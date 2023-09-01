@@ -73,10 +73,8 @@ The aim of the SAT4J library is to provide an efficient library of SAT solvers i
   </developers>
   <properties>
     <!-- compiler params -->
-    <javaSource>1.5</javaSource>
-    <javaTarget>1.5</javaTarget>
-    <testSource>1.5</testSource>
-    <testTarget>1.5</testTarget>
+    <maven.compile.source>1.5</maven.compile.source>
+    <maven.compile.target>1.5</maven.compile.target>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>	
     <!-- common distribution locations -->
     <siteRepositoryId />
@@ -94,12 +92,14 @@ The aim of the SAT4J library is to provide an efficient library of SAT solvers i
   </pluginRepositories>
   <modules>
     <module>org.sat4j.core</module>
+      <!--
     <module>org.sat4j.pb</module>
     <module>org.sat4j.maxsat</module>
     <module>org.sat4j.sat</module>
     <module>org.sat4j.csp</module>
     <module>org.sat4j.csp.xmlparser</module>
     <module>org.sat4j.scala</module>
+      -->
   </modules>
 
  <dependencies>
@@ -180,24 +180,6 @@ The aim of the SAT4J library is to provide an efficient library of SAT solvers i
             </property>
           </systemProperties>
         </configuration>
-      </plugin>
-      <plugin>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <version>2.1</version>
-        <configuration>
-          <source>${javaSource}</source>
-          <target>${javaTarget}</target>
-          <testSource>${testSource}</testSource>
-          <testTarget>${testTarget}</testTarget>
-          <compilerId>jdt</compilerId>
-        </configuration>
-         <dependencies>
-          <dependency>
-              <groupId>org.sonatype.tycho</groupId>
-              <artifactId>tycho-compiler-jdt</artifactId>
-              <version>0.7.0</version>
-           </dependency>
-        </dependencies>
       </plugin>
       <plugin>
       	<groupId>org.codehaus.mojo</groupId>
