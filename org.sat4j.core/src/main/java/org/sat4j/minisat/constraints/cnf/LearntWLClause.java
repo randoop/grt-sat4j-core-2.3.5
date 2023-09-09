@@ -30,7 +30,6 @@
 package org.sat4j.minisat.constraints.cnf;
 
 import org.sat4j.minisat.core.ILits;
-import org.sat4j.minisat.core.MandatoryLiteralListener;
 import org.sat4j.specs.IVecInt;
 
 public final class LearntWLClause extends WLClause {
@@ -91,10 +90,5 @@ public final class LearntWLClause extends WLClause {
      */
     public void incActivity(double claInc) {
         this.activity += claInc;
-    }
-
-    public boolean propagatePI(MandatoryLiteralListener s, int p) {
-        this.voc.watch(p, this);
-        return true;
     }
 }

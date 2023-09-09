@@ -29,13 +29,9 @@
  *******************************************************************************/
 package org.sat4j.tools;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import org.sat4j.core.VecInt;
 import org.sat4j.specs.ISolver;
 import org.sat4j.specs.IVecInt;
-import org.sat4j.specs.IteratorInt;
 import org.sat4j.specs.TimeoutException;
 
 /**
@@ -58,6 +54,9 @@ public class Backbone {
      * João Marques-Silva, Mikolás Janota, Inês Lynce: On Computing Backbones of
      * Propositional Theories. ECAI 2010: 15-20
      * 
+     * We use Sat4j's ability to compute prime implicants instead of models to
+     * simplify the model at each step.
+     * 
      * @param solver
      * @return
      * @throws TimeoutException
@@ -71,6 +70,8 @@ public class Backbone {
      * João Marques-Silva, Mikolás Janota, Inês Lynce: On Computing Backbones of
      * Propositional Theories. ECAI 2010: 15-20
      * 
+     * We use Sat4j's ability to compute prime implicants instead of models to
+     * simplify the model at each step.
      * 
      * @param solver
      * @param assumptions
@@ -94,13 +95,9 @@ public class Backbone {
 
     public static IVecInt compute(ISolver solver, int[] implicant,
             IVecInt assumptions) throws TimeoutException {
-        Set<Integer> assumptionsSet = new HashSet<Integer>();
-        for (IteratorInt it = assumptions.iterator(); it.hasNext();) {
-            assumptionsSet.add(it.next());
-        }
         IVecInt litsToTest = new VecInt();
         for (int p : implicant) {
-            if (!assumptionsSet.contains(p)) {
+            if (!assumptions.contains(p)) {
                 litsToTest.push(-p);
             }
         }
@@ -113,7 +110,7 @@ public class Backbone {
             litsToTest.pop();
             if (solver.isSatisfiable(candidates)) {
                 candidates.pop();
-                implicant = solver.model();
+                implicant = solver.primeImplicant();
                 removeVarNotPresentAndSatisfiedLits(implicant, litsToTest,
                         solver.nVars());
             } else {

@@ -33,13 +33,11 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.sat4j.core.VecInt;
 import org.sat4j.specs.ContradictionException;
 import org.sat4j.specs.IConstr;
 import org.sat4j.specs.IGroupSolver;
 import org.sat4j.specs.ISolver;
 import org.sat4j.specs.IVecInt;
-import org.sat4j.specs.IteratorInt;
 
 public class GroupClauseSelectorSolver<T extends ISolver> extends
         AbstractClauseSelectorSolver<T> implements IGroupSolver {
@@ -101,27 +99,6 @@ public class GroupClauseSelectorSolver<T extends ISolver> extends
 
     public Map<Integer, Integer> getVarToHighLevel() {
         return varToHighLevel;
-    }
-
-    @Override
-    public IVecInt unsatExplanation() {
-        IVecInt internal = super.unsatExplanation();
-        IVecInt external = new VecInt(internal.size());
-        int p;
-        Integer group;
-        for (IteratorInt it = internal.iterator(); it.hasNext();) {
-            p = it.next();
-            if (p > 0) {
-                group = varToHighLevel.get(p);
-            } else {
-                Integer negGroup = varToHighLevel.get(-p);
-                group = (negGroup == null) ? (null) : (-negGroup);
-            }
-            if (group != null) {
-                external.push(group);
-            }
-        }
-        return external;
     }
 
 }

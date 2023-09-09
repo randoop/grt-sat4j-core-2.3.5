@@ -63,7 +63,7 @@ final class VoidTracing implements SearchListener<ISolverService> {
     public void learnUnit(int p) {
     }
 
-    public void delete(IConstr c) {
+    public void delete(int[] clause) {
     }
 
     public void conflictFound(IConstr confl, int dlevel, int trailLevel) {

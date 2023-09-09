@@ -224,7 +224,6 @@ public class ManyCore<S extends ISolver> extends
         }
     }
 
-    @Deprecated
     public void printStat(PrintWriter out, String prefix) {
         for (int i = 0; i < this.numberOfSolvers; i++) {
             out.printf(
@@ -403,7 +402,7 @@ public class ManyCore<S extends ISolver> extends
 
     public void setDBSimplificationAllowed(boolean status) {
         for (int i = 0; i < this.numberOfSolvers; i++) {
-            this.solvers.get(i).setDBSimplificationAllowed(status);
+            this.solvers.get(0).setDBSimplificationAllowed(status);
         }
     }
 
@@ -531,13 +530,7 @@ public class ManyCore<S extends ISolver> extends
      * @since 2.3.3
      */
     public void printStat(PrintWriter out) {
-        for (int i = 0; i < this.numberOfSolvers; i++) {
-            out.printf(
-                    "%s>>>>>>>>>> Solver number %d (%d answers) <<<<<<<<<<<<<<<<<<%n",
-                    this.solvers.get(i).getLogPrefix(), i, this.solversStats
-                            .get(i).getValue());
-            this.solvers.get(i).printStat(out);
-        }
+        printStat(out, getLogPrefix());
     }
 
     /**

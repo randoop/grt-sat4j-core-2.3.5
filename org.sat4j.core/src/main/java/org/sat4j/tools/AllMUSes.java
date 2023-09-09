@@ -82,22 +82,7 @@ public class AllMUSes {
     }
 
     public List<IVecInt> computeAllMUSes() {
-        return computeAllMUSes(VecInt.EMPTY);
-    }
-
-    /**
-     * Reset the state of the object to allow computing new MUSes or MSSes.
-     */
-    public void reset() {
-        this.secondPhaseClauses.clear();
-    }
-
-    public List<IVecInt> computeAllMUSes(SolutionFoundListener listener) {
-        return computeAllMUSes(VecInt.EMPTY, listener);
-    }
-
-    public List<IVecInt> computeAllMUSes(IVecInt assumptions) {
-        return computeAllMUSes(assumptions, SolutionFoundListener.VOID);
+        return computeAllMUSes(SolutionFoundListener.VOID);
     }
 
     /**
@@ -108,10 +93,9 @@ public class AllMUSes {
      *            the <code>ISolver</code> that contains the set of clauses
      * @return a list containing all the MUSes
      */
-    public List<IVecInt> computeAllMUSes(IVecInt assumptions,
-            SolutionFoundListener listener) {
+    public List<IVecInt> computeAllMUSes(SolutionFoundListener listener) {
         if (secondPhaseClauses.isEmpty()) {
-            computeAllMSS(assumptions);
+            computeAllMSS();
         }
         ISolver solver = factory.defaultSolver();
         for (IVecInt v : secondPhaseClauses) {
@@ -123,15 +107,10 @@ public class AllMUSes {
         }
         AbstractMinimalModel minSolver = new Minimal4InclusionModel(solver,
                 Minimal4InclusionModel.positiveLiterals(solver));
-        return computeAllMUSes(assumptions, listener, minSolver);
+        return computeAllMUSes(listener, minSolver);
     }
 
     public List<IVecInt> computeAllMUSesOrdered(SolutionFoundListener listener) {
-        return computeAllMUSesOrdered(VecInt.EMPTY, listener);
-    }
-
-    public List<IVecInt> computeAllMUSesOrdered(IVecInt assumptions,
-            SolutionFoundListener listener) {
         if (secondPhaseClauses.isEmpty()) {
             computeAllMSS();
         }
@@ -145,11 +124,11 @@ public class AllMUSes {
         }
         AbstractMinimalModel minSolver = new Minimal4CardinalityModel(solver,
                 Minimal4InclusionModel.positiveLiterals(solver));
-        return computeAllMUSes(assumptions, listener, minSolver);
+        return computeAllMUSes(listener, minSolver);
     }
 
-    private List<IVecInt> computeAllMUSes(IVecInt assumptions,
-            SolutionFoundListener listener, ISolver minSolver) {
+    private List<IVecInt> computeAllMUSes(SolutionFoundListener listener,
+            ISolver minSolver) {
         if (css.isVerbose()) {
             System.out.println(css.getLogPrefix() + "Computing all MUSes ...");
         }
@@ -161,7 +140,7 @@ public class AllMUSes {
 
         try {
 
-            while (minSolver.isSatisfiable(assumptions)) {
+            while (minSolver.isSatisfiable()) {
                 blockingClause = new VecInt();
                 mus = new VecInt();
 
@@ -191,41 +170,31 @@ public class AllMUSes {
     }
 
     public List<IVecInt> computeAllMSS() {
-        return computeAllMSS(VecInt.EMPTY);
+        return computeAllMSS(SolutionFoundListener.VOID);
     }
 
-    public List<IVecInt> computeAllMSS(IVecInt assumptions) {
-        return computeAllMSS(assumptions, SolutionFoundListener.VOID);
-    }
-
-    public List<IVecInt> computeAllMSS(SolutionFoundListener mssListener) {
-        return computeAllMSS(VecInt.EMPTY, mssListener);
-    }
-
-    public List<IVecInt> computeAllMSS(IVecInt assumptions,
-            SolutionFoundListener listener) {
+    public List<IVecInt> computeAllMSS(SolutionFoundListener listener) {
         IVecInt pLits = new VecInt();
         for (Integer i : css.getAddedVars()) {
             pLits.push(i);
         }
 
         AbstractMinimalModel min4Inc = new Minimal4InclusionModel(css, pLits);
-        return computeAllMSS(assumptions, listener, min4Inc, pLits);
+        return computeAllMSS(listener, min4Inc, pLits);
     }
 
-    public List<IVecInt> computeAllMSSOrdered(IVecInt assumptions,
-            SolutionFoundListener listener) {
+    public List<IVecInt> computeAllMSSOrdered(SolutionFoundListener listener) {
         IVecInt pLits = new VecInt();
         for (Integer i : css.getAddedVars()) {
             pLits.push(i);
         }
 
         AbstractMinimalModel min4Inc = new Minimal4CardinalityModel(css, pLits);
-        return computeAllMSS(assumptions, listener, min4Inc, pLits);
+        return computeAllMSS(listener, min4Inc, pLits);
     }
 
-    private List<IVecInt> computeAllMSS(IVecInt assumptions,
-            SolutionFoundListener listener, ISolver min4Inc, IVecInt pLits) {
+    private List<IVecInt> computeAllMSS(SolutionFoundListener listener,
+            ISolver min4Inc, IVecInt pLits) {
         if (css.isVerbose()) {
             System.out.println(css.getLogPrefix() + "Computing all MSSes ...");
         }
@@ -248,7 +217,7 @@ public class AllMUSes {
         // first phase
         try {
 
-            while (min4Inc.isSatisfiable(assumptions)) {
+            while (min4Inc.isSatisfiable()) {
                 int[] fullmodel = min4Inc.modelWithInternalVariables();
 
                 mss = new VecInt();

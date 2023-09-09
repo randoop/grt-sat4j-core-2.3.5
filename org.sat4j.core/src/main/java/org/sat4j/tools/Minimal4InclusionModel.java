@@ -106,7 +106,6 @@ public class Minimal4InclusionModel extends AbstractMinimalModel {
                 modelListener.onSolutionFound(prevmodel);
                 vec.clear();
                 cube.clear();
-                assumps.copyTo(cube);
                 for (int q : prevfullmodel) {
                     if (pLiterals.contains(q)) {
                         vec.push(-q);
@@ -133,13 +132,5 @@ public class Minimal4InclusionModel extends AbstractMinimalModel {
     public int[] modelWithInternalVariables() {
         model();
         return prevfullmodel;
-    }
-
-    private IVecInt assumps = VecInt.EMPTY;
-
-    @Override
-    public boolean isSatisfiable(IVecInt assumps) throws TimeoutException {
-        this.assumps = assumps;
-        return super.isSatisfiable(assumps);
     }
 }

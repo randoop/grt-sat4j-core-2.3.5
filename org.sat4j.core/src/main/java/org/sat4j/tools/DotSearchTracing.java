@@ -162,7 +162,7 @@ public class DotSearchTracing<T> extends SearchListenerAdapter<ISolverService> {
     }
 
     @Override
-    public final void delete(final IConstr c) {
+    public final void delete(final int[] clause) {
     }
 
     /**

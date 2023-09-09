@@ -66,9 +66,9 @@ public class ModelIterator extends SolverDecorator<ISolver> {
 
     private static final long serialVersionUID = 1L;
 
-    protected boolean trivialfalsity = false;
+    private boolean trivialfalsity = false;
     private final long bound;
-    protected long nbModelFound = 0;
+    private long nbModelFound = 0;
 
     /**
      * Create an iterator over the solutions available in <code>solver</code>.

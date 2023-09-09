@@ -32,7 +32,6 @@ package org.sat4j;
 import java.io.PrintWriter;
 
 import org.sat4j.core.Vec;
-import org.sat4j.core.VecInt;
 import org.sat4j.reader.Reader;
 import org.sat4j.specs.ContradictionException;
 import org.sat4j.specs.ILogAble;
@@ -139,6 +138,7 @@ public interface ILauncherMode extends SolutionFoundListener {
                 out.flush();
                 double wallclocktime = (System.currentTimeMillis() - beginTime) / 1000.0;
                 solver.printStat(out);
+                solver.printInfos(out);
                 out.println(ANSWER_PREFIX + exitCode);
                 if (exitCode != ExitCode.UNKNOWN
                         && exitCode != ExitCode.UNSATISFIABLE) {
@@ -221,9 +221,6 @@ public interface ILauncherMode extends SolutionFoundListener {
             this.exitCode = ExitCode.SATISFIABLE;
             this.out.printf("c Found solution #%d  (%.2f)s%n", nbSolutionFound,
                     (System.currentTimeMillis() - beginTime) / 1000.0);
-            if (System.getProperty("printallmodels") != null) {
-                this.out.println(new VecInt(solution));
-            }
         }
 
         public void onSolutionFound(IVecInt solution) {
@@ -268,6 +265,7 @@ public interface ILauncherMode extends SolutionFoundListener {
             System.out.flush();
             out.flush();
             solver.printStat(out);
+            solver.printInfos(out);
             out.println(ANSWER_PREFIX + exitCode);
             if (exitCode == ExitCode.SATISFIABLE
                     || exitCode == ExitCode.OPTIMUM_FOUND || isIncomplete

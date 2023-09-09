@@ -43,8 +43,7 @@ public interface IGroupSolver extends ISolver {
      * @param literals
      *            a clause
      * @param desc
-     *            the level of the clause set. The specific level 0 is used to
-     *            denote hard clauses.
+     *            the level of the clause set
      * @return on object representing that clause in the solver.
      * @throws ContradictionException
      */
