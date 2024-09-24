@@ -83,7 +83,7 @@ The aim of the SAT4J library is to provide an efficient library of SAT solvers i
     <next.eclipse.release.date>June, 2010</next.eclipse.release.date>
     <bundle-manifest>${project.build.directory}/META-INF/MANIFEST.MF</bundle-manifest>
     <grt-testing.basedir>${grt-testing.basedir}</grt-testing.basedir>
-    <grt-testing.major.jar>build/major/lib/major.jar</grt-testing.major.jar>
+    <grt-testing.major.jar>${grt-testing-basedir}/{grt-testing-major.jar}</grt-testing.major.jar>
     <grt-testing.plugin>${grt-testing.plugin}</grt-testing.plugin>
   </properties>
    <pluginRepositories>
