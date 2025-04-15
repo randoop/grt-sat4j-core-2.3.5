@@ -2629,8 +2629,4 @@ public class Solver<D extends DataStructureFactory> implements ISolverService,
     public void setUnitClauseProvider(UnitClauseProvider ucp) {
         this.unitClauseProvider = ucp;
     }
-
-    public int[] getModel() {
-        return this.model;
-    }
 }
