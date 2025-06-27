@@ -82,9 +82,6 @@ The aim of the SAT4J library is to provide an efficient library of SAT solvers i
     <sat4j.custom.version>${project.version}.v${maven.build.timestamp}</sat4j.custom.version>
     <next.eclipse.release.date>June, 2010</next.eclipse.release.date>
     <bundle-manifest>${project.build.directory}/META-INF/MANIFEST.MF</bundle-manifest>
-    <grt-testing.basedir>${grt-testing.basedir}</grt-testing.basedir>
-    <grt-testing.major.jar>${grt-testing-basedir}/{grt-testing-major.jar}</grt-testing.major.jar>
-    <grt-testing.plugin>${grt-testing.plugin}</grt-testing.plugin>
   </properties>
    <pluginRepositories>
     <pluginRepository>
@@ -115,13 +112,6 @@ The aim of the SAT4J library is to provide an efficient library of SAT solvers i
       <artifactId>mockito-all</artifactId>
       <version>1.9.5</version>
       <scope>test</scope>
-    </dependency>
-    <dependency>
-     <groupId>major</groupId>
-     <artifactId>major</artifactId>
-     <version>2.2.0</version>
-     <scope>system</scope>
-     <systemPath>${grt-testing.basedir}/${grt-testing.major.jar}</systemPath>
     </dependency>
  </dependencies>
 
@@ -275,17 +265,11 @@ The aim of the SAT4J library is to provide an efficient library of SAT solvers i
             <id>translate-qualifier</id>
             <phase>generate-resources</phase>
             <configuration>
-<!--          <tasks>-->
-<!--          <echo>Changing ${bundle-manifest}</echo>-->
-<!--        <copy file="META-INF/MANIFEST.MF" tofile="${bundle-manifest}" overwrite="true" />-->
-<!--        <replace file="${bundle-manifest}" token="9.9.9.token" value="${sat4j.custom.version}">-->
-<!--            </replace>-->
-<!--          </tasks>-->
                 <target>
-                  <echo>Changing ${bundle-manifest}</echo>
-                  <copy file="META-INF/MANIFEST.MF" tofile="${bundle-manifest}" overwrite="true" />
-                  <replace file="${bundle-manifest}" token="9.9.9.token" value="${sat4j.custom.version}">
-                  </replace>
+                    <echo>Changing ${bundle-manifest}</echo>
+                    <copy file="META-INF/MANIFEST.MF" tofile="${bundle-manifest}" overwrite="true" />
+                    <replace file="${bundle-manifest}" token="9.9.9.token" value="${sat4j.custom.version}">
+                    </replace>
                 </target>
             </configuration>
             <goals>
@@ -393,17 +377,7 @@ The aim of the SAT4J library is to provide an efficient library of SAT solvers i
 			</plugin>
           </reportPlugins>
         </configuration>
-      </plugin>
-        <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-compiler-plugin</artifactId>
-            <configuration>
-                <testExcludes>
-                    <exclude>**/*</exclude>
-                </testExcludes>
-                <compilerArgument>${grt-testing.plugin}</compilerArgument>
-            </configuration>
-        </plugin>
+      </plugin> 
     </plugins>
   </build>
 
