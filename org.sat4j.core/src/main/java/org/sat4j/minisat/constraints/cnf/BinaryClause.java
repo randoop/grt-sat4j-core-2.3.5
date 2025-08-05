@@ -29,6 +29,9 @@
  *******************************************************************************/
 package org.sat4j.minisat.constraints.cnf;
 
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import static org.sat4j.core.LiteralsUtils.neg;
 
 import java.io.Serializable;
@@ -66,6 +69,7 @@ public abstract class BinaryClause implements Propagatable, Constr,
      * @param ps
      *            A VecInt that WILL BE EMPTY after calling that method.
      */
+    @Impure
     public BinaryClause(IVecInt ps, ILits voc) {
         assert ps.size() == 2;
         this.head = ps.get(0);
@@ -79,6 +83,7 @@ public abstract class BinaryClause implements Propagatable, Constr,
      * 
      * @see Constr#calcReason(Solver, Lit, Vec)
      */
+    @Impure
     public void calcReason(int p, IVecInt outReason) {
         if (this.voc.isFalsified(this.head)) {
             outReason.push(neg(this.head));
@@ -93,6 +98,7 @@ public abstract class BinaryClause implements Propagatable, Constr,
      * 
      * @see Constr#remove(Solver)
      */
+    @Impure
     public void remove(UnitPropagationListener upl) {
         this.voc.watches(neg(this.head)).remove(this);
         this.voc.watches(neg(this.tail)).remove(this);
@@ -103,6 +109,8 @@ public abstract class BinaryClause implements Propagatable, Constr,
      * 
      * @see Constr#simplify(Solver)
      */
+    @Pure
+    @Impure
     public boolean simplify() {
         if (this.voc.isSatisfied(this.head) || this.voc.isSatisfied(this.tail)) {
             return true;
@@ -110,6 +118,7 @@ public abstract class BinaryClause implements Propagatable, Constr,
         return false;
     }
 
+    @Impure
     public boolean propagate(UnitPropagationListener s, int p) {
         this.voc.watch(p, this);
         if (this.head == neg(p)) {
@@ -122,6 +131,8 @@ public abstract class BinaryClause implements Propagatable, Constr,
     /*
      * For learnt clauses only @author leberre
      */
+    @Pure
+    @Impure
     public boolean locked() {
         return this.voc.getReason(this.head) == this
                 || this.voc.getReason(this.tail) == this;
@@ -130,10 +141,12 @@ public abstract class BinaryClause implements Propagatable, Constr,
     /**
      * @return the activity of the clause
      */
+    @Pure
     public double getActivity() {
         return this.activity;
     }
 
+    @Impure
     @Override
     public String toString() {
         StringBuffer stb = new StringBuffer();
@@ -157,6 +170,7 @@ public abstract class BinaryClause implements Propagatable, Constr,
      *            the index of the literal
      * @return the literal
      */
+    @Pure
     public int get(int i) {
         if (i == 0) {
             return this.head;
@@ -168,20 +182,24 @@ public abstract class BinaryClause implements Propagatable, Constr,
     /**
      * @param d
      */
+    @Impure
     public void rescaleBy(double d) {
         this.activity *= d;
     }
 
+    @Pure
     public int size() {
         return 2;
     }
 
+    @Impure
     public void assertConstraint(UnitPropagationListener s) {
         // assert this.voc.isUnassigned(this.head);
         boolean ret = s.enqueue(this.head, this);
         assert ret;
     }
 
+    @Impure
     public void assertConstraintIfNeeded(UnitPropagationListener s) {
         if (voc.isFalsified(this.tail)) {
             boolean ret = s.enqueue(this.head, this);
@@ -189,10 +207,12 @@ public abstract class BinaryClause implements Propagatable, Constr,
         }
     }
 
+    @Pure
     public ILits getVocabulary() {
         return this.voc;
     }
 
+    @Impure
     public int[] getLits() {
         int[] tmp = new int[2];
         tmp[0] = this.head;
@@ -200,6 +220,7 @@ public abstract class BinaryClause implements Propagatable, Constr,
         return tmp;
     }
 
+    @SideEffectFree
     @Override
     public boolean equals(Object obj) {
         if (obj == null) {
@@ -216,25 +237,30 @@ public abstract class BinaryClause implements Propagatable, Constr,
         }
     }
 
+    @Pure
     @Override
     public int hashCode() {
         long sum = this.head + this.tail;
         return (int) sum / 2;
     }
 
+    @Impure
     public void register() {
         this.voc.watch(neg(this.head), this);
         this.voc.watch(neg(this.tail), this);
     }
 
+    @Pure
     public boolean canBePropagatedMultipleTimes() {
         return false;
     }
 
+    @Pure
     public Constr toConstraint() {
         return this;
     }
 
+    @Impure
     public void calcReasonOnTheFly(int p, IVecInt trail, IVecInt outReason) {
         calcReason(p, outReason);
     }

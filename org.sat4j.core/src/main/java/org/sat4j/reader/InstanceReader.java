@@ -29,6 +29,8 @@
  *******************************************************************************/
 package org.sat4j.reader;
 
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.Impure;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Locale;
@@ -57,11 +59,13 @@ public class InstanceReader extends Reader {
 
     private final ISolver solver;
 
+    @Impure
     public InstanceReader(ISolver solver) {
         // dimacs = new DimacsReader(solver);
         this.solver = solver;
     }
 
+    @Impure
     private Reader getDefaultSATReader() {
         if (this.dimacs == null) {
             this.dimacs = new LecteurDimacs(this.solver);// new
@@ -70,6 +74,7 @@ public class InstanceReader extends Reader {
         return this.dimacs;
     }
 
+    @Impure
     private Reader getEZSATReader() {
         if (this.ezdimacs == null) {
             this.ezdimacs = new DimacsReader(this.solver);// new
@@ -78,6 +83,7 @@ public class InstanceReader extends Reader {
         return this.ezdimacs;
     }
 
+    @Impure
     private Reader getAIGReader() {
         if (this.aig == null) {
             this.aig = new AIGReader(this.solver);
@@ -85,6 +91,7 @@ public class InstanceReader extends Reader {
         return this.aig;
     }
 
+    @Impure
     private Reader getAAGReader() {
         if (this.aag == null) {
             this.aag = new AAGReader(this.solver);
@@ -92,6 +99,7 @@ public class InstanceReader extends Reader {
         return this.aag;
     }
 
+    @Impure
     @Override
     public IProblem parseInstance(String filename)
             throws ParseFormatException, IOException,
@@ -120,6 +128,7 @@ public class InstanceReader extends Reader {
         return this.reader.parseInstance(filename);
     }
 
+    @Impure
     protected Reader handleFileName(String fname, String prefix) {
         if ("EZCNF".equals(prefix)) {
             return getEZSATReader();
@@ -133,17 +142,20 @@ public class InstanceReader extends Reader {
         return getDefaultSATReader();
     }
 
+    @Impure
     @Override
     @Deprecated
     public String decode(int[] model) {
         return this.reader.decode(model);
     }
 
+    @Impure
     @Override
     public void decode(int[] model, PrintWriter out) {
         this.reader.decode(model, out);
     }
 
+    @Pure
     @Override
     public IProblem parseInstance(java.io.InputStream in)
             throws ParseFormatException, ContradictionException, IOException {

@@ -29,6 +29,8 @@
  *******************************************************************************/
 package org.sat4j.reader;
 
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.Impure;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
@@ -56,10 +58,12 @@ public class AIGReader extends Reader {
 
     private int nbinputs;
 
+    @Impure
     AIGReader(ISolver s) {
         this.solver = new GateTranslator(s);
     }
 
+    @Impure
     @Override
     public String decode(int[] model) {
         StringBuffer stb = new StringBuffer();
@@ -69,6 +73,7 @@ public class AIGReader extends Reader {
         return stb.toString();
     }
 
+    @Impure
     @Override
     public void decode(int[] model, PrintWriter out) {
         for (int i = 0; i < this.nbinputs; i++) {
@@ -76,6 +81,7 @@ public class AIGReader extends Reader {
         }
     }
 
+    @Impure
     int parseInt(InputStream in, char expected) throws IOException,
             ParseFormatException {
         int res, ch;
@@ -102,6 +108,7 @@ public class AIGReader extends Reader {
      * 
      * @see org.sat4j.reader.Reader#parseInstance(java.io.InputStream)
      */
+    @Impure
     @Override
     public IProblem parseInstance(InputStream in) throws ParseFormatException,
             ContradictionException, IOException {
@@ -132,6 +139,7 @@ public class AIGReader extends Reader {
         return this.solver;
     }
 
+    @Impure
     static int safeGet(InputStream in) throws IOException, ParseFormatException {
         int ch = in.read();
         if (ch == -1) {
@@ -140,6 +148,7 @@ public class AIGReader extends Reader {
         return ch;
     }
 
+    @Impure
     static int decode(InputStream in) throws IOException, ParseFormatException {
         int x = 0, i = 0;
         int ch;
@@ -151,6 +160,7 @@ public class AIGReader extends Reader {
         return x | ch << 7 * i;
     }
 
+    @Impure
     private void readAnd(int nbands, int output0, InputStream in, int startid)
             throws ContradictionException, IOException, ParseFormatException {
         int lhs = startid;
@@ -166,6 +176,7 @@ public class AIGReader extends Reader {
         this.solver.gateTrue(toDimacs(output0));
     }
 
+    @Pure
     private int toDimacs(int v) {
         if (v == FALSE) {
             return -(this.maxvarid + 1);

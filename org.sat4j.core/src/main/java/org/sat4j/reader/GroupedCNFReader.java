@@ -29,6 +29,7 @@
  *******************************************************************************/
 package org.sat4j.reader;
 
+import org.checkerframework.dataflow.qual.Impure;
 import java.io.IOException;
 
 import org.sat4j.specs.ContradictionException;
@@ -47,6 +48,7 @@ public class GroupedCNFReader extends DimacsReader {
 
     private int currentComponentIndex;
 
+    @Impure
     public GroupedCNFReader(IGroupSolver solver) {
         super(solver, "gcnf");
         this.groupSolver = solver;
@@ -61,6 +63,7 @@ public class GroupedCNFReader extends DimacsReader {
      *             if the input stream does not comply with the DIMACS format.
      * @since 2.1
      */
+    @Impure
     @Override
     protected void readProblemLine() throws IOException, ParseFormatException {
 
@@ -90,6 +93,7 @@ public class GroupedCNFReader extends DimacsReader {
     /**
      * @since 2.1
      */
+    @Impure
     @Override
     protected boolean handleLine() throws ContradictionException, IOException,
             ParseFormatException {
@@ -127,6 +131,7 @@ public class GroupedCNFReader extends DimacsReader {
      * @throws ContradictionException
      * @since 2.1
      */
+    @Impure
     @Override
     protected void flushConstraint() throws ContradictionException {
         try {

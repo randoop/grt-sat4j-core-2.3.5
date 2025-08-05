@@ -29,6 +29,7 @@
  *******************************************************************************/
 package org.sat4j.tools;
 
+import org.checkerframework.dataflow.qual.Impure;
 import org.sat4j.specs.IConstr;
 import org.sat4j.specs.ISolverService;
 import org.sat4j.specs.Lbool;
@@ -50,6 +51,7 @@ public class LearnedClausesSizeTracing extends
     private int counter;
     private int maxSize;
 
+    @Impure
     public LearnedClausesSizeTracing(IVisualizationTool visuTool,
             IVisualizationTool restartTool, IVisualizationTool cleanTool) {
         this.visuTool = visuTool;
@@ -59,6 +61,7 @@ public class LearnedClausesSizeTracing extends
         this.maxSize = 0;
     }
 
+    @Impure
     @Override
     public void end(Lbool result) {
         this.visuTool.end();
@@ -66,6 +69,7 @@ public class LearnedClausesSizeTracing extends
         this.cleanTool.end();
     }
 
+    @Impure
     @Override
     public void learn(IConstr c) {
         int s = c.size();
@@ -78,6 +82,7 @@ public class LearnedClausesSizeTracing extends
         this.counter++;
     }
 
+    @Impure
     @Override
     public void start() {
         this.visuTool.init();
@@ -87,6 +92,7 @@ public class LearnedClausesSizeTracing extends
         this.maxSize = 0;
     }
 
+    @Impure
     @Override
     public void restarting() {
         this.visuTool.addInvisiblePoint(this.counter, 0);
@@ -94,6 +100,7 @@ public class LearnedClausesSizeTracing extends
         this.cleanTool.addPoint(this.counter, 0);
     }
 
+    @Impure
     @Override
     public void cleaning() {
         this.visuTool.addInvisiblePoint(this.counter, 0);

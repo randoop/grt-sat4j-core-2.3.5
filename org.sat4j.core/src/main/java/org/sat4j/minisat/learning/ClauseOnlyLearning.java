@@ -29,6 +29,7 @@
  *******************************************************************************/
 package org.sat4j.minisat.learning;
 
+import org.checkerframework.dataflow.qual.Pure;
 import org.sat4j.minisat.constraints.cnf.WLClause;
 import org.sat4j.minisat.core.Constr;
 import org.sat4j.minisat.core.DataStructureFactory;
@@ -51,11 +52,13 @@ public final class ClauseOnlyLearning<D extends DataStructureFactory> extends
      */
     private static final long serialVersionUID = 1L;
 
+    @Pure
     @Override
     protected boolean learningCondition(Constr constr) {
         return constr instanceof WLClause;
     }
 
+    @Pure
     @Override
     public String toString() {
         return "Limit learning to clauses using watched literals only";

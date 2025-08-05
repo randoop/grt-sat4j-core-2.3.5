@@ -29,6 +29,7 @@
  *******************************************************************************/
 package org.sat4j.tools;
 
+import org.checkerframework.dataflow.qual.Impure;
 import org.sat4j.specs.IConstr;
 import org.sat4j.specs.ISolverService;
 import org.sat4j.specs.Lbool;
@@ -47,27 +48,32 @@ public class DecisionLevelTracing extends SearchListenerAdapter<ISolverService> 
 
     private final IVisualizationTool visuTool;
 
+    @Impure
     public DecisionLevelTracing(IVisualizationTool visuTool) {
         this.visuTool = visuTool;
         visuTool.init();
         this.counter = 0;
     }
 
+    @Impure
     @Override
     public void conflictFound(IConstr confl, int dlevel, int trailLevel) {
         this.counter++;
     }
 
+    @Impure
     @Override
     public void end(Lbool result) {
         this.visuTool.end();
     }
 
+    @Impure
     @Override
     public void start() {
         this.visuTool.init();
     }
 
+    @Impure
     @Override
     public void backjump(int backjumpLevel) {
         this.visuTool.addPoint(this.counter, backjumpLevel);

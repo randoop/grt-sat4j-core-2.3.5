@@ -29,6 +29,9 @@
  *******************************************************************************/
 package org.sat4j;
 
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.dataflow.qual.Pure;
 import org.sat4j.minisat.SolverFactory;
 import org.sat4j.reader.GroupedCNFReader;
 import org.sat4j.reader.LecteurDimacs;
@@ -58,11 +61,13 @@ public class MUSLauncher extends AbstractLauncher {
 
     private AllMUSes allMuses;
 
+    @Impure
     @Override
     public void usage() {
         log("java -jar sat4j-mus.jar [Insertion|Deletion|QuickXplain] <cnffile>|<gcnffile>");
     }
 
+    @Impure
     @Override
     protected Reader createReader(ISolver theSolver, String problemname) {
         if (this.highLevel) {
@@ -71,6 +76,7 @@ public class MUSLauncher extends AbstractLauncher {
         return new LecteurDimacs(theSolver);
     }
 
+    @Pure
     @Override
     protected String getInstanceName(String[] args) {
         if (args.length == 0) {
@@ -79,6 +85,7 @@ public class MUSLauncher extends AbstractLauncher {
         return args[args.length - 1];
     }
 
+    @Impure
     @Override
     protected ISolver configureSolver(String[] args) {
         String problemName = args[args.length - 1];
@@ -120,6 +127,7 @@ public class MUSLauncher extends AbstractLauncher {
         return solver;
     }
 
+    @Impure
     @Override
     protected void displayResult() {
         if (this.solver != null) {
@@ -142,6 +150,7 @@ public class MUSLauncher extends AbstractLauncher {
         }
     }
 
+    @Impure
     @Override
     public void run(String[] args) {
         this.mus = null;
@@ -156,25 +165,30 @@ public class MUSLauncher extends AbstractLauncher {
                     SolutionFoundListener mssListener = new SolutionFoundListener() {
                         private int msscount = 0;
 
+                        @SideEffectFree
                         public void onUnsatTermination() {
                             throw new UnsupportedOperationException(
                                     "Not implemented yet!");
                         }
 
+                        @Impure
                         public void onSolutionFound(IVecInt solution) {
                             System.out.print("\r" + solver.getLogPrefix()
                                     + "found mss number " + ++msscount);
                         }
 
+                        @SideEffectFree
                         public void onSolutionFound(int[] solution) {
                             throw new UnsupportedOperationException(
                                     "Not implemented yet!");
                         }
                     };
                     SolutionFoundListener musListener = new SolutionFoundListener() {
+                        @SideEffectFree
                         public void onSolutionFound(int[] solution) {
                         }
 
+                        @Impure
                         public void onSolutionFound(IVecInt solution) {
                             System.out.println(solver.getLogPrefix()
                                     + "found mus number " + ++muscount);
@@ -185,6 +199,7 @@ public class MUSLauncher extends AbstractLauncher {
                             out.println();
                         }
 
+                        @SideEffectFree
                         public void onUnsatTermination() {
                         }
                     };
@@ -219,6 +234,7 @@ public class MUSLauncher extends AbstractLauncher {
 
     private int muscount = 0;
 
+    @Impure
     public static void main(final String[] args) {
         MUSLauncher lanceur = new MUSLauncher();
         if (args.length < 1 || args.length > 2) {

@@ -28,6 +28,7 @@
  *   CRIL - initial API and implementation
  *******************************************************************************/
 package org.sat4j.minisat.core;
+import org.checkerframework.dataflow.qual.Impure;
 
 /**
  * @author leberre
@@ -37,5 +38,6 @@ interface ConstrActivityListener {
     /**
      * @param outclause
      */
+    @Impure
     void claBumpActivity(Constr confl);
 }

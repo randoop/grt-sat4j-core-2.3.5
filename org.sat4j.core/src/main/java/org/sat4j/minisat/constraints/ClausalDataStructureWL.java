@@ -29,6 +29,7 @@
  *******************************************************************************/
 package org.sat4j.minisat.constraints;
 
+import org.checkerframework.dataflow.qual.Impure;
 import org.sat4j.minisat.constraints.cnf.Clauses;
 import org.sat4j.minisat.constraints.cnf.LearntWLClause;
 import org.sat4j.minisat.constraints.cnf.Lits;
@@ -55,6 +56,7 @@ public class ClausalDataStructureWL extends AbstractDataStructureFactory {
      * org.sat4j.minisat.DataStructureFactory#createClause(org.sat4j.datatype
      * .VecInt)
      */
+    @Impure
     public Constr createClause(IVecInt literals) throws ContradictionException {
         IVecInt v = Clauses.sanityCheck(literals, getVocabulary(), this.solver);
         if (v == null) {
@@ -71,10 +73,12 @@ public class ClausalDataStructureWL extends AbstractDataStructureFactory {
         return OriginalWLClause.brandNewClause(this.solver, getVocabulary(), v);
     }
 
+    @Impure
     public Constr createUnregisteredClause(IVecInt literals) {
         return new LearntWLClause(literals, getVocabulary());
     }
 
+    @Impure
     @Override
     protected ILits createLits() {
         return new Lits();

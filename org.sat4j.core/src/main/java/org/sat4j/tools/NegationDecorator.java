@@ -29,6 +29,8 @@
  *******************************************************************************/
 package org.sat4j.tools;
 
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.Impure;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -58,11 +60,13 @@ public class NegationDecorator<T extends ISolver> extends
 
     private final Collection<Integer> addedVars = new ArrayList<Integer>();
 
+    @Impure
     public NegationDecorator(T decorated) {
         super(decorated);
         internalState();
     }
 
+    @Impure
     @Override
     public IConstr addClause(IVecInt literals) throws ContradictionException {
         int newVar = createNewVar(literals);
@@ -78,24 +82,28 @@ public class NegationDecorator<T extends ISolver> extends
         return group;
     }
 
+    @Pure
     @Override
     public IConstr addAtMost(IVecInt literals, int degree)
             throws ContradictionException {
         throw new UnsupportedOperationException("Not implemented yet!");
     }
 
+    @Pure
     @Override
     public IConstr addAtLeast(IVecInt literals, int degree)
             throws ContradictionException {
         throw new UnsupportedOperationException("Not implemented yet!");
     }
 
+    @Pure
     @Override
     public IConstr addExactly(IVecInt literals, int n)
             throws ContradictionException {
         throw new UnsupportedOperationException("Not implemented yet!");
     }
 
+    @Impure
     @Override
     public boolean isSatisfiable(IVecInt assumps, boolean global)
             throws TimeoutException {
@@ -118,6 +126,7 @@ public class NegationDecorator<T extends ISolver> extends
 
     }
 
+    @Pure
     @Override
     public Collection<Integer> getAddedVars() {
         return addedVars;

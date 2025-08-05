@@ -29,6 +29,8 @@
  *******************************************************************************/
 package org.sat4j.minisat.learning;
 
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.Impure;
 import org.sat4j.minisat.core.Constr;
 import org.sat4j.minisat.core.DataStructureFactory;
 import org.sat4j.minisat.core.Solver;
@@ -49,10 +51,12 @@ public final class MiniSATLearning<D extends DataStructureFactory> extends
 
     private DataStructureFactory dsf;
 
+    @Impure
     public void setDataStructureFactory(DataStructureFactory dsf) {
         this.dsf = dsf;
     }
 
+    @Impure
     @Override
     public void setSolver(Solver<D> s) {
         super.setSolver(s);
@@ -61,6 +65,7 @@ public final class MiniSATLearning<D extends DataStructureFactory> extends
         }
     }
 
+    @Impure
     public void learns(Constr constr) {
         // va contenir une nouvelle clause ou null si la clause est unitaire
         claBumpActivity(constr);
@@ -72,6 +77,7 @@ public final class MiniSATLearning<D extends DataStructureFactory> extends
      * 
      * @see java.lang.Object#toString()
      */
+    @Pure
     @Override
     public String toString() {
         return "Learn all clauses as in MiniSAT";

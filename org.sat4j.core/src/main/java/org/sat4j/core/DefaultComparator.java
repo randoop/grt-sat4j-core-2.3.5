@@ -29,6 +29,7 @@
  *******************************************************************************/
 package org.sat4j.core;
 
+import org.checkerframework.dataflow.qual.Pure;
 import java.io.Serializable;
 import java.util.Comparator;
 
@@ -44,6 +45,7 @@ public final class DefaultComparator<A extends Comparable<A>> implements
         Comparator<A>, Serializable {
     private static final long serialVersionUID = 1L;
 
+    @Pure
     public int compare(A a, A b) {
         return a.compareTo(b);
     }

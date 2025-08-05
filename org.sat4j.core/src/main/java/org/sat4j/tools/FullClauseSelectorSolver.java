@@ -29,6 +29,9 @@
  *******************************************************************************/
 package org.sat4j.tools;
 
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -51,11 +54,14 @@ public class FullClauseSelectorSolver<T extends ISolver> extends
     private IConstr lastConstr;
     private final boolean skipDuplicatedEntries;
 
+    @SideEffectFree
+    @Impure
     public FullClauseSelectorSolver(T solver, boolean skipDuplicatedEntries) {
         super(solver);
         this.skipDuplicatedEntries = skipDuplicatedEntries;
     }
 
+    @Impure
     public IConstr addControlableClause(IVecInt literals)
             throws ContradictionException {
         if (this.skipDuplicatedEntries) {
@@ -76,16 +82,19 @@ public class FullClauseSelectorSolver<T extends ISolver> extends
         return this.lastConstr;
     }
 
+    @Impure
     public IConstr addNonControlableClause(IVecInt literals)
             throws ContradictionException {
         return super.addClause(literals);
     }
 
+    @Impure
     @Override
     public IConstr addClause(IVecInt literals) throws ContradictionException {
         return addControlableClause(literals);
     }
 
+    @Impure
     @Override
     public int[] model() {
         int[] fullmodel = super.modelWithInternalVariables();
@@ -106,31 +115,38 @@ public class FullClauseSelectorSolver<T extends ISolver> extends
      * 
      * @since 2.1
      */
+    @SideEffectFree
     public Collection<IConstr> getConstraints() {
         return this.constrs.values();
     }
 
+    @SideEffectFree
     @Override
     public Collection<Integer> getAddedVars() {
         return this.constrs.keySet();
     }
 
+    @Pure
     public IConstr getLastConstr() {
         return lastConstr;
     }
 
+    @Impure
     public void setLastConstr(IConstr lastConstr) {
         this.lastConstr = lastConstr;
     }
 
+    @Pure
     public Map<Integer, IConstr> getConstrs() {
         return constrs;
     }
 
+    @Pure
     public IVecInt getLastClause() {
         return lastClause;
     }
 
+    @Pure
     public boolean isSkipDuplicatedEntries() {
         return skipDuplicatedEntries;
     }

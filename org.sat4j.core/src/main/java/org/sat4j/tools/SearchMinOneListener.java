@@ -29,6 +29,8 @@
  *******************************************************************************/
 package org.sat4j.tools;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.dataflow.qual.Impure;
 import org.sat4j.specs.ISolverService;
 import org.sat4j.specs.RandomAccessModel;
 import org.sat4j.specs.Lbool;
@@ -51,15 +53,18 @@ public class SearchMinOneListener extends SearchListenerAdapter<ISolverService> 
 
     private final SolutionFoundListener sfl;
 
+    @Impure
     public SearchMinOneListener(SolutionFoundListener sfl) {
         this.sfl = sfl;
     }
 
+    @Impure
     @Override
     public void init(ISolverService solverService) {
         this.solverService = solverService;
     }
 
+    @Impure
     @Override
     public void solutionFound(int[] model, RandomAccessModel lazyModel) {
         int degree = 0;
@@ -77,6 +82,7 @@ public class SearchMinOneListener extends SearchListenerAdapter<ISolverService> 
         sfl.onSolutionFound(model);
     }
 
+    @SideEffectFree
     @Override
     public void end(Lbool result) {
         assert result != Lbool.TRUE;

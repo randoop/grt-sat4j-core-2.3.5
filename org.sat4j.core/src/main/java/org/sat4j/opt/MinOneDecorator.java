@@ -29,6 +29,9 @@
  *******************************************************************************/
 package org.sat4j.opt;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.Impure;
 import org.sat4j.core.VecInt;
 import org.sat4j.specs.ContradictionException;
 import org.sat4j.specs.IConstr;
@@ -58,10 +61,13 @@ public final class MinOneDecorator extends SolverDecorator<ISolver> implements
 
     private boolean isSolutionOptimal;
 
+    @SideEffectFree
+    @Impure
     public MinOneDecorator(ISolver solver) {
         super(solver);
     }
 
+    @Impure
     public boolean admitABetterSolution() throws TimeoutException {
         return admitABetterSolution(VecInt.EMPTY);
     }
@@ -69,6 +75,7 @@ public final class MinOneDecorator extends SolverDecorator<ISolver> implements
     /**
      * @since 2.1
      */
+    @Impure
     public boolean admitABetterSolution(IVecInt assumps)
             throws TimeoutException {
         this.isSolutionOptimal = false;
@@ -84,21 +91,25 @@ public final class MinOneDecorator extends SolverDecorator<ISolver> implements
         return result;
     }
 
+    @Pure
     public boolean hasNoObjectiveFunction() {
         return false;
     }
 
+    @Pure
     public boolean nonOptimalMeansSatisfiable() {
         return true;
     }
 
     private int counter;
 
+    @Impure
     public Number calculateObjective() {
         calculateObjectiveValue();
         return this.counter;
     }
 
+    @Impure
     private void calculateObjectiveValue() {
         this.counter = 0;
         for (int p : this.prevmodel) {
@@ -115,6 +126,7 @@ public final class MinOneDecorator extends SolverDecorator<ISolver> implements
     /**
      * @since 2.1
      */
+    @Impure
     public void discardCurrentSolution() throws ContradictionException {
         if (this.literals.isEmpty()) {
             for (int i = 1; i <= nVars(); i++) {
@@ -127,17 +139,20 @@ public final class MinOneDecorator extends SolverDecorator<ISolver> implements
         this.previousConstr = addAtMost(this.literals, this.counter - 1);
     }
 
+    @Pure
     @Override
     public int[] model() {
         // DLB findbugs ok
         return this.prevmodel;
     }
 
+    @Pure
     @Override
     public int[] modelWithInternalVariables() {
         return this.prevmodelWithInternalVariables;
     }
 
+    @Impure
     @Override
     public void reset() {
         this.literals.clear();
@@ -148,10 +163,12 @@ public final class MinOneDecorator extends SolverDecorator<ISolver> implements
     /**
      * @since 2.1
      */
+    @Pure
     public Number getObjectiveValue() {
         return this.counter;
     }
 
+    @Impure
     public void discard() throws ContradictionException {
         discardCurrentSolution();
     }
@@ -159,6 +176,7 @@ public final class MinOneDecorator extends SolverDecorator<ISolver> implements
     /**
      * @since 2.1
      */
+    @Impure
     public void forceObjectiveValueTo(Number forcedValue)
             throws ContradictionException {
         try {
@@ -170,10 +188,12 @@ public final class MinOneDecorator extends SolverDecorator<ISolver> implements
 
     }
 
+    @Pure
     public boolean isOptimal() {
         return this.isSolutionOptimal;
     }
 
+    @SideEffectFree
     public void setTimeoutForFindingBetterSolution(int seconds) {
         // TODO
         throw new UnsupportedOperationException("No implemented yet");

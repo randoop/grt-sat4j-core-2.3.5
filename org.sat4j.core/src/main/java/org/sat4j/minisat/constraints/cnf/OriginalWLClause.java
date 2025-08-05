@@ -29,12 +29,16 @@
  *******************************************************************************/
 package org.sat4j.minisat.constraints.cnf;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.Pure;
 import org.sat4j.minisat.core.ILits;
 import org.sat4j.specs.IVecInt;
 import org.sat4j.specs.UnitPropagationListener;
 
 public final class OriginalWLClause extends WLClause {
 
+    @Impure
     public OriginalWLClause(IVecInt ps, ILits voc) {
         super(ps, voc);
     }
@@ -49,16 +53,19 @@ public final class OriginalWLClause extends WLClause {
      * 
      * @see org.sat4j.minisat.constraints.cnf.WLClause#register()
      */
+    @Impure
     public void register() {
         assert this.lits.length > 1;
         this.voc.watch(this.lits[0] ^ 1, this);
         this.voc.watch(this.lits[1] ^ 1, this);
     }
 
+    @Pure
     public boolean learnt() {
         return false;
     }
 
+    @SideEffectFree
     public void setLearnt() {
         // do nothing
     }
@@ -75,6 +82,7 @@ public final class OriginalWLClause extends WLClause {
      * @return the created clause or null if the clause should be ignored
      *         (tautology for example)
      */
+    @Impure
     public static OriginalWLClause brandNewClause(UnitPropagationListener s,
             ILits voc, IVecInt literals) {
         OriginalWLClause c = new OriginalWLClause(literals, voc);
@@ -85,6 +93,7 @@ public final class OriginalWLClause extends WLClause {
     /**
      * @since 2.1
      */
+    @Impure
     public void forwardActivity(double claInc) {
         this.activity += claInc;
     }
@@ -92,6 +101,7 @@ public final class OriginalWLClause extends WLClause {
     /**
      * @param claInc
      */
+    @SideEffectFree
     public void incActivity(double claInc) {
 
     }

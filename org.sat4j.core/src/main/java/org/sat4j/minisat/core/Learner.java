@@ -28,6 +28,7 @@
  *   CRIL - initial API and implementation
  *******************************************************************************/
 package org.sat4j.minisat.core;
+import org.checkerframework.dataflow.qual.Impure;
 
 /**
  * Provide the learning service.
@@ -36,5 +37,6 @@ package org.sat4j.minisat.core;
  */
 public interface Learner {
 
+    @Impure
     void learn(Constr c);
 }

@@ -29,6 +29,8 @@
  *******************************************************************************/
 package org.sat4j.tools;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.dataflow.qual.Impure;
 import org.sat4j.specs.ContradictionException;
 import org.sat4j.specs.IConstr;
 import org.sat4j.specs.ISolver;
@@ -54,17 +56,21 @@ public class ClausalCardinalitiesDecorator<T extends ISolver> extends
 
     private final EncodingStrategyAdapter encodingAdapter;
 
+    @Impure
     public ClausalCardinalitiesDecorator(T solver) {
         super(solver);
         this.encodingAdapter = new Policy();
     }
 
+    @SideEffectFree
+    @Impure
     public ClausalCardinalitiesDecorator(T solver,
             EncodingStrategyAdapter encodingAd) {
         super(solver);
         this.encodingAdapter = encodingAd;
     }
 
+    @Impure
     @Override
     public IConstr addAtLeast(IVecInt literals, int k)
             throws ContradictionException {
@@ -75,6 +81,7 @@ public class ClausalCardinalitiesDecorator<T extends ISolver> extends
         }
     }
 
+    @Impure
     @Override
     public IConstr addAtMost(IVecInt literals, int k)
             throws ContradictionException {
@@ -85,6 +92,7 @@ public class ClausalCardinalitiesDecorator<T extends ISolver> extends
         }
     }
 
+    @Impure
     @Override
     public IConstr addExactly(IVecInt literals, int k)
             throws ContradictionException {
@@ -96,11 +104,13 @@ public class ClausalCardinalitiesDecorator<T extends ISolver> extends
         }
     }
 
+    @Impure
     @Override
     public String toString() {
         return toString("");
     }
 
+    @Impure
     @Override
     public String toString(String prefix) {
         return super.toString(prefix) + "\n"

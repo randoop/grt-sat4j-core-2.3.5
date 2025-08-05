@@ -30,6 +30,7 @@
 
 package org.sat4j.tools.encoding;
 
+import org.checkerframework.dataflow.qual.Impure;
 import org.sat4j.core.ConstrGroup;
 import org.sat4j.core.VecInt;
 import org.sat4j.specs.ContradictionException;
@@ -62,6 +63,7 @@ public class Sequential extends EncodingStrategyAdapter {
      * at most constraint and k is the degree of the constraint) and 2nk+n-3k-1
      * clauses.
      */
+    @Impure
     @Override
     public IConstr addAtMost(ISolver solver, IVecInt literals, int k)
             throws ContradictionException {
@@ -120,12 +122,14 @@ public class Sequential extends EncodingStrategyAdapter {
         return group;
     }
 
+    @Impure
     @Override
     public IConstr addAtMostOne(ISolver solver, IVecInt literals)
             throws ContradictionException {
         return addAtMost(solver, literals, 1);
     }
 
+    @Impure
     @Override
     public IConstr addExactlyOne(ISolver solver, IVecInt literals)
             throws ContradictionException {
@@ -137,6 +141,7 @@ public class Sequential extends EncodingStrategyAdapter {
         return group;
     }
 
+    @Impure
     @Override
     public IConstr addExactly(ISolver solver, IVecInt literals, int degree)
             throws ContradictionException {

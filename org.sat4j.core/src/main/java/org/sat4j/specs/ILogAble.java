@@ -28,6 +28,7 @@
  *   CRIL - initial API and implementation
  *******************************************************************************/
 package org.sat4j.specs;
+import org.checkerframework.dataflow.qual.Impure;
 
 /**
  * Utility interface to catch objects with logging capability (able to log).
@@ -41,11 +42,13 @@ package org.sat4j.specs;
 public interface ILogAble {
     ILogAble CONSOLE = new ILogAble() {
 
+        @Impure
         public void log(String message) {
             System.out.println(message);
         }
     };
 
+    @Impure
     void log(String message);
 
 }

@@ -29,6 +29,8 @@
  *******************************************************************************/
 package org.sat4j.tools.xplain;
 
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.Impure;
 import java.util.Map;
 import java.util.Set;
 
@@ -73,6 +75,7 @@ public class InsertionStrategy implements MinimizationStrategy {
     /**
      * @since 2.1
      */
+    @Impure
     public void cancelExplanationComputation() {
         this.computationCanceled = true;
     }
@@ -80,6 +83,7 @@ public class InsertionStrategy implements MinimizationStrategy {
     /**
      * @since 2.1
      */
+    @Impure
     public IVecInt explain(ISolver solver, Map<Integer, ?> constrs,
             IVecInt assumps) throws TimeoutException {
         this.computationCanceled = false;
@@ -167,6 +171,7 @@ public class InsertionStrategy implements MinimizationStrategy {
         return constrsKeys;
     }
 
+    @Pure
     @Override
     public String toString() {
         return "Replay (Insertion-based) minimization strategy";

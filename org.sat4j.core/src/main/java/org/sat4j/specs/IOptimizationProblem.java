@@ -28,6 +28,9 @@
  *   CRIL - initial API and implementation
  *******************************************************************************/
 package org.sat4j.specs;
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.Impure;
 
 /**
  * Represents an optimization problem. The SAT solver will find suboptimal
@@ -84,6 +87,7 @@ public interface IOptimizationProblem extends IProblem {
      *             if the solver cannot answer in reasonable time.
      * @see ISolver#setTimeout(int)
      */
+    @Impure
     boolean admitABetterSolution() throws TimeoutException;
 
     /**
@@ -98,6 +102,7 @@ public interface IOptimizationProblem extends IProblem {
      * @see ISolver#setTimeout(int)
      * @since 2.1
      */
+    @Impure
     boolean admitABetterSolution(IVecInt assumps) throws TimeoutException;
 
     /**
@@ -107,6 +112,7 @@ public interface IOptimizationProblem extends IProblem {
      * @return true if the problem is a decision problem, false if the problem
      *         is an optimization problem.
      */
+    @Pure
     boolean hasNoObjectiveFunction();
 
     /**
@@ -120,6 +126,7 @@ public interface IOptimizationProblem extends IProblem {
      * @return true if founding a suboptimal solution means that the problem is
      *         satisfiable.
      */
+    @Pure
     boolean nonOptimalMeansSatisfiable();
 
     /**
@@ -132,6 +139,7 @@ public interface IOptimizationProblem extends IProblem {
      * @return the value of the objective function.
      * @see #getObjectiveValue()
      */
+    @Impure
     @Deprecated
     Number calculateObjective();
 
@@ -142,6 +150,7 @@ public interface IOptimizationProblem extends IProblem {
      * @return the value of the objective function for the current solution.
      * @since 2.1
      */
+    @Pure
     Number getObjectiveValue();
 
     /**
@@ -152,6 +161,7 @@ public interface IOptimizationProblem extends IProblem {
      * @throws ContradictionException
      * @since 2.1
      */
+    @Impure
     void forceObjectiveValueTo(Number forcedValue)
             throws ContradictionException;
 
@@ -165,6 +175,7 @@ public interface IOptimizationProblem extends IProblem {
      *             if a trivial inconsistency is detected.
      * @see #discardCurrentSolution()
      */
+    @Impure
     @Deprecated
     void discard() throws ContradictionException;
 
@@ -175,6 +186,7 @@ public interface IOptimizationProblem extends IProblem {
      *             if a trivial inconsistency is detected.
      * @since 2.1
      */
+    @Impure
     void discardCurrentSolution() throws ContradictionException;
 
     /**
@@ -183,6 +195,7 @@ public interface IOptimizationProblem extends IProblem {
      * 
      * @return
      */
+    @Pure
     boolean isOptimal();
 
     /**
@@ -194,5 +207,6 @@ public interface IOptimizationProblem extends IProblem {
      * 
      * @since 2.3.3
      */
+    @SideEffectFree
     void setTimeoutForFindingBetterSolution(int seconds);
 }

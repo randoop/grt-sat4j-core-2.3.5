@@ -28,6 +28,8 @@
  *   CRIL - initial API and implementation
  *******************************************************************************/
 package org.sat4j.specs;
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 
 /**
  * Interface for engines able to derive unit clauses for the current problem.
@@ -40,10 +42,12 @@ public interface UnitClauseProvider {
 
     UnitClauseProvider VOID = new UnitClauseProvider() {
 
+        @SideEffectFree
         public void provideUnitClauses(UnitPropagationListener upl) {
             // do nothing
         }
     };
 
+    @Impure
     void provideUnitClauses(UnitPropagationListener upl);
 }

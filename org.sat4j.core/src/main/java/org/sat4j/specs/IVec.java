@@ -29,6 +29,7 @@
  *******************************************************************************/
 package org.sat4j.specs;
 
+import org.checkerframework.dataflow.qual.Impure;
 import java.io.Serializable;
 import java.util.Comparator;
 import java.util.Iterator;
@@ -43,6 +44,7 @@ public interface IVec<T> extends Serializable {
     /**
      * @return the number of elements contained in the vector
      */
+    @Impure
     int size();
 
     /**
@@ -53,6 +55,7 @@ public interface IVec<T> extends Serializable {
      * @param nofelems
      *            the number of elements to remove.
      */
+    @Impure
     void shrink(int nofelems);
 
     /**
@@ -61,18 +64,23 @@ public interface IVec<T> extends Serializable {
      * @param newsize
      *            the new size of the vector.
      */
+    @Impure
     void shrinkTo(final int newsize);
 
     /**
      * Pop the last element on the stack. It is assumed that the stack is not
      * empty!
      */
+    @Impure
     void pop();
 
+    @Impure
     void growTo(final int newsize, final T pad);
 
+    @Impure
     void ensure(final int nsize);
 
+    @Impure
     IVec<T> push(final T elem);
 
     /**
@@ -80,6 +88,7 @@ public interface IVec<T> extends Serializable {
      * 
      * @param elem
      */
+    @Impure
     void unsafePush(T elem);
 
     /**
@@ -90,10 +99,13 @@ public interface IVec<T> extends Serializable {
      * @param elem
      *            the element to put first in the vector.
      */
+    @Impure
     void insertFirst(final T elem);
 
+    @Impure
     void insertFirstWithShifting(final T elem);
 
+    @Impure
     void clear();
 
     /**
@@ -102,10 +114,13 @@ public interface IVec<T> extends Serializable {
      * 
      * @return the last (top) element on the stack
      */
+    @Impure
     T last();
 
+    @Impure
     T get(int i);
 
+    @Impure
     void set(int i, T o);
 
     /**
@@ -114,6 +129,7 @@ public interface IVec<T> extends Serializable {
      * @param elem
      *            un element du vecteur
      */
+    @Impure
     void remove(T elem);
 
     /**
@@ -125,6 +141,7 @@ public interface IVec<T> extends Serializable {
      * @return the former ith element of the vector that is now removed from the
      *         vector
      */
+    @Impure
     T delete(int i);
 
     /**
@@ -133,8 +150,10 @@ public interface IVec<T> extends Serializable {
      * 
      * @param copy
      */
+    @Impure
     void copyTo(IVec<T> copy);
 
+    @Impure
     <E> void copyTo(E[] dest);
 
     /**
@@ -144,6 +163,7 @@ public interface IVec<T> extends Serializable {
      * 
      * @return the internal representation of the Vector as an array.
      */
+    @Impure
     T[] toArray();
 
     /**
@@ -153,6 +173,7 @@ public interface IVec<T> extends Serializable {
      * @param dest
      *            the vector where top put the content of this vector
      */
+    @Impure
     void moveTo(IVec<T> dest);
 
     /**
@@ -164,13 +185,16 @@ public interface IVec<T> extends Serializable {
      * @param source
      *            the index of the source
      */
+    @Impure
     void moveTo(int dest, int source);
 
     /*
      * @param comparator
      */
+    @Impure
     void sort(Comparator<T> comparator);
 
+    @Impure
     void sortUnique(Comparator<T> comparator);
 
     /**
@@ -179,8 +203,10 @@ public interface IVec<T> extends Serializable {
      * @return true iff the vector is empty.
      * @since 1.6
      */
+    @Impure
     boolean isEmpty();
 
+    @Impure
     Iterator<T> iterator();
 
     /**
@@ -190,6 +216,7 @@ public interface IVec<T> extends Serializable {
      * @return true iff element is found in the vector.
      * @since 2.1
      */
+    @Impure
     boolean contains(T element);
 
     /**
@@ -198,5 +225,6 @@ public interface IVec<T> extends Serializable {
      * @return the index of the element if it is found in the vector, else -1.
      * @since 2.2
      */
+    @Impure
     int indexOf(T element);
 }

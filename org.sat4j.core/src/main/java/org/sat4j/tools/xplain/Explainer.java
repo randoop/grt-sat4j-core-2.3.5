@@ -29,11 +29,14 @@
  *******************************************************************************/
 package org.sat4j.tools.xplain;
 
+import org.checkerframework.dataflow.qual.Impure;
 import org.sat4j.specs.TimeoutException;
 
 public interface Explainer {
 
+    @Impure
     int[] minimalExplanation() throws TimeoutException;
 
+    @Impure
     void setMinimizationStrategy(MinimizationStrategy explainer);
 }

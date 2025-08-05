@@ -29,6 +29,7 @@
  *******************************************************************************/
 package org.sat4j.specs;
 
+import org.checkerframework.dataflow.qual.Impure;
 import java.io.PrintWriter;
 
 /**
@@ -46,6 +47,7 @@ public interface IProblem extends RandomAccessModel {
      * @see #isSatisfiable()
      * @see #isSatisfiable(IVecInt)
      */
+    @Impure
     int[] model();
 
     /**
@@ -57,6 +59,7 @@ public interface IProblem extends RandomAccessModel {
      *         format.
      * @since 2.3
      */
+    @Impure
     int[] primeImplicant();
 
     /**
@@ -67,6 +70,7 @@ public interface IProblem extends RandomAccessModel {
      *            a literal in Dimacs format
      * @return true iff p belongs to {@link #primeImplicant()}
      */
+    @Impure
     boolean primeImplicant(int p);
 
     /**
@@ -75,6 +79,7 @@ public interface IProblem extends RandomAccessModel {
      * 
      * @return true if the set of constraints is satisfiable, else false.
      */
+    @Impure
     boolean isSatisfiable() throws TimeoutException;
 
     /**
@@ -91,6 +96,7 @@ public interface IProblem extends RandomAccessModel {
      * @return true if the set of constraints is satisfiable when literals are
      *         satisfied, else false.
      */
+    @Impure
     boolean isSatisfiable(IVecInt assumps, boolean globalTimeout)
             throws TimeoutException;
 
@@ -104,6 +110,7 @@ public interface IProblem extends RandomAccessModel {
      *            reset between each call.
      * @return true if the set of constraints is satisfiable, else false.
      */
+    @Impure
     boolean isSatisfiable(boolean globalTimeout) throws TimeoutException;
 
     /**
@@ -116,6 +123,7 @@ public interface IProblem extends RandomAccessModel {
      * @return true if the set of constraints is satisfiable when literals are
      *         satisfied, else false.
      */
+    @Impure
     boolean isSatisfiable(IVecInt assumps) throws TimeoutException;
 
     /**
@@ -134,6 +142,7 @@ public interface IProblem extends RandomAccessModel {
      *             if a model cannot be found within the given timeout.
      * @since 1.7
      */
+    @Impure
     int[] findModel() throws TimeoutException;
 
     /**
@@ -152,6 +161,7 @@ public interface IProblem extends RandomAccessModel {
      *             if a model cannot be found within the given timeout.
      * @since 1.7
      */
+    @Impure
     int[] findModel(IVecInt assumps) throws TimeoutException;
 
     /**
@@ -160,6 +170,7 @@ public interface IProblem extends RandomAccessModel {
      * 
      * @return the number of constraints added to the solver
      */
+    @Impure
     int nConstraints();
 
     /**
@@ -174,6 +185,7 @@ public interface IProblem extends RandomAccessModel {
      *         highest variable number)
      * @see #nVars()
      */
+    @Impure
     int newVar(int howmany);
 
     /**
@@ -186,6 +198,7 @@ public interface IProblem extends RandomAccessModel {
      * @return the number of variables created using newVar().
      * @see #newVar(int)
      */
+    @Impure
     int nVars();
 
     /**
@@ -197,6 +210,7 @@ public interface IProblem extends RandomAccessModel {
      *            the prefix to put in front of each line
      * 
      */
+    @Impure
     @Deprecated
     void printInfos(PrintWriter out, String prefix);
 
@@ -209,5 +223,6 @@ public interface IProblem extends RandomAccessModel {
      * @since 2.3.3
      * 
      */
+    @Impure
     void printInfos(PrintWriter out);
 }

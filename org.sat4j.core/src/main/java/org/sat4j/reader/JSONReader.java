@@ -29,6 +29,9 @@
  *******************************************************************************/
 package org.sat4j.reader;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.Pure;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -78,6 +81,7 @@ public class JSONReader<S extends ISolver> extends Reader {
 
     private final Pattern constraintPattern;
 
+    @Impure
     public JSONReader(S solver) {
         this.solver = solver;
         constraint = constraintRegexp();
@@ -85,10 +89,12 @@ public class JSONReader<S extends ISolver> extends Reader {
         constraintPattern = Pattern.compile(constraint);
     }
 
+    @Pure
     protected String constraintRegexp() {
         return "(" + CLAUSE + "|" + CARD + ")";
     }
 
+    @Impure
     private void handleConstraint(String constraint)
             throws ParseFormatException, ContradictionException {
         if (CARD_PATTERN.matcher(constraint).matches()) {
@@ -100,16 +106,20 @@ public class JSONReader<S extends ISolver> extends Reader {
         }
     }
 
+    @SideEffectFree
+    @Impure
     protected void handleNotHandled(String constraint)
             throws ParseFormatException, ContradictionException {
         throw new ParseFormatException("Unknown constraint: " + constraint);
     }
 
+    @Impure
     private void handleClause(String constraint) throws ParseFormatException,
             ContradictionException {
         solver.addClause(getLiterals(constraint));
     }
 
+    @Impure
     protected IVecInt getLiterals(String constraint)
             throws ParseFormatException {
         String trimmed = constraint.trim();
@@ -123,6 +133,7 @@ public class JSONReader<S extends ISolver> extends Reader {
         return clause;
     }
 
+    @Impure
     protected void handleCard(String constraint) throws ParseFormatException,
             ContradictionException {
         String trimmed = constraint.trim();
@@ -149,6 +160,7 @@ public class JSONReader<S extends ISolver> extends Reader {
         }
     }
 
+    @Impure
     @Override
     public IProblem parseInstance(InputStream in) throws ParseFormatException,
             ContradictionException, IOException {
@@ -161,6 +173,7 @@ public class JSONReader<S extends ISolver> extends Reader {
         return parseString(out.toString());
     }
 
+    @Impure
     public ISolver parseString(String json) throws ParseFormatException,
             ContradictionException {
         String trimmed = json.trim();
@@ -174,12 +187,15 @@ public class JSONReader<S extends ISolver> extends Reader {
         return solver;
     }
 
+    @SideEffectFree
+    @Impure
     @Override
     @Deprecated
     public String decode(int[] model) {
         return "[" + new VecInt(model) + "]";
     }
 
+    @Impure
     @Override
     public void decode(int[] model, PrintWriter out) {
         out.print("[");

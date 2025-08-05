@@ -29,6 +29,8 @@
  *******************************************************************************/
 package org.sat4j.minisat.core;
 
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.Pure;
 import java.io.Serializable;
 
 import org.sat4j.specs.IVec;
@@ -44,8 +46,10 @@ public interface LearnedConstraintsDeletionStrategy extends Serializable {
     /**
 	 * 
 	 */
+    @Impure
     void init();
 
+    @Pure
     ConflictTimer getTimer();
 
     /**
@@ -54,6 +58,7 @@ public interface LearnedConstraintsDeletionStrategy extends Serializable {
      * 
      * @param learnedConstrs
      */
+    @Impure
     void reduce(IVec<Constr> learnedConstrs);
 
     /**
@@ -62,6 +67,7 @@ public interface LearnedConstraintsDeletionStrategy extends Serializable {
      * 
      * @param outLearnt
      */
+    @Impure
     void onClauseLearning(Constr outLearnt);
 
     /**
@@ -69,6 +75,7 @@ public interface LearnedConstraintsDeletionStrategy extends Serializable {
      * 
      * @param reason
      */
+    @Impure
     void onConflictAnalysis(Constr reason);
 
     /**
@@ -76,5 +83,6 @@ public interface LearnedConstraintsDeletionStrategy extends Serializable {
      * 
      * @param from
      */
+    @Impure
     void onPropagation(Constr from);
 }

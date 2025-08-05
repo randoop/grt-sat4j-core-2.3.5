@@ -29,6 +29,9 @@
  *******************************************************************************/
 package org.sat4j.minisat.constraints;
 
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.dataflow.qual.Pure;
 import java.io.Serializable;
 
 import org.sat4j.core.Vec;
@@ -61,6 +64,7 @@ public abstract class AbstractDataStructureFactory implements
      * org.sat4j.minisat.core.DataStructureFactory#conflictDetectedInWatchesFor
      * (int)
      */
+    @Impure
     public void conflictDetectedInWatchesFor(int p, int i) {
         for (int j = i + 1; j < this.tmp.size(); j++) {
             this.lits.watch(p, this.tmp.get(j));
@@ -72,6 +76,7 @@ public abstract class AbstractDataStructureFactory implements
      * 
      * @see org.sat4j.minisat.core.DataStructureFactory#getWatchesFor(int)
      */
+    @Impure
     public IVec<Propagatable> getWatchesFor(int p) {
         this.tmp.clear();
         this.lits.watches(p).moveTo(this.tmp);
@@ -80,10 +85,12 @@ public abstract class AbstractDataStructureFactory implements
 
     protected ILits lits;
 
+    @Impure
     protected AbstractDataStructureFactory() {
         this.lits = createLits();
     }
 
+    @Impure
     protected abstract ILits createLits();
 
     private final IVec<Propagatable> tmp = new Vec<Propagatable>();
@@ -93,6 +100,7 @@ public abstract class AbstractDataStructureFactory implements
      * 
      * @see org.sat4j.minisat.DataStructureFactory#createVocabulary()
      */
+    @Pure
     public ILits getVocabulary() {
         return this.lits;
     }
@@ -101,17 +109,21 @@ public abstract class AbstractDataStructureFactory implements
 
     protected Learner learner;
 
+    @Impure
     public void setUnitPropagationListener(UnitPropagationListener s) {
         this.solver = s;
     }
 
+    @Impure
     public void setLearner(Learner learner) {
         this.learner = learner;
     }
 
+    @SideEffectFree
     public void reset() {
     }
 
+    @Impure
     public void learnConstraint(Constr constr) {
         this.learner.learn(constr);
     }
@@ -123,11 +135,13 @@ public abstract class AbstractDataStructureFactory implements
      * org.sat4j.minisat.core.DataStructureFactory#createCardinalityConstraint
      * (org.sat4j.specs.VecInt, int)
      */
+    @Impure
     public Constr createCardinalityConstraint(IVecInt literals, int degree)
             throws ContradictionException {
         throw new UnsupportedOperationException();
     }
 
+    @Impure
     public Constr createUnregisteredCardinalityConstraint(IVecInt literals,
             int degree) {
         throw new UnsupportedOperationException();

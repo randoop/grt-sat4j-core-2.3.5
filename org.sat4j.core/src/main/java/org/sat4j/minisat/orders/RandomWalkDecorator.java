@@ -29,6 +29,9 @@
  *******************************************************************************/
 package org.sat4j.minisat.orders;
 
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.dataflow.qual.Pure;
 import java.io.PrintWriter;
 import java.io.Serializable;
 import java.util.Random;
@@ -55,40 +58,51 @@ public class RandomWalkDecorator implements IOrder, Serializable {
     private ILits voc;
     private int nbRandomWalks;
 
+    @SideEffectFree
+    @Impure
     public RandomWalkDecorator(VarOrderHeap order) {
         this(order, 0.01);
     }
 
+    @SideEffectFree
     public RandomWalkDecorator(VarOrderHeap order, double p) {
         this.decorated = order;
         this.p = p;
     }
 
+    @Impure
     public void assignLiteral(int q) {
         this.decorated.assignLiteral(q);
     }
 
+    @Pure
+    @Impure
     public IPhaseSelectionStrategy getPhaseSelectionStrategy() {
         return this.decorated.getPhaseSelectionStrategy();
     }
 
+    @Pure
     public double getProbability() {
         return this.p;
     }
 
+    @Impure
     public void setProbability(double p) {
         this.p = p;
     }
 
+    @Impure
     public void init() {
         this.decorated.init();
     }
 
+    @Impure
     public void printStat(PrintWriter out, String prefix) {
         out.println(prefix + "random walks\t: " + this.nbRandomWalks);
         this.decorated.printStat(out, prefix);
     }
 
+    @Impure
     public int select() {
         if (RAND.nextDouble() < this.p) {
             int var, lit, max;
@@ -106,45 +120,58 @@ public class RandomWalkDecorator implements IOrder, Serializable {
         return this.decorated.select();
     }
 
+    @Impure
     public void setLits(ILits lits) {
         this.decorated.setLits(lits);
         this.voc = lits;
         this.nbRandomWalks = 0;
     }
 
+    @Impure
     public void setPhaseSelectionStrategy(IPhaseSelectionStrategy strategy) {
         this.decorated.setPhaseSelectionStrategy(strategy);
     }
 
+    @Impure
     public void setVarDecay(double d) {
         this.decorated.setVarDecay(d);
     }
 
+    @Impure
     public void undo(int x) {
         this.decorated.undo(x);
     }
 
+    @Impure
     public void updateVar(int q) {
         this.decorated.updateVar(q);
     }
 
+    @Pure
+    @Impure
     public double varActivity(int q) {
         return this.decorated.varActivity(q);
     }
 
+    @Impure
     public void varDecayActivity() {
         this.decorated.varDecayActivity();
     }
 
+    @Impure
     public void updateVarAtDecisionLevel(int q) {
         this.decorated.updateVarAtDecisionLevel(q);
     }
 
+    @Pure
+    @SideEffectFree
     @Override
     public String toString() {
         return this.decorated.toString() + " with random walks " + this.p;
     }
 
+    @Pure
+    @Impure
     public double[] getVariableHeuristics() {
         return this.decorated.getVariableHeuristics();
     }

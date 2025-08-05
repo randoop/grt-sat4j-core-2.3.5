@@ -29,6 +29,8 @@
  *******************************************************************************/
 package org.sat4j.minisat.constraints.cnf;
 
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.Pure;
 import java.io.Serializable;
 
 import org.sat4j.core.LiteralsUtils;
@@ -68,10 +70,12 @@ public final class Lits implements Serializable, ILits {
 
     private boolean[] falsified = new boolean[0];
 
+    @Impure
     public Lits() {
         init(DEFAULT_INIT_SIZE);
     }
 
+    @Impure
     @SuppressWarnings({ "unchecked" })
     public void init(int nvar) {
         if (nvar < this.pool.length) {
@@ -106,6 +110,7 @@ public final class Lits implements Serializable, ILits {
         this.falsified = newFalsified;
     }
 
+    @Impure
     public int getFromPool(int x) {
         int var = Math.abs(x);
         if (var >= this.pool.length) {
@@ -132,6 +137,7 @@ public final class Lits implements Serializable, ILits {
         return lit;
     }
 
+    @Pure
     public boolean belongsToPool(int x) {
         assert x > 0;
         if (x >= this.pool.length) {
@@ -140,6 +146,7 @@ public final class Lits implements Serializable, ILits {
         return this.pool[x];
     }
 
+    @Impure
     public void resetPool() {
         for (int i = 0; i < this.pool.length; i++) {
             if (this.pool[i]) {
@@ -150,6 +157,7 @@ public final class Lits implements Serializable, ILits {
         this.realnVars = 0;
     }
 
+    @Impure
     public void ensurePool(int howmany) {
         if (howmany >= this.pool.length) {
             init(Math.max(howmany, this.pool.length << 1));
@@ -157,35 +165,43 @@ public final class Lits implements Serializable, ILits {
         this.maxvarid = howmany;
     }
 
+    @Impure
     public void unassign(int lit) {
         assert this.falsified[lit] || this.falsified[lit ^ 1];
         this.falsified[lit] = false;
         this.falsified[lit ^ 1] = false;
     }
 
+    @Impure
     public void satisfies(int lit) {
         assert !this.falsified[lit] && !this.falsified[lit ^ 1];
         this.falsified[lit] = false;
         this.falsified[lit ^ 1] = true;
     }
 
+    @Impure
     public void forgets(int var) {
         this.falsified[var << 1] = true;
         this.falsified[var << 1 ^ 1] = true;
     }
 
+    @Pure
     public boolean isSatisfied(int lit) {
         return this.falsified[lit ^ 1];
     }
 
+    @Pure
     public boolean isFalsified(int lit) {
         return this.falsified[lit];
     }
 
+    @Pure
     public boolean isUnassigned(int lit) {
         return !this.falsified[lit] && !this.falsified[lit ^ 1];
     }
 
+    @Pure
+    @Impure
     public String valueToString(int lit) {
         if (isUnassigned(lit)) {
             return "?"; //$NON-NLS-1$
@@ -196,19 +212,23 @@ public final class Lits implements Serializable, ILits {
         return "F"; //$NON-NLS-1$
     }
 
+    @Pure
     public int nVars() {
         // return pool.length - 1;
         return this.maxvarid;
     }
 
+    @Pure
     public int not(int lit) {
         return lit ^ 1;
     }
 
+    @Pure
     public static String toString(int lit) {
         return ((lit & 1) == 0 ? "" : "-") + (lit >> 1); //$NON-NLS-1$//$NON-NLS-2$
     }
 
+    @Impure
     public void reset(int lit) {
         this.watches[lit].clear();
         this.watches[lit ^ 1].clear();
@@ -220,34 +240,42 @@ public final class Lits implements Serializable, ILits {
         this.pool[lit >> 1] = false;
     }
 
+    @Pure
     public int getLevel(int lit) {
         return this.level[lit >> 1];
     }
 
+    @Impure
     public void setLevel(int lit, int l) {
         this.level[lit >> 1] = l;
     }
 
+    @Pure
     public Constr getReason(int lit) {
         return this.reason[lit >> 1];
     }
 
+    @Impure
     public void setReason(int lit, Constr r) {
         this.reason[lit >> 1] = r;
     }
 
+    @Pure
     public IVec<Undoable> undos(int lit) {
         return this.undos[lit >> 1];
     }
 
+    @Impure
     public void watch(int lit, Propagatable c) {
         this.watches[lit].push(c);
     }
 
+    @Pure
     public IVec<Propagatable> watches(int lit) {
         return this.watches[lit];
     }
 
+    @Pure
     public boolean isImplied(int lit) {
         int var = lit >> 1;
         assert this.reason[var] == null || this.falsified[lit]
@@ -258,6 +286,7 @@ public final class Lits implements Serializable, ILits {
                 && (this.reason[var] != null || this.level[var] == 0);
     }
 
+    @Pure
     public int realnVars() {
         return this.realnVars;
     }
@@ -268,6 +297,7 @@ public final class Lits implements Serializable, ILits {
      * @return the total number of variables that can be managed by the
      *         vocabulary.
      */
+    @Pure
     protected int capacity() {
         return this.pool.length - 1;
     }
@@ -275,6 +305,7 @@ public final class Lits implements Serializable, ILits {
     /**
      * @since 2.1
      */
+    @Impure
     public int nextFreeVarId(boolean reserve) {
         if (reserve) {
             ensurePool(this.maxvarid + 1);

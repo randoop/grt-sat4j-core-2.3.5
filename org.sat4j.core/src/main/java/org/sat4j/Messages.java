@@ -29,6 +29,8 @@
  *******************************************************************************/
 package org.sat4j;
 
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
@@ -49,10 +51,12 @@ public final class Messages {
      * message for key.
      * 
      */
+    @SideEffectFree
     private Messages() {
         super();
     }
 
+    @Impure
     public static String getString(String key) {
         // TODO Auto-generated method stub
         try {

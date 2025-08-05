@@ -28,6 +28,8 @@
  *   CRIL - initial API and implementation
  *******************************************************************************/
 package org.sat4j.minisat.orders;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.Impure;
 
 /**
  * @author leberre TODO To change the template for this generated type comment
@@ -44,19 +46,23 @@ public final class PureOrder extends VarOrderHeap {
 
     private int cpt;
 
+    @Impure
     public PureOrder() {
         this(20);
     }
 
+    @Impure
     public PureOrder(int p) {
         setPeriod(p);
     }
 
+    @Impure
     public void setPeriod(int p) {
         this.period = p;
         this.cpt = this.period;
     }
 
+    @Pure
     public int getPeriod() {
         return this.period;
     }
@@ -66,6 +72,7 @@ public final class PureOrder extends VarOrderHeap {
      * 
      * @see org.sat4j.minisat.core.VarOrder#select()
      */
+    @Impure
     @Override
     public int select() {
         // wait period branching
@@ -87,6 +94,7 @@ public final class PureOrder extends VarOrderHeap {
         return super.select();
     }
 
+    @Pure
     @Override
     public String toString() {
         return "tries to first branch on a single phase watched unassigned variable (pure literal if using a CB data structure) else VSIDS from MiniSAT"; //$NON-NLS-1$

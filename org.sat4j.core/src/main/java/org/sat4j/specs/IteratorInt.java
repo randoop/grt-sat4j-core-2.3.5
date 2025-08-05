@@ -28,6 +28,8 @@
  *   CRIL - initial API and implementation
  *******************************************************************************/
 package org.sat4j.specs;
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.Pure;
 
 /**
  * Iterator interface to avoid boxing int into Integer.
@@ -37,7 +39,9 @@ package org.sat4j.specs;
  */
 public interface IteratorInt {
 
+    @Pure
     boolean hasNext();
 
+    @Impure
     int next();
 }

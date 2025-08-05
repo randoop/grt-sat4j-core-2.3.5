@@ -30,6 +30,7 @@
 
 package org.sat4j.tools.encoding;
 
+import org.checkerframework.dataflow.qual.Impure;
 import org.sat4j.core.ConstrGroup;
 import org.sat4j.core.VecInt;
 import org.sat4j.specs.ContradictionException;
@@ -55,6 +56,7 @@ public class Ladder extends EncodingStrategyAdapter {
      */
     private static final long serialVersionUID = 1L;
 
+    @Impure
     @Override
     /**
      * If n is the number of variables in the constraint, 
@@ -135,6 +137,7 @@ public class Ladder extends EncodingStrategyAdapter {
         return group;
     }
 
+    @Impure
     @Override
     /**
      * If n is the number of variables in the constraint, 

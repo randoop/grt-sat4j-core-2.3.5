@@ -29,6 +29,8 @@
  *******************************************************************************/
 package org.sat4j;
 
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.Pure;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -80,6 +82,7 @@ public abstract class AbstractLauncher implements Serializable, ILogAble {
     private boolean displaySolutionLine = true;
 
     protected transient Thread shutdownHook = new Thread() {
+        @Impure
         @Override
         public void run() {
             displayResult();
@@ -96,10 +99,12 @@ public abstract class AbstractLauncher implements Serializable, ILogAble {
 
     private ILauncherMode launcherMode = ILauncherMode.DECISION;
 
+    @Impure
     protected void setLauncherMode(ILauncherMode launcherMode) {
         this.launcherMode = launcherMode;
     }
 
+    @Impure
     protected void setIncomplete(boolean isIncomplete) {
         this.launcherMode.setIncomplete(isIncomplete);
     }
@@ -108,16 +113,19 @@ public abstract class AbstractLauncher implements Serializable, ILogAble {
         Runtime.getRuntime().addShutdownHook(this.shutdownHook);
     }
 
+    @Impure
     protected void displayResult() {
         launcherMode.displayResult(solver, problem, this, out, reader,
                 beginTime, displaySolutionLine);
     }
 
+    @Impure
     public abstract void usage();
 
     /**
      * @throws IOException
      */
+    @Impure
     protected final void displayHeader() {
         displayLicense();
         URL url = AbstractLauncher.class.getResource("/sat4j.version"); //$NON-NLS-1$
@@ -154,6 +162,7 @@ public abstract class AbstractLauncher implements Serializable, ILogAble {
         log("Number of processors \t" + runtime.availableProcessors()); //$NON-NLS-1$
     }
 
+    @Impure
     public void displayLicense() {
         log("SAT4J: a SATisfiability library for Java (c) 2004-2013 Artois University and CNRS"); //$NON-NLS-1$
         log("This is free software under the dual EPL/GNU LGPL licenses."); //$NON-NLS-1$
@@ -173,6 +182,7 @@ public abstract class AbstractLauncher implements Serializable, ILogAble {
      * @throws ContradictionException
      *             if the problem is found trivially unsat
      */
+    @Impure
     protected IProblem readProblem(String problemname)
             throws ParseFormatException, IOException, ContradictionException {
         log("solving " + problemname); //$NON-NLS-1$
@@ -200,8 +210,10 @@ public abstract class AbstractLauncher implements Serializable, ILogAble {
         return aProblem;
     }
 
+    @Impure
     protected abstract Reader createReader(ISolver theSolver, String problemname);
 
+    @Impure
     public void run(String[] args) {
 
         try {
@@ -259,8 +271,10 @@ public abstract class AbstractLauncher implements Serializable, ILogAble {
         }
     }
 
+    @Pure
     protected abstract String getInstanceName(String[] args);
 
+    @Impure
     protected abstract ISolver configureSolver(String[] args);
 
     /**
@@ -268,12 +282,14 @@ public abstract class AbstractLauncher implements Serializable, ILogAble {
      * 
      * @param message
      */
+    @Impure
     public void log(String message) {
         if (!this.silent) {
             this.out.println(COMMENT_PREFIX + message);
         }
     }
 
+    @Impure
     protected void solve(IProblem problem) throws TimeoutException {
         launcherMode.solve(problem, reader, this, out, beginTime);
         this.setExitCode(launcherMode.getCurrentExitCode());
@@ -285,6 +301,7 @@ public abstract class AbstractLauncher implements Serializable, ILogAble {
      * 
      * @param value
      */
+    @Impure
     protected void setDisplaySolutionLine(boolean value) {
         this.displaySolutionLine = value;
     }
@@ -295,6 +312,7 @@ public abstract class AbstractLauncher implements Serializable, ILogAble {
      * @param exitCode
      *            the new ExitCode
      */
+    @Impure
     public final void setExitCode(ExitCode exitCode) {
         this.exitCode = exitCode;
     }
@@ -304,6 +322,7 @@ public abstract class AbstractLauncher implements Serializable, ILogAble {
      * 
      * @return the current value of the Exitcode
      */
+    @Pure
     public final ExitCode getExitCode() {
         return this.exitCode;
     }
@@ -314,6 +333,7 @@ public abstract class AbstractLauncher implements Serializable, ILogAble {
      * 
      * @return the time signature at the beginning of the run() method.
      */
+    @Pure
     public final long getBeginTime() {
         return this.beginTime;
     }
@@ -322,6 +342,7 @@ public abstract class AbstractLauncher implements Serializable, ILogAble {
      * 
      * @return the reader used to parse the instance
      */
+    @Pure
     public final Reader getReader() {
         return this.reader;
     }
@@ -332,23 +353,28 @@ public abstract class AbstractLauncher implements Serializable, ILogAble {
      * 
      * @param out
      */
+    @Impure
     public void setLogWriter(PrintWriter out) {
         this.out = out;
     }
 
+    @Pure
     public PrintWriter getLogWriter() {
         return this.out;
     }
 
+    @Impure
     protected void setSilent(boolean b) {
         this.silent = b;
     }
 
+    @Impure
     private void readObject(ObjectInputStream stream) throws IOException,
             ClassNotFoundException {
         stream.defaultReadObject();
         this.out = new PrintWriter(System.out, true);
         this.shutdownHook = new Thread() {
+            @Impure
             @Override
             public void run() {
                 displayResult();
@@ -356,6 +382,7 @@ public abstract class AbstractLauncher implements Serializable, ILogAble {
         };
     }
 
+    @Impure
     protected <T extends ISolver> void showAvailableSolvers(
             ASolverFactory<T> afactory) {
         // if (afactory != null) {
@@ -368,6 +395,7 @@ public abstract class AbstractLauncher implements Serializable, ILogAble {
         showAvailableSolvers(afactory, "");
     }
 
+    @Impure
     protected <T extends ISolver> void showAvailableSolvers(
             ASolverFactory<T> afactory, String framework) {
         if (afactory != null) {

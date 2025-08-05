@@ -29,6 +29,9 @@
  *******************************************************************************/
 package org.sat4j.tools;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.Impure;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -63,20 +66,25 @@ public class LexicoDecorator<T extends ISolver> extends SolverDecorator<T>
 	 */
     private static final long serialVersionUID = 1L;
 
+    @SideEffectFree
+    @Impure
     public LexicoDecorator(T solver) {
         super(solver);
     }
 
+    @Impure
     public void addCriterion(IVecInt literals) {
         IVecInt copy = new VecInt(literals.size());
         literals.copyTo(copy);
         this.criteria.add(copy);
     }
 
+    @Impure
     public boolean admitABetterSolution() throws TimeoutException {
         return admitABetterSolution(VecInt.EMPTY);
     }
 
+    @Impure
     public boolean admitABetterSolution(IVecInt assumps)
             throws TimeoutException {
         this.isSolutionOptimal = false;
@@ -94,6 +102,7 @@ public class LexicoDecorator<T extends ISolver> extends SolverDecorator<T>
         return manageUnsatCase();
     }
 
+    @Impure
     protected boolean manageUnsatCase() {
         if (this.prevfullmodel == null) {
             // the problem is UNSAT
@@ -132,61 +141,74 @@ public class LexicoDecorator<T extends ISolver> extends SolverDecorator<T>
         return false;
     }
 
+    @Pure
     public int numberOfCriteria() {
         return this.criteria.size();
     }
 
+    @Impure
     protected void fixCriterionValue() throws ContradictionException {
         super.addExactly(this.criteria.get(this.currentCriterion),
                 this.currentValue.intValue());
     }
 
+    @Pure
     @Override
     public int[] model() {
         return this.prevfullmodel;
     }
 
+    @Pure
     @Override
     public boolean model(int var) {
         return this.prevboolmodel[var - 1];
     }
 
+    @Pure
     @Override
     public int[] modelWithInternalVariables() {
         return this.prevmodelwithinternalvars;
     }
 
+    @Pure
     public boolean hasNoObjectiveFunction() {
         return false;
     }
 
+    @Pure
     public boolean nonOptimalMeansSatisfiable() {
         return true;
     }
 
+    @Impure
     public Number calculateObjective() {
         this.currentValue = evaluate();
         return this.currentValue;
     }
 
+    @Pure
     public Number getObjectiveValue() {
         return this.currentValue;
     }
 
+    @Impure
     public Number getObjectiveValue(int criterion) {
         return evaluate(criterion);
     }
 
+    @SideEffectFree
     public void forceObjectiveValueTo(Number forcedValue)
             throws ContradictionException {
         throw new UnsupportedOperationException();
     }
 
+    @Impure
     public void discard() throws ContradictionException {
         discardCurrentSolution();
 
     }
 
+    @Impure
     public void discardCurrentSolution() throws ContradictionException {
         if (this.prevConstr != null) {
             super.removeSubsumedConstr(this.prevConstr);
@@ -202,16 +224,19 @@ public class LexicoDecorator<T extends ISolver> extends SolverDecorator<T>
 
     }
 
+    @Impure
     protected IConstr discardSolutionsForOptimizing()
             throws ContradictionException {
         return super.addAtMost(this.criteria.get(this.currentCriterion),
                 this.currentValue.intValue() - 1);
     }
 
+    @Impure
     protected Number evaluate() {
         return evaluate(this.currentCriterion);
     }
 
+    @Impure
     protected Number evaluate(int criterion) {
         int value = 0;
         int lit;
@@ -226,10 +251,12 @@ public class LexicoDecorator<T extends ISolver> extends SolverDecorator<T>
         return value;
     }
 
+    @Pure
     public boolean isOptimal() {
         return this.isSolutionOptimal;
     }
 
+    @SideEffectFree
     public void setTimeoutForFindingBetterSolution(int seconds) {
         // TODO
         throw new UnsupportedOperationException("No implemented yet");

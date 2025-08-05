@@ -29,6 +29,9 @@
  *******************************************************************************/
 package org.sat4j.tools.xplain;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.Pure;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
@@ -60,16 +63,20 @@ public class HighLevelXplain<T extends ISolver> extends
 
     private MinimizationStrategy xplainStrategy = new DeletionStrategy();
 
+    @SideEffectFree
+    @Impure
     public HighLevelXplain(T solver) {
         super(solver);
     }
 
+    @Pure
     @Override
     public IConstr addAtLeast(IVecInt literals, int degree)
             throws ContradictionException {
         throw new UnsupportedOperationException();
     }
 
+    @Pure
     @Override
     public IConstr addAtMost(IVecInt literals, int degree)
             throws ContradictionException {
@@ -86,6 +93,7 @@ public class HighLevelXplain<T extends ISolver> extends
      * @return
      * @throws TimeoutException
      */
+    @Impure
     private IVecInt explanationKeys() throws TimeoutException {
         assert !isSatisfiable(this.assump);
         ISolver solver = decorated();
@@ -96,6 +104,7 @@ public class HighLevelXplain<T extends ISolver> extends
                 this.assump);
     }
 
+    @Impure
     public int[] minimalExplanation() throws TimeoutException {
         Collection<Integer> components = explain();
         int[] model = new int[components.size()];
@@ -112,6 +121,7 @@ public class HighLevelXplain<T extends ISolver> extends
      * @return
      * @throws TimeoutException
      */
+    @Impure
     public Collection<Integer> explain() throws TimeoutException {
         IVecInt keys = explanationKeys();
         Collection<Integer> explanation = new HashSet<Integer>(keys.size());
@@ -124,40 +134,47 @@ public class HighLevelXplain<T extends ISolver> extends
     /**
      * @since 2.1
      */
+    @Impure
     public void cancelExplanation() {
         this.xplainStrategy.cancelExplanationComputation();
     }
 
+    @Impure
     @Override
     public int[] findModel() throws TimeoutException {
         this.assump = VecInt.EMPTY;
         return super.findModel();
     }
 
+    @Impure
     @Override
     public int[] findModel(IVecInt assumps) throws TimeoutException {
         this.assump = assumps;
         return super.findModel(assumps);
     }
 
+    @Impure
     @Override
     public boolean isSatisfiable() throws TimeoutException {
         this.assump = VecInt.EMPTY;
         return super.isSatisfiable();
     }
 
+    @Impure
     @Override
     public boolean isSatisfiable(boolean global) throws TimeoutException {
         this.assump = VecInt.EMPTY;
         return super.isSatisfiable(global);
     }
 
+    @Impure
     @Override
     public boolean isSatisfiable(IVecInt assumps) throws TimeoutException {
         this.assump = assumps;
         return super.isSatisfiable(assumps);
     }
 
+    @Impure
     @Override
     public boolean isSatisfiable(IVecInt assumps, boolean global)
             throws TimeoutException {
@@ -165,6 +182,7 @@ public class HighLevelXplain<T extends ISolver> extends
         return super.isSatisfiable(assumps, global);
     }
 
+    @Impure
     @Override
     public String toString(String prefix) {
         System.out.println(prefix
@@ -173,6 +191,7 @@ public class HighLevelXplain<T extends ISolver> extends
         return super.toString(prefix);
     }
 
+    @Impure
     public void setMinimizationStrategy(MinimizationStrategy strategy) {
         this.xplainStrategy = strategy;
     }

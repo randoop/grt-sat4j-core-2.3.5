@@ -29,6 +29,10 @@
  *******************************************************************************/
 package org.sat4j.tools;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.Deterministic;
 import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.util.Map;
@@ -58,24 +62,29 @@ public abstract class AbstractOutputSolver implements ISolver {
 	 */
     private static final long serialVersionUID = 1L;
 
+    @Pure
     public boolean removeConstr(IConstr c) {
         throw new UnsupportedOperationException();
     }
 
+    @SideEffectFree
     public void addAllClauses(IVec<IVecInt> clauses)
             throws ContradictionException {
         throw new UnsupportedOperationException();
     }
 
+    @SideEffectFree
     public void setTimeout(int t) {
         // TODO Auto-generated method stub
 
     }
 
+    @SideEffectFree
     public void setTimeoutMs(long t) {
         // TODO Auto-generated method stub
     }
 
+    @Pure
     public int getTimeout() {
         return 0;
     }
@@ -83,78 +92,100 @@ public abstract class AbstractOutputSolver implements ISolver {
     /**
      * @since 2.1
      */
+    @Pure
     public long getTimeoutMs() {
         return 0L;
     }
 
+    @SideEffectFree
     public void expireTimeout() {
         // TODO Auto-generated method stub
 
     }
 
+    @Pure
+    @Deterministic
     public boolean isSatisfiable(IVecInt assumps, boolean global)
             throws TimeoutException {
         throw new TimeoutException("There is no real solver behind!");
     }
 
+    @Pure
+    @Deterministic
     public boolean isSatisfiable(boolean global) throws TimeoutException {
         throw new TimeoutException("There is no real solver behind!");
     }
 
+    @SideEffectFree
     public void printInfos(PrintWriter output, String prefix) {
     }
 
+    @SideEffectFree
     public void setTimeoutOnConflicts(int count) {
 
     }
 
+    @Pure
     public boolean isDBSimplificationAllowed() {
         return false;
     }
 
+    @SideEffectFree
     public void setDBSimplificationAllowed(boolean status) {
 
     }
 
+    @SideEffectFree
     public void printStat(PrintStream output, String prefix) {
         // TODO Auto-generated method stub
     }
 
+    @SideEffectFree
     public void printStat(PrintWriter output, String prefix) {
         // TODO Auto-generated method stub
 
     }
 
+    @Pure
     public Map<String, Number> getStat() {
         // TODO Auto-generated method stub
         return null;
     }
 
+    @SideEffectFree
     public void clearLearntClauses() {
         // TODO Auto-generated method stub
 
     }
 
+    @Pure
     public int[] model() {
         throw new UnsupportedOperationException();
     }
 
+    @Pure
     public boolean model(int var) {
         throw new UnsupportedOperationException();
     }
 
+    @Pure
+    @Deterministic
     public boolean isSatisfiable() throws TimeoutException {
         throw new TimeoutException("There is no real solver behind!");
     }
 
+    @Pure
+    @Deterministic
     public boolean isSatisfiable(IVecInt assumps) throws TimeoutException {
         throw new TimeoutException("There is no real solver behind!");
     }
 
+    @Pure
     public int[] findModel() throws TimeoutException {
         throw new UnsupportedOperationException();
     }
 
+    @Pure
     public int[] findModel(IVecInt assumps) throws TimeoutException {
         throw new UnsupportedOperationException();
     }
@@ -162,6 +193,7 @@ public abstract class AbstractOutputSolver implements ISolver {
     /**
      * @since 2.1
      */
+    @Pure
     public boolean removeSubsumedConstr(IConstr c) {
         return false;
     }
@@ -169,6 +201,7 @@ public abstract class AbstractOutputSolver implements ISolver {
     /**
      * @since 2.1
      */
+    @Pure
     public IConstr addBlockingClause(IVecInt literals)
             throws ContradictionException {
         throw new UnsupportedOperationException();
@@ -177,6 +210,7 @@ public abstract class AbstractOutputSolver implements ISolver {
     /**
      * @since 2.2
      */
+    @Pure
     public <S extends ISolverService> SearchListener<S> getSearchListener() {
         throw new UnsupportedOperationException();
     }
@@ -184,6 +218,7 @@ public abstract class AbstractOutputSolver implements ISolver {
     /**
      * @since 2.1
      */
+    @SideEffectFree
     public <S extends ISolverService> void setSearchListener(
             SearchListener<S> sl) {
     }
@@ -191,6 +226,7 @@ public abstract class AbstractOutputSolver implements ISolver {
     /**
      * @since 2.2
      */
+    @Pure
     public boolean isVerbose() {
         return true;
     }
@@ -198,6 +234,7 @@ public abstract class AbstractOutputSolver implements ISolver {
     /**
      * @since 2.2
      */
+    @SideEffectFree
     public void setVerbose(boolean value) {
         // do nothing
     }
@@ -205,6 +242,7 @@ public abstract class AbstractOutputSolver implements ISolver {
     /**
      * @since 2.2
      */
+    @SideEffectFree
     public void setLogPrefix(String prefix) {
         // do nothing
 
@@ -213,6 +251,7 @@ public abstract class AbstractOutputSolver implements ISolver {
     /**
      * @since 2.2
      */
+    @Pure
     public String getLogPrefix() {
         return "";
     }
@@ -220,40 +259,49 @@ public abstract class AbstractOutputSolver implements ISolver {
     /**
      * @since 2.2
      */
+    @Pure
     public IVecInt unsatExplanation() {
         throw new UnsupportedOperationException();
     }
 
+    @Pure
     public int[] primeImplicant() {
         throw new UnsupportedOperationException();
     }
 
+    @Pure
     public int nConstraints() {
         // TODO Auto-generated method stub
         return 0;
     }
 
+    @Impure
     public int newVar(int howmany) {
         // TODO Auto-generated method stub
         return 0;
     }
 
+    @Pure
     public int nVars() {
         // TODO Auto-generated method stub
         return 0;
     }
 
+    @Pure
     public boolean isSolverKeptHot() {
         return false;
     }
 
+    @SideEffectFree
     public void setKeepSolverHot(boolean value) {
     }
 
+    @Pure
     public ISolver getSolvingEngine() {
         throw new UnsupportedOperationException();
     }
 
+    @SideEffectFree
     public void setUnitClauseProvider(UnitClauseProvider upl) {
         throw new UnsupportedOperationException();
     }

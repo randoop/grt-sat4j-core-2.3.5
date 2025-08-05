@@ -29,6 +29,7 @@
  *******************************************************************************/
 package org.sat4j.specs;
 
+import org.checkerframework.dataflow.qual.Impure;
 import java.io.Serializable;
 
 /**
@@ -49,6 +50,7 @@ public interface SearchListener<S extends ISolverService> extends Serializable {
      *            a way to safely control the solver.
      * @since 2.3.2
      */
+    @Impure
     void init(S solverService);
 
     /**
@@ -56,6 +58,7 @@ public interface SearchListener<S extends ISolverService> extends Serializable {
      * 
      * @param p
      */
+    @Impure
     void assuming(int p);
 
     /**
@@ -65,6 +68,7 @@ public interface SearchListener<S extends ISolverService> extends Serializable {
      * @param reason
      *            TODO
      */
+    @Impure
     void propagating(int p, IConstr reason);
 
     /**
@@ -72,11 +76,13 @@ public interface SearchListener<S extends ISolverService> extends Serializable {
      * 
      * @param p
      */
+    @Impure
     void backtracking(int p);
 
     /**
      * adding forced variable (conflict driven assignment)
      */
+    @Impure
     void adding(int p);
 
     /**
@@ -84,6 +90,7 @@ public interface SearchListener<S extends ISolverService> extends Serializable {
      * 
      * @param c
      */
+    @Impure
     void learn(IConstr c);
 
     /**
@@ -93,11 +100,13 @@ public interface SearchListener<S extends ISolverService> extends Serializable {
      *            a literal in Dimacs format.
      * @since 2.3.4
      */
+    @Impure
     void learnUnit(int p);
 
     /**
      * delete a clause
      */
+    @Impure
     void delete(int[] clause);
 
     /**
@@ -111,6 +120,7 @@ public interface SearchListener<S extends ISolverService> extends Serializable {
      *            TODO
      * 
      */
+    @Impure
     void conflictFound(IConstr confl, int dlevel, int trailLevel);
 
     /**
@@ -119,6 +129,7 @@ public interface SearchListener<S extends ISolverService> extends Serializable {
      * @param p
      *            the conflicting value.
      */
+    @Impure
     void conflictFound(int p);
 
     /**
@@ -130,17 +141,20 @@ public interface SearchListener<S extends ISolverService> extends Serializable {
      *            TODO
      * 
      */
+    @Impure
     void solutionFound(int[] model, RandomAccessModel lazyModel);
 
     /**
      * starts a propagation
      */
+    @Impure
     void beginLoop();
 
     /**
      * Start the search.
      * 
      */
+    @Impure
     void start();
 
     /**
@@ -149,11 +163,13 @@ public interface SearchListener<S extends ISolverService> extends Serializable {
      * @param result
      *            the result of the search.
      */
+    @Impure
     void end(Lbool result);
 
     /**
      * The solver restarts the search.
      */
+    @Impure
     void restarting();
 
     /**
@@ -161,10 +177,12 @@ public interface SearchListener<S extends ISolverService> extends Serializable {
      * 
      * @param backjumpLevel
      */
+    @Impure
     void backjump(int backjumpLevel);
 
     /**
      * The solver is going to delete some learned clauses.
      */
+    @Impure
     void cleaning();
 }

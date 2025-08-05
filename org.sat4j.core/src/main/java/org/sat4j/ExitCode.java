@@ -28,6 +28,8 @@
  *   CRIL - initial API and implementation
  *******************************************************************************/
 package org.sat4j;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 
 /**
  * Enumeration allowing to manage easily exit code for the SAT and PB
@@ -61,6 +63,7 @@ public final class ExitCode {
      * @param str
      *            the alternative textual representation
      */
+    @SideEffectFree
     private ExitCode(final int i, final String str) {
         this.value = i;
         this.str = str;
@@ -69,6 +72,7 @@ public final class ExitCode {
     /**
      * @return the exit code value
      */
+    @Pure
     public int value() {
         return this.value;
     }
@@ -77,6 +81,7 @@ public final class ExitCode {
      * @return the name of the enum or the alternative textual representation if
      *         any.
      */
+    @Pure
     @Override
     public String toString() {
         return this.str;

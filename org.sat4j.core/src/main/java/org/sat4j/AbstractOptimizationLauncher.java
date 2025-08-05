@@ -29,6 +29,7 @@
  *******************************************************************************/
 package org.sat4j;
 
+import org.checkerframework.dataflow.qual.Impure;
 import java.io.PrintWriter;
 
 import org.sat4j.specs.ContradictionException;
@@ -62,16 +63,19 @@ public abstract class AbstractOptimizationLauncher extends AbstractLauncher {
 
     private boolean displaySolutionLine = true;
 
+    @Impure
     @Override
     protected void setIncomplete(boolean value) {
         this.incomplete = value;
     }
 
+    @Impure
     @Override
     protected void setDisplaySolutionLine(boolean value) {
         this.displaySolutionLine = value;
     }
 
+    @Impure
     @Override
     protected void displayResult() {
         displayAnswer();
@@ -80,6 +84,7 @@ public abstract class AbstractOptimizationLauncher extends AbstractLauncher {
                 + (System.currentTimeMillis() - getBeginTime()) / 1000.0);
     }
 
+    @Impure
     protected void displayAnswer() {
         if (this.solver == null) {
             return;
@@ -106,6 +111,7 @@ public abstract class AbstractOptimizationLauncher extends AbstractLauncher {
         }
     }
 
+    @Impure
     @Override
     protected void solve(IProblem problem) throws TimeoutException {
         boolean isSatisfiable = false;

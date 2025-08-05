@@ -29,6 +29,7 @@
  *******************************************************************************/
 package org.sat4j.core;
 
+import org.checkerframework.dataflow.qual.Impure;
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -58,6 +59,7 @@ public abstract class ASolverFactory<T extends ISolver> implements Serializable 
      *         library.
      * @see #createSolverByName(String)
      */
+    @Impure
     public String[] solverNames() {
         List<String> l = new ArrayList<String>();
         Method[] solvers = this.getClass().getDeclaredMethods();
@@ -81,6 +83,7 @@ public abstract class ASolverFactory<T extends ISolver> implements Serializable 
      * @return an ISolver built using newSolvername. <code>null</code> if the
      *         solvername doesn't map one of the method of the factory.
      */
+    @Impure
     @SuppressWarnings("unchecked")
     public T createSolverByName(String solvername) {
         try {
@@ -112,6 +115,7 @@ public abstract class ASolverFactory<T extends ISolver> implements Serializable 
      * @return a solver from the factory
      * @see #lightSolver()
      */
+    @Impure
     public abstract T defaultSolver();
 
     /**
@@ -126,5 +130,6 @@ public abstract class ASolverFactory<T extends ISolver> implements Serializable 
      * @return a solver from the factory
      * @see #defaultSolver()
      */
+    @Impure
     public abstract T lightSolver();
 }

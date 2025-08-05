@@ -29,6 +29,7 @@
  *******************************************************************************/
 package org.sat4j.tools;
 
+import org.checkerframework.dataflow.qual.Impure;
 import org.sat4j.specs.IConstr;
 import org.sat4j.specs.ISolverService;
 import org.sat4j.specs.IVec;
@@ -44,20 +45,24 @@ public class LearnedTracing extends SearchListenerAdapter<ISolverService> {
 
     private final IVisualizationTool visuTool;
 
+    @Impure
     public LearnedTracing(IVisualizationTool visuTool) {
         this.visuTool = visuTool;
     }
 
+    @Impure
     @Override
     public void solutionFound(int[] model, RandomAccessModel lazyModel) {
         trace();
     }
 
+    @Impure
     @Override
     public void restarting() {
         trace();
     }
 
+    @Impure
     private void trace() {
         this.visuTool.init();
         IVec<? extends IConstr> constrs = this.solverService
@@ -70,11 +75,13 @@ public class LearnedTracing extends SearchListenerAdapter<ISolverService> {
 
     }
 
+    @Impure
     @Override
     public void init(ISolverService solverService) {
         this.solverService = solverService;
     }
 
+    @Impure
     @Override
     public void cleaning() {
         trace();

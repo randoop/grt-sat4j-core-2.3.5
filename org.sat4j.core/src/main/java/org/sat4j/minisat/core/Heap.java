@@ -29,6 +29,8 @@
  *******************************************************************************/
 package org.sat4j.minisat.core;
 
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.Pure;
 import java.io.Serializable;
 
 import org.sat4j.core.VecInt;
@@ -47,18 +49,22 @@ public final class Heap implements Serializable {
      */
     private static final long serialVersionUID = 1L;
 
+    @Pure
     private static int left(int i) {
         return i << 1;
     }
 
+    @Pure
     private static int right(int i) {
         return i << 1 ^ 1;
     }
 
+    @Pure
     private static int parent(int i) {
         return i >> 1;
     }
 
+    @Pure
     private boolean comp(int a, int b) {
         return this.activity[a] > this.activity[b];
     }
@@ -69,6 +75,7 @@ public final class Heap implements Serializable {
 
     private final double[] activity;
 
+    @Impure
     void percolateUp(int i) {
         int x = this.heap.get(i);
         while (parent(i) != 0 && comp(x, this.heap.get(parent(i)))) {
@@ -80,6 +87,7 @@ public final class Heap implements Serializable {
         this.indices.set(x, i);
     }
 
+    @Impure
     void percolateDown(int i) {
         int x = this.heap.get(i);
         while (left(i) < this.heap.size()) {
@@ -97,39 +105,47 @@ public final class Heap implements Serializable {
         this.indices.set(x, i);
     }
 
+    @Impure
     boolean ok(int n) {
         return n >= 0 && n < this.indices.size();
     }
 
+    @Impure
     public Heap(double[] activity) { // NOPMD
         this.activity = activity;
         this.heap.push(-1);
     }
 
+    @Impure
     public void setBounds(int size) {
         assert size >= 0;
         this.indices.growTo(size, 0);
     }
 
+    @Impure
     public boolean inHeap(int n) {
         assert ok(n);
         return this.indices.get(n) != 0;
     }
 
+    @Impure
     public void increase(int n) {
         assert ok(n);
         assert inHeap(n);
         percolateUp(this.indices.get(n));
     }
 
+    @Impure
     public boolean empty() {
         return this.heap.size() == 1;
     }
 
+    @Impure
     public int size() {
         return this.heap.size() - 1;
     }
 
+    @Impure
     public int get(int i) {
         int r = this.heap.get(i);
         this.heap.set(i, this.heap.last());
@@ -142,6 +158,7 @@ public final class Heap implements Serializable {
         return r;
     }
 
+    @Impure
     public void insert(int n) {
         assert ok(n);
         this.indices.set(n, this.heap.size());
@@ -149,14 +166,17 @@ public final class Heap implements Serializable {
         percolateUp(this.indices.get(n));
     }
 
+    @Impure
     public int getmin() {
         return get(1);
     }
 
+    @Impure
     public boolean heapProperty() {
         return heapProperty(1);
     }
 
+    @Impure
     public boolean heapProperty(int i) {
         return i >= this.heap.size()
                 || (parent(i) == 0 || !comp(this.heap.get(i),

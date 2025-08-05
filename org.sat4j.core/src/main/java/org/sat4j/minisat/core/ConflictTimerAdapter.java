@@ -29,6 +29,9 @@
  *******************************************************************************/
 package org.sat4j.minisat.core;
 
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import java.io.Serializable;
 
 /**
@@ -49,15 +52,18 @@ public abstract class ConflictTimerAdapter implements Serializable,
 
     private final int bound;
 
+    @SideEffectFree
     public ConflictTimerAdapter(final int bound) {
         this.bound = bound;
         this.counter = 0;
     }
 
+    @Impure
     public void reset() {
         this.counter = 0;
     }
 
+    @Impure
     public void newConflict() {
         this.counter++;
         if (this.counter == this.bound) {
@@ -66,8 +72,10 @@ public abstract class ConflictTimerAdapter implements Serializable,
         }
     }
 
+    @Impure
     public abstract void run();
 
+    @Pure
     public int bound() {
         return this.bound;
     }

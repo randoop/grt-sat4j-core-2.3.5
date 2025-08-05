@@ -29,11 +29,15 @@
  *******************************************************************************/
 package org.sat4j.minisat.constraints.cnf;
 
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.dataflow.qual.Pure;
 import org.sat4j.minisat.core.ILits;
 import org.sat4j.specs.IVecInt;
 
 public final class LearntWLClause extends WLClause {
 
+    @Impure
     public LearntWLClause(IVecInt ps, ILits voc) {
         super(ps, voc);
     }
@@ -48,6 +52,7 @@ public final class LearntWLClause extends WLClause {
      * 
      * @see org.sat4j.minisat.constraints.cnf.WLClause#register()
      */
+    @Impure
     public void register() {
         assert this.lits.length > 1;
         // prendre un deuxieme litt???ral ??? surveiller
@@ -70,10 +75,12 @@ public final class LearntWLClause extends WLClause {
 
     }
 
+    @Pure
     public boolean learnt() {
         return true;
     }
 
+    @SideEffectFree
     public void setLearnt() {
         // do nothing
     }
@@ -81,6 +88,7 @@ public final class LearntWLClause extends WLClause {
     /**
      * @since 2.1
      */
+    @SideEffectFree
     public void forwardActivity(double claInc) {
 
     }
@@ -88,6 +96,7 @@ public final class LearntWLClause extends WLClause {
     /**
      * @param claInc
      */
+    @Impure
     public void incActivity(double claInc) {
         this.activity += claInc;
     }

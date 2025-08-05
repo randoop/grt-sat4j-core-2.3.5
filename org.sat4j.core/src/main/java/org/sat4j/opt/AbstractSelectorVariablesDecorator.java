@@ -29,6 +29,9 @@
  *******************************************************************************/
 package org.sat4j.opt;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.Pure;
 import org.sat4j.core.VecInt;
 import org.sat4j.specs.IOptimizationProblem;
 import org.sat4j.specs.ISolver;
@@ -69,19 +72,24 @@ public abstract class AbstractSelectorVariablesDecorator extends
 
     private boolean isSolutionOptimal;
 
+    @SideEffectFree
+    @Impure
     public AbstractSelectorVariablesDecorator(ISolver solver) {
         super(solver);
     }
 
+    @Impure
     @Override
     public void setExpectedNumberOfClauses(int nb) {
         this.nbexpectedclauses = nb;
     }
 
+    @Pure
     public int getExpectedNumberOfClauses() {
         return this.nbexpectedclauses;
     }
 
+    @Impure
     public boolean admitABetterSolution() throws TimeoutException {
         return admitABetterSolution(VecInt.EMPTY);
     }
@@ -89,6 +97,7 @@ public abstract class AbstractSelectorVariablesDecorator extends
     /**
      * @since 2.1
      */
+    @Impure
     public boolean admitABetterSolution(IVecInt assumps)
             throws TimeoutException {
         this.isSolutionOptimal = false;
@@ -107,58 +116,72 @@ public abstract class AbstractSelectorVariablesDecorator extends
         return result;
     }
 
+    @Impure
     abstract void calculateObjectiveValue();
 
+    @Pure
     @Override
     public int[] model() {
         return this.prevmodel;
     }
 
+    @Pure
     @Override
     public boolean model(int var) {
         return this.prevboolmodel[var - 1];
     }
 
+    @Pure
     public boolean isOptimal() {
         return this.isSolutionOptimal;
     }
 
+    @Pure
     public int getNbexpectedclauses() {
         return nbexpectedclauses;
     }
 
+    @Impure
     public void setNbexpectedclauses(int nbexpectedclauses) {
         this.nbexpectedclauses = nbexpectedclauses;
     }
 
+    @Pure
     public int[] getPrevfullmodel() {
         return prevfullmodel;
     }
 
+    @Impure
     public void setPrevfullmodel(int[] prevfullmodel) {
         this.prevfullmodel = prevfullmodel.clone();
     }
 
+    @Pure
     public int[] getPrevmodel() {
         return prevmodel;
     }
 
+    @Impure
     public void setPrevmodel(int[] prevmodel) {
         this.prevmodel = prevmodel.clone();
     }
 
+    @Pure
     public boolean[] getPrevboolmodel() {
         return prevboolmodel;
     }
 
+    @Impure
     public void setPrevboolmodel(boolean[] prevboolmodel) {
         this.prevboolmodel = prevboolmodel.clone();
     }
 
+    @Pure
     public boolean isSolutionOptimal() {
         return isSolutionOptimal;
     }
 
+    @Impure
     public void setSolutionOptimal(boolean isSolutionOptimal) {
         this.isSolutionOptimal = isSolutionOptimal;
     }

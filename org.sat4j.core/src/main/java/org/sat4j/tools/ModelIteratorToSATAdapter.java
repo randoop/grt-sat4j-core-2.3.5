@@ -29,6 +29,9 @@
  *******************************************************************************/
 package org.sat4j.tools;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.Impure;
 import org.sat4j.specs.ISolver;
 import org.sat4j.specs.IVecInt;
 import org.sat4j.specs.TimeoutException;
@@ -47,16 +50,21 @@ public class ModelIteratorToSATAdapter extends ModelIterator {
     private int[] lastModel = null;
     private final SolutionFoundListener sfl;
 
+    @SideEffectFree
+    @Impure
     public ModelIteratorToSATAdapter(ISolver solver, SolutionFoundListener sfl) {
         this(solver, Long.MAX_VALUE, sfl);
     }
 
+    @SideEffectFree
+    @Impure
     public ModelIteratorToSATAdapter(ISolver solver, long bound,
             SolutionFoundListener sfl) {
         super(solver, bound);
         this.sfl = sfl;
     }
 
+    @Impure
     @Override
     public boolean isSatisfiable() throws TimeoutException {
         boolean isSat = false;
@@ -68,6 +76,7 @@ public class ModelIteratorToSATAdapter extends ModelIterator {
         return isSat;
     }
 
+    @Impure
     @Override
     public boolean isSatisfiable(IVecInt assumps) throws TimeoutException {
         boolean isSat = false;
@@ -79,6 +88,7 @@ public class ModelIteratorToSATAdapter extends ModelIterator {
         return isSat;
     }
 
+    @Pure
     @Override
     public int[] model() {
         return this.lastModel;

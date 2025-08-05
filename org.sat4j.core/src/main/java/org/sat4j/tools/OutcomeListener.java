@@ -29,6 +29,7 @@
  *******************************************************************************/
 
 package org.sat4j.tools;
+import org.checkerframework.dataflow.qual.Impure;
 
 /**
  * Simple interface to check the outcome of running a solver in parallel.
@@ -38,5 +39,6 @@ package org.sat4j.tools;
  * @see ManyCore
  */
 public interface OutcomeListener {
+    @Impure
     void onFinishWithAnswer(boolean finished, boolean result, int index);
 }

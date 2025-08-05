@@ -29,6 +29,7 @@
  *******************************************************************************/
 package org.sat4j.minisat.constraints;
 
+import org.checkerframework.dataflow.qual.Impure;
 import org.sat4j.minisat.constraints.card.AtLeast;
 import org.sat4j.minisat.constraints.cnf.Clauses;
 import org.sat4j.minisat.constraints.cnf.LearntWLClause;
@@ -56,6 +57,7 @@ public class MixedDataStructureSingleWL extends AbstractDataStructureFactory {
      * org.sat4j.minisat.DataStructureFactory#createCardinalityConstraint(org
      * .sat4j.datatype.VecInt, int)
      */
+    @Impure
     @Override
     public Constr createCardinalityConstraint(IVecInt literals, int degree)
             throws ContradictionException {
@@ -63,6 +65,7 @@ public class MixedDataStructureSingleWL extends AbstractDataStructureFactory {
                 degree);
     }
 
+    @Impure
     @Override
     public Constr createUnregisteredCardinalityConstraint(IVecInt literals,
             int degree) {
@@ -76,6 +79,7 @@ public class MixedDataStructureSingleWL extends AbstractDataStructureFactory {
      * org.sat4j.minisat.DataStructureFactory#createClause(org.sat4j.datatype
      * .VecInt)
      */
+    @Impure
     public Constr createClause(IVecInt literals) throws ContradictionException {
         IVecInt v = Clauses.sanityCheck(literals, getVocabulary(), this.solver);
         if (v == null) {
@@ -92,10 +96,12 @@ public class MixedDataStructureSingleWL extends AbstractDataStructureFactory {
         return OriginalWLClause.brandNewClause(this.solver, getVocabulary(), v);
     }
 
+    @Impure
     public Constr createUnregisteredClause(IVecInt literals) {
         return new LearntWLClause(literals, getVocabulary());
     }
 
+    @Impure
     @Override
     protected ILits createLits() {
         return new Lits();

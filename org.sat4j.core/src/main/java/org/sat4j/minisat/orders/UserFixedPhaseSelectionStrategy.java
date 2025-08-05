@@ -28,6 +28,8 @@
  *   CRIL - initial API and implementation
  *******************************************************************************/
 package org.sat4j.minisat.orders;
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.dataflow.qual.Pure;
 
 /**
  * Selection strategy where the phase selection is decided at init time and is
@@ -44,17 +46,21 @@ public final class UserFixedPhaseSelectionStrategy extends
      */
     private static final long serialVersionUID = 1L;
 
+    @SideEffectFree
     public void assignLiteral(int p) {
     }
 
+    @SideEffectFree
     public void updateVar(int p) {
     }
 
+    @Pure
     @Override
     public String toString() {
         return "Fixed selection strategy.";
     }
 
+    @SideEffectFree
     public void updateVarAtDecisionLevel(int q) {
     }
 }

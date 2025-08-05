@@ -28,6 +28,8 @@
  *   CRIL - initial API and implementation
  *******************************************************************************/
 package org.sat4j.core;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 
 /**
  * Utility methods to avoid using bit manipulation inside code. One should use
@@ -52,6 +54,7 @@ package org.sat4j.core;
  */
 public final class LiteralsUtils {
 
+    @SideEffectFree
     private LiteralsUtils() {
         // no instance supposed to be created.
     }
@@ -63,6 +66,7 @@ public final class LiteralsUtils {
      *            a literal in internal representation
      * @return the Dimacs variable associated to that literal.
      */
+    @Pure
     public static int var(int p) {
         assert p > 1;
         return p >> 1;
@@ -75,6 +79,7 @@ public final class LiteralsUtils {
      *            a literal in internal representation
      * @return the opposite literal in internal representation
      */
+    @Pure
     public static int neg(int p) {
         return p ^ 1;
     }
@@ -87,6 +92,7 @@ public final class LiteralsUtils {
      * @return the positive literal associated with this variable in internal
      *         representation
      */
+    @Pure
     public static int posLit(int var) {
         return var << 1;
     }
@@ -99,6 +105,7 @@ public final class LiteralsUtils {
      * @return the negative literal associated with this variable in internal
      *         representation
      */
+    @Pure
     public static int negLit(int var) {
         return var << 1 ^ 1;
     }
@@ -111,6 +118,7 @@ public final class LiteralsUtils {
      *            the literal in internal representation
      * @return the literal in dimacs representation
      */
+    @Pure
     public static int toDimacs(int p) {
         return ((p & 1) == 0 ? 1 : -1) * (p >> 1);
     }
@@ -124,6 +132,7 @@ public final class LiteralsUtils {
      * @return the literal in internal format.
      * @since 2.2
      */
+    @Pure
     public static int toInternal(int x) {
         return x < 0 ? -x << 1 ^ 1 : x << 1;
     }

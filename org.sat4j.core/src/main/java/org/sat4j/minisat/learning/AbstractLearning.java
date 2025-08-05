@@ -29,6 +29,8 @@
  *******************************************************************************/
 package org.sat4j.minisat.learning;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.dataflow.qual.Impure;
 import org.sat4j.minisat.core.Constr;
 import org.sat4j.minisat.core.DataStructureFactory;
 import org.sat4j.minisat.core.LearningStrategy;
@@ -56,14 +58,17 @@ abstract class AbstractLearning<D extends DataStructureFactory> implements
 
     private VarActivityListener val;
 
+    @Impure
     public void setVarActivityListener(VarActivityListener s) {
         this.val = s;
     }
 
+    @Impure
     public void setSolver(Solver<D> s) {
         this.val = s;
     }
 
+    @Impure
     public final void claBumpActivity(Constr reason) {
         for (int i = 0; i < reason.size(); i++) {
             int q = reason.get(i);
@@ -72,6 +77,7 @@ abstract class AbstractLearning<D extends DataStructureFactory> implements
         }
     }
 
+    @SideEffectFree
     public void init() {
     }
 

@@ -28,6 +28,7 @@
  *   CRIL - initial API and implementation
  *******************************************************************************/
 package org.sat4j.reader;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 
 /**
  * Exception launched when there is a problem during parsing.
@@ -43,6 +44,7 @@ public class ParseFormatException extends Exception {
     /**
      * Constructor for ParseFormatException.
      */
+    @SideEffectFree
     public ParseFormatException() {
         super(PARSING_ERROR);
     }
@@ -53,6 +55,7 @@ public class ParseFormatException extends Exception {
      * @param message
      *            the error message
      */
+    @SideEffectFree
     public ParseFormatException(String message) {
         super(PARSING_ERROR + message);
     }
@@ -65,6 +68,7 @@ public class ParseFormatException extends Exception {
      * @param cause
      *            the cause of the exception
      */
+    @SideEffectFree
     public ParseFormatException(String message, Throwable cause) {
         super(PARSING_ERROR + message, cause);
     }
@@ -75,6 +79,7 @@ public class ParseFormatException extends Exception {
      * @param cause
      *            the cause of the exception
      */
+    @SideEffectFree
     public ParseFormatException(Throwable cause) {
         super(cause);
     }

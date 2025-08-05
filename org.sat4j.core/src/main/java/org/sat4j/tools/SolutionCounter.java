@@ -29,6 +29,9 @@
  *******************************************************************************/
 package org.sat4j.tools;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.Pure;
 import org.sat4j.core.VecInt;
 import org.sat4j.specs.ContradictionException;
 import org.sat4j.specs.ISolver;
@@ -69,6 +72,8 @@ public class SolutionCounter extends SolverDecorator<ISolver> {
 
     private int lowerBound;
 
+    @SideEffectFree
+    @Impure
     public SolutionCounter(ISolver solver) {
         super(solver);
     }
@@ -79,6 +84,7 @@ public class SolutionCounter extends SolverDecorator<ISolver> {
      * @return the number of solutions found so far.
      * @since 2.1
      */
+    @Pure
     public int lowerBound() {
         return this.lowerBound;
     }
@@ -92,6 +98,7 @@ public class SolutionCounter extends SolverDecorator<ISolver> {
      * @throws TimeoutException
      *             if the timeout given to the solver is reached.
      */
+    @Impure
     public long countSolutions() throws TimeoutException {
         this.lowerBound = 0;
         boolean trivialfalsity = false;

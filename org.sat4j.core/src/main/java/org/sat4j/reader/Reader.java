@@ -29,6 +29,8 @@
  *******************************************************************************/
 package org.sat4j.reader;
 
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.Pure;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -63,6 +65,7 @@ public abstract class Reader {
      * @throws ContradictionException
      *             if the problem is found trivially inconsistent.
      */
+    @Impure
     public IProblem parseInstance(final String filename)
             throws ParseFormatException, IOException,
             ContradictionException {
@@ -120,6 +123,7 @@ public abstract class Reader {
      * @throws ContradictionException
      *             if the problem is found trivially inconsistent.
      */
+    @Impure
     public abstract IProblem parseInstance(final InputStream in)
             throws ParseFormatException, ContradictionException, IOException;
 
@@ -139,6 +143,7 @@ public abstract class Reader {
      *             if the problem is found trivially inconsistent.
      * @see #parseInstance(InputStream)
      */
+    @Pure
     @Deprecated
     public IProblem parseInstance(java.io.Reader in)
             throws ParseFormatException, ContradictionException, IOException {
@@ -153,6 +158,7 @@ public abstract class Reader {
      *            a model using the Dimacs format.
      * @return a human readable view of the model.
      */
+    @Impure
     @Deprecated
     public abstract String decode(int[] model);
 
@@ -164,12 +170,15 @@ public abstract class Reader {
      * @param out
      *            the place where to display the model
      */
+    @Impure
     public abstract void decode(int[] model, PrintWriter out);
 
+    @Pure
     public boolean isVerbose() {
         return this.verbose;
     }
 
+    @Impure
     public void setVerbosity(boolean b) {
         this.verbose = b;
     }

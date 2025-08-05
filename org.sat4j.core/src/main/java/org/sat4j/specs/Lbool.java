@@ -28,6 +28,8 @@
  *   CRIL - initial API and implementation
  *******************************************************************************/
 package org.sat4j.specs;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 
 /**
  * That enumeration defines the possible truth value for a variable: satisfied,
@@ -51,6 +53,7 @@ public final class Lbool {
         UNDEFINED.opposite = UNDEFINED;
     }
 
+    @SideEffectFree
     private Lbool(String symbol) {
         this.symbol = symbol;
     }
@@ -60,6 +63,7 @@ public final class Lbool {
      * 
      * @return Boolean negation. The negation of UNDEFINED is UNDEFINED.
      */
+    @Pure
     public Lbool not() {
         return this.opposite;
     }
@@ -69,6 +73,7 @@ public final class Lbool {
      * 
      * @return "T","F" or "U"
      */
+    @Pure
     @Override
     public String toString() {
         return this.symbol;

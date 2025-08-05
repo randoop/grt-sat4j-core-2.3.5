@@ -29,6 +29,7 @@
  *******************************************************************************/
 package org.sat4j.specs;
 
+import org.checkerframework.dataflow.qual.Impure;
 import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.io.Serializable;
@@ -52,6 +53,7 @@ public interface ISolver extends IProblem, Serializable {
      * @return the number of variables available in the vocabulary, which is the
      *         identifier of the new variable.
      */
+    @Impure
     @Deprecated
     int newVar();
 
@@ -76,6 +78,7 @@ public interface ISolver extends IProblem, Serializable {
      * @see #realNumberOfVariables()
      * @since 2.1
      */
+    @Impure
     int nextFreeVarId(boolean reserve);
 
     /**
@@ -88,6 +91,7 @@ public interface ISolver extends IProblem, Serializable {
      * @param p
      *            the literal in Dimacs format that should appear in the model.
      */
+    @Impure
     void registerLiteral(int p);
 
     /**
@@ -103,6 +107,7 @@ public interface ISolver extends IProblem, Serializable {
      * @see #newVar(int)
      * @since 1.6
      */
+    @Impure
     void setExpectedNumberOfClauses(int nb);
 
     /**
@@ -119,6 +124,7 @@ public interface ISolver extends IProblem, Serializable {
      *             falsified literals after unit propagation
      * @see #removeConstr(IConstr)
      */
+    @Impure
     IConstr addClause(IVecInt literals) throws ContradictionException;
 
     /**
@@ -130,6 +136,7 @@ public interface ISolver extends IProblem, Serializable {
      * @throws ContradictionException
      * @since 2.1
      */
+    @Impure
     IConstr addBlockingClause(IVecInt literals) throws ContradictionException;
 
     /**
@@ -142,6 +149,7 @@ public interface ISolver extends IProblem, Serializable {
      *            a constraint returned by one of the add method.
      * @return true if the constraint was successfully removed.
      */
+    @Impure
     boolean removeConstr(IConstr c);
 
     /**
@@ -164,6 +172,7 @@ public interface ISolver extends IProblem, Serializable {
      * @return true if the constraint was successfully removed.
      * @since 2.1
      */
+    @Impure
     boolean removeSubsumedConstr(IConstr c);
 
     /**
@@ -180,6 +189,7 @@ public interface ISolver extends IProblem, Serializable {
      *             falsified literals after unit propagation
      * @see #addClause(IVecInt)
      */
+    @Impure
     void addAllClauses(IVec<IVecInt> clauses) throws ContradictionException;
 
     /**
@@ -199,6 +209,7 @@ public interface ISolver extends IProblem, Serializable {
      * @see #removeConstr(IConstr)
      */
 
+    @Impure
     IConstr addAtMost(IVecInt literals, int degree)
             throws ContradictionException;
 
@@ -218,6 +229,7 @@ public interface ISolver extends IProblem, Serializable {
      *             not remaining unfalsified after unit propagation
      * @see #removeConstr(IConstr)
      */
+    @Impure
     IConstr addAtLeast(IVecInt literals, int degree)
             throws ContradictionException;
 
@@ -236,6 +248,7 @@ public interface ISolver extends IProblem, Serializable {
      *             iff the constraint is trivially unsatisfiable.
      * @since 2.3.1
      */
+    @Impure
     IConstr addExactly(IVecInt literals, int n) throws ContradictionException;
 
     /**
@@ -245,6 +258,7 @@ public interface ISolver extends IProblem, Serializable {
      * @param t
      *            the timeout (in s)
      */
+    @Impure
     void setTimeout(int t);
 
     /**
@@ -257,6 +271,7 @@ public interface ISolver extends IProblem, Serializable {
      * @param count
      *            the timeout (in number of conflicts)
      */
+    @Impure
     void setTimeoutOnConflicts(int count);
 
     /**
@@ -266,6 +281,7 @@ public interface ISolver extends IProblem, Serializable {
      * @param t
      *            the timeout (in milliseconds)
      */
+    @Impure
     void setTimeoutMs(long t);
 
     /**
@@ -273,6 +289,7 @@ public interface ISolver extends IProblem, Serializable {
      * 
      * @return the internal timeout of the solver (in seconds)
      */
+    @Impure
     int getTimeout();
 
     /**
@@ -281,11 +298,13 @@ public interface ISolver extends IProblem, Serializable {
      * @return the internal timeout of the solver (in milliseconds)
      * @since 2.1
      */
+    @Impure
     long getTimeoutMs();
 
     /**
      * Expire the timeout of the solver.
      */
+    @Impure
     void expireTimeout();
 
     /**
@@ -296,6 +315,7 @@ public interface ISolver extends IProblem, Serializable {
      * There is a known issue for instance where failing to call reset() on a
      * solver will keep timer threads alive and exhausts memory.
      */
+    @Impure
     void reset();
 
     /**
@@ -307,6 +327,7 @@ public interface ISolver extends IProblem, Serializable {
      *            the prefix to put in front of each line
      * @see #printStat(PrintWriter, String)
      */
+    @Impure
     @Deprecated
     void printStat(PrintStream out, String prefix);
 
@@ -320,6 +341,7 @@ public interface ISolver extends IProblem, Serializable {
      * @deprecated using the prefix does no longer makes sense because the
      *             solver owns it.
      */
+    @Impure
     @Deprecated
     void printStat(PrintWriter out, String prefix);
 
@@ -331,6 +353,7 @@ public interface ISolver extends IProblem, Serializable {
      * 
      * @see #setLogPrefix(String)
      */
+    @Impure
     void printStat(PrintWriter out);
 
     /**
@@ -339,6 +362,7 @@ public interface ISolver extends IProblem, Serializable {
      * 
      * @return a Map with the name of the statistics as key.
      */
+    @Impure
     Map<String, Number> getStat();
 
     /**
@@ -348,11 +372,13 @@ public interface ISolver extends IProblem, Serializable {
      *            the prefix to use on each line.
      * @return a textual description of the solver internals.
      */
+    @Impure
     String toString(String prefix);
 
     /**
      * Remove clauses learned during the solving process.
      */
+    @Impure
     void clearLearntClauses();
 
     /**
@@ -362,6 +388,7 @@ public interface ISolver extends IProblem, Serializable {
      * Note that the solver should not be allowed to perform such simplification
      * when constraint removal is planned.
      */
+    @Impure
     void setDBSimplificationAllowed(boolean status);
 
     /**
@@ -371,6 +398,7 @@ public interface ISolver extends IProblem, Serializable {
      * Note that the solver should not be allowed to perform such simplification
      * when constraint removal is planned.
      */
+    @Impure
     boolean isDBSimplificationAllowed();
 
     /**
@@ -381,6 +409,7 @@ public interface ISolver extends IProblem, Serializable {
      *            a Search Listener.
      * @since 2.1
      */
+    @Impure
     <S extends ISolverService> void setSearchListener(SearchListener<S> sl);
 
     /**
@@ -390,6 +419,7 @@ public interface ISolver extends IProblem, Serializable {
      *            an object able to provide unit clauses.
      * @since 2.3.4
      */
+    @Impure
     void setUnitClauseProvider(UnitClauseProvider ucp);
 
     /**
@@ -398,6 +428,7 @@ public interface ISolver extends IProblem, Serializable {
      * @return a Search Listener.
      * @since 2.2
      */
+    @Impure
     <S extends ISolverService> SearchListener<S> getSearchListener();
 
     /**
@@ -406,6 +437,7 @@ public interface ISolver extends IProblem, Serializable {
      * @return true if the solver is verbose.
      * @since 2.2
      */
+    @Impure
     boolean isVerbose();
 
     /**
@@ -416,6 +448,7 @@ public interface ISolver extends IProblem, Serializable {
      *            false either.
      * @since 2.2
      */
+    @Impure
     void setVerbose(boolean value);
 
     /**
@@ -425,6 +458,7 @@ public interface ISolver extends IProblem, Serializable {
      *            the prefix to be in front of each line of text
      * @since 2.2
      */
+    @Impure
     void setLogPrefix(String prefix);
 
     /**
@@ -432,6 +466,7 @@ public interface ISolver extends IProblem, Serializable {
      * @return the string used to prefix the output.
      * @since 2.2
      */
+    @Impure
     String getLogPrefix();
 
     /**
@@ -448,6 +483,7 @@ public interface ISolver extends IProblem, Serializable {
      * @see #isSatisfiable(IVecInt, boolean)
      * @since 2.2
      */
+    @Impure
     IVecInt unsatExplanation();
 
     /**
@@ -469,6 +505,7 @@ public interface ISolver extends IProblem, Serializable {
      * @see org.sat4j.tools.ModelIterator
      * @since 2.3.1
      */
+    @Impure
     int[] modelWithInternalVariables();
 
     /**
@@ -485,6 +522,7 @@ public interface ISolver extends IProblem, Serializable {
      * @see #nextFreeVarId(boolean)
      * @since 2.3.1
      */
+    @Impure
     int realNumberOfVariables();
 
     /**
@@ -496,6 +534,7 @@ public interface ISolver extends IProblem, Serializable {
      *         calls.
      * @since 2.3.2
      */
+    @Impure
     boolean isSolverKeptHot();
 
     /**
@@ -507,6 +546,7 @@ public interface ISolver extends IProblem, Serializable {
      *            true to keep the heuristics values across calls, false either.
      * @since 2.3.2
      */
+    @Impure
     void setKeepSolverHot(boolean keepHot);
 
     /**
@@ -521,5 +561,6 @@ public interface ISolver extends IProblem, Serializable {
      * @return the solver
      * @since 2.3.3
      */
+    @Impure
     ISolver getSolvingEngine();
 }

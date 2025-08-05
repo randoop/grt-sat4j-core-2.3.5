@@ -29,6 +29,8 @@
  *******************************************************************************/
 package org.sat4j.minisat.core;
 
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.Pure;
 import java.io.Serializable;
 
 /**
@@ -52,6 +54,7 @@ public final class IntQueue implements Serializable {
      * @param x
      *            the element to add
      */
+    @Impure
     public void insert(final int x) {
         // ensure(size + 1);
         assert this.size < this.myarray.length;
@@ -64,6 +67,7 @@ public final class IntQueue implements Serializable {
      * 
      * @return the firsst element on the queue
      */
+    @Impure
     public int dequeue() {
         assert this.first < this.size;
         return this.myarray[this.first++];
@@ -72,6 +76,7 @@ public final class IntQueue implements Serializable {
     /**
      * Vide la queue
      */
+    @Impure
     public void clear() {
         this.size = 0;
         this.first = 0;
@@ -82,6 +87,7 @@ public final class IntQueue implements Serializable {
      * 
      * @return le nombre d'elements restant dans la queue
      */
+    @Pure
     public int size() {
         return this.size - this.first;
     }
@@ -92,6 +98,7 @@ public final class IntQueue implements Serializable {
      * @param nsize
      *            la taille maximale de la queue
      */
+    @Impure
     public void ensure(final int nsize) {
         if (nsize >= this.myarray.length) {
             int[] narray = new int[Math.max(nsize, this.size * 2)];
@@ -100,6 +107,7 @@ public final class IntQueue implements Serializable {
         }
     }
 
+    @Impure
     @Override
     public String toString() {
         StringBuffer stb = new StringBuffer();

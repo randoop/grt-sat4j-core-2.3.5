@@ -29,6 +29,9 @@
  *******************************************************************************/
 package org.sat4j.minisat.core;
 
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.sat4j.specs.IConstr;
 import org.sat4j.specs.IVecInt;
 import org.sat4j.specs.UnitPropagationListener;
@@ -52,6 +55,7 @@ public interface Constr extends IConstr {
      * @param upl
      * @since 2.1
      */
+    @Impure
     void remove(UnitPropagationListener upl);
 
     /**
@@ -61,6 +65,8 @@ public interface Constr extends IConstr {
      * @return true iff the constraint is satisfied and can be removed from the
      *         database.
      */
+    @Pure
+    @Impure
     boolean simplify();
 
     /**
@@ -78,6 +84,7 @@ public interface Constr extends IConstr {
      *            the list of falsified literals whose negation is the reason of
      *            the assignment of p to true.
      */
+    @Impure
     void calcReason(int p, IVecInt outReason);
 
     /**
@@ -97,6 +104,7 @@ public interface Constr extends IConstr {
      *            the assignment of p to true.
      * @since 2.3.3
      */
+    @Impure
     void calcReasonOnTheFly(int p, IVecInt trail, IVecInt outReason);
 
     /**
@@ -105,6 +113,7 @@ public interface Constr extends IConstr {
      * @param claInc
      *            the value to increase the activity with
      */
+    @Impure
     void incActivity(double claInc);
 
     /**
@@ -113,6 +122,7 @@ public interface Constr extends IConstr {
      * @since 2.1
      * 
      */
+    @Impure
     @Deprecated
     void forwardActivity(double claInc);
 
@@ -121,17 +131,21 @@ public interface Constr extends IConstr {
      * 
      * @return true if a constraint is a "reason" for an assignment.
      */
+    @Pure
+    @Impure
     boolean locked();
 
     /**
      * Mark a constraint as learnt.
      */
 
+    @SideEffectFree
     void setLearnt();
 
     /**
      * Register the constraint to the solver.
      */
+    @Impure
     void register();
 
     /**
@@ -140,6 +154,7 @@ public interface Constr extends IConstr {
      * @param d
      *            the value to rescale the clause activity with.
      */
+    @Impure
     void rescaleBy(double d);
 
     /**
@@ -149,6 +164,7 @@ public interface Constr extends IConstr {
      *            the new activity
      * @since 2.3.1
      */
+    @Impure
     void setActivity(double d);
 
     /**
@@ -160,6 +176,7 @@ public interface Constr extends IConstr {
      * @param s
      *            a UnitPropagationListener to use for unit propagation.
      */
+    @Impure
     void assertConstraint(UnitPropagationListener s);
 
     /**
@@ -171,6 +188,7 @@ public interface Constr extends IConstr {
      *            a UnitPropagationListener to use for unit propagation.
      * @since 2.3.4
      */
+    @Impure
     void assertConstraintIfNeeded(UnitPropagationListener s);
 
 }

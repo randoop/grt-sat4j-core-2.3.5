@@ -29,6 +29,7 @@
  *******************************************************************************/
 package org.sat4j.minisat.constraints;
 
+import org.checkerframework.dataflow.qual.Impure;
 import org.sat4j.minisat.constraints.card.MaxWatchCard;
 import org.sat4j.minisat.constraints.card.MinWatchCard;
 import org.sat4j.minisat.constraints.cnf.LearntWLClause;
@@ -52,11 +53,13 @@ public class CardinalityDataStructureYanMax extends
      * org.sat4j.minisat.DataStructureFactory#createClause(org.sat4j.datatype
      * .VecInt)
      */
+    @Impure
     public Constr createClause(IVecInt literals) throws ContradictionException {
         return MaxWatchCard.maxWatchCardNew(this.solver, getVocabulary(),
                 literals, MinWatchCard.ATLEAST, 1);
     }
 
+    @Impure
     public Constr createUnregisteredClause(IVecInt literals) {
         return new LearntWLClause(literals, getVocabulary());
     }
@@ -68,6 +71,7 @@ public class CardinalityDataStructureYanMax extends
      * org.sat4j.minisat.DataStructureFactory#createCardinalityConstraint(org
      * .sat4j.datatype.VecInt, int)
      */
+    @Impure
     @Override
     public Constr createCardinalityConstraint(IVecInt literals, int degree)
             throws ContradictionException {
@@ -75,6 +79,7 @@ public class CardinalityDataStructureYanMax extends
                 literals, MinWatchCard.ATLEAST, degree);
     }
 
+    @Impure
     public Constr createUnregisteredCardinalityConstraint(IVecInt literals,
             int degree) {
         return new MaxWatchCard(getVocabulary(), literals,

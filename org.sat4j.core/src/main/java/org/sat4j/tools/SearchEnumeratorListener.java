@@ -29,6 +29,9 @@
  *******************************************************************************/
 package org.sat4j.tools;
 
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.dataflow.qual.Impure;
 import org.sat4j.specs.ISolverService;
 import org.sat4j.specs.RandomAccessModel;
 import org.sat4j.specs.Lbool;
@@ -54,15 +57,18 @@ public class SearchEnumeratorListener extends
 
     private final SolutionFoundListener sfl;
 
+    @Impure
     public SearchEnumeratorListener(SolutionFoundListener sfl) {
         this.sfl = sfl;
     }
 
+    @Impure
     @Override
     public void init(ISolverService solverService) {
         this.solverService = solverService;
     }
 
+    @Impure
     @Override
     public void solutionFound(int[] model, RandomAccessModel lazyModel) {
         int[] clause = new int[model.length];
@@ -74,11 +80,13 @@ public class SearchEnumeratorListener extends
         sfl.onSolutionFound(model);
     }
 
+    @SideEffectFree
     @Override
     public void end(Lbool result) {
         assert result != Lbool.TRUE;
     }
 
+    @Pure
     public int getNumberOfSolutionFound() {
         return this.nbsolutions;
     }

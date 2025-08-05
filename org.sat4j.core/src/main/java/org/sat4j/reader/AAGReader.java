@@ -29,6 +29,8 @@
  *******************************************************************************/
 package org.sat4j.reader;
 
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.Pure;
 import java.io.IOException;
 import java.io.PrintWriter;
 
@@ -57,10 +59,12 @@ public class AAGReader extends Reader {
 
     private int nbinputs;
 
+    @Impure
     AAGReader(ISolver s) {
         this.solver = new GateTranslator(s);
     }
 
+    @Impure
     @Override
     public String decode(int[] model) {
         StringBuffer stb = new StringBuffer();
@@ -70,6 +74,7 @@ public class AAGReader extends Reader {
         return stb.toString();
     }
 
+    @Impure
     @Override
     public void decode(int[] model, PrintWriter out) {
         for (int i = 0; i < this.nbinputs; i++) {
@@ -77,6 +82,7 @@ public class AAGReader extends Reader {
         }
     }
 
+    @Impure
     @Override
     public IProblem parseInstance(java.io.InputStream in)
             throws ParseFormatException, ContradictionException, IOException {
@@ -105,6 +111,7 @@ public class AAGReader extends Reader {
         return this.solver;
     }
 
+    @Impure
     private void readAnd(int nbands, int output0, EfficientScanner scanner)
             throws ContradictionException, IOException, ParseFormatException {
 
@@ -118,6 +125,7 @@ public class AAGReader extends Reader {
         this.solver.gateTrue(toDimacs(output0));
     }
 
+    @Pure
     private int toDimacs(int v) {
         if (v == FALSE) {
             return -(this.maxvarid + 1);
@@ -132,6 +140,7 @@ public class AAGReader extends Reader {
         return -var;
     }
 
+    @Impure
     private int readOutput(int nboutputs, EfficientScanner scanner)
             throws IOException, ParseFormatException {
         IVecInt outputs = new VecInt(nboutputs);
@@ -141,6 +150,7 @@ public class AAGReader extends Reader {
         return outputs.get(0);
     }
 
+    @Impure
     private IVecInt readInput(int numberOfInputs, EfficientScanner scanner)
             throws IOException, ParseFormatException {
         IVecInt inputs = new VecInt(numberOfInputs);

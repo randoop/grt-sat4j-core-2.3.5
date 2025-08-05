@@ -29,6 +29,8 @@
  *******************************************************************************/
 package org.sat4j.minisat.core;
 
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.Pure;
 import org.sat4j.specs.IVec;
 
 /**
@@ -53,6 +55,7 @@ public interface ILits {
 
     int UNDEFINED = -1;
 
+    @Impure
     void init(int nvar);
 
     /**
@@ -62,6 +65,7 @@ public interface ILits {
      *            the Dimacs literal (a non null integer).
      * @return the literal in the internal representation.
      */
+    @Impure
     int getFromPool(int x);
 
     /**
@@ -70,11 +74,13 @@ public interface ILits {
      * @param x
      * @return true iff the variable belongs to the formula.
      */
+    @Pure
     boolean belongsToPool(int x);
 
     /**
      * reset the vocabulary.
      */
+    @Impure
     void resetPool();
 
     /**
@@ -84,6 +90,7 @@ public interface ILits {
      * @param howmany
      *            the new capacity (in boolean variables) of the vocabulary.
      */
+    @Impure
     void ensurePool(int howmany);
 
     /**
@@ -92,6 +99,7 @@ public interface ILits {
      * @param lit
      *            a literal in internal format.
      */
+    @Impure
     void unassign(int lit);
 
     /**
@@ -100,6 +108,7 @@ public interface ILits {
      * @param lit
      *            a literal in internal format.
      */
+    @Impure
     void satisfies(int lit);
 
     /**
@@ -111,6 +120,7 @@ public interface ILits {
      *            a variable in Dimacs format.
      * @since 2.3.2
      */
+    @Impure
     void forgets(int var);
 
     /**
@@ -120,6 +130,7 @@ public interface ILits {
      *            a literal in internal format.
      * @return true if that literal is satisfied.
      */
+    @Pure
     boolean isSatisfied(int lit);
 
     /**
@@ -130,6 +141,7 @@ public interface ILits {
      * @return true if the literal is falsified. Note that a forgotten variable
      *         will also see its literals as falsified.
      */
+    @Pure
     boolean isFalsified(int lit);
 
     /**
@@ -139,6 +151,7 @@ public interface ILits {
      *            a literal in internal format.
      * @return true if the literal is neither satisfied nor falsified.
      */
+    @Pure
     boolean isUnassigned(int lit);
 
     /**
@@ -146,6 +159,7 @@ public interface ILits {
      * @return true iff the truth value of that literal is due to a unit
      *         propagation or a decision.
      */
+    @Pure
     boolean isImplied(int lit);
 
     /**
@@ -153,6 +167,7 @@ public interface ILits {
      * 
      * @return the maximum number of variables in the formula
      */
+    @Pure
     int nVars();
 
     /**
@@ -160,6 +175,7 @@ public interface ILits {
      * 
      * @return the number of variables used in the pool
      */
+    @Pure
     int realnVars();
 
     /**
@@ -173,6 +189,7 @@ public interface ILits {
      *         inside the solver.
      * @since 2.1
      */
+    @Impure
     int nextFreeVarId(boolean reserve);
 
     /**
@@ -181,6 +198,7 @@ public interface ILits {
      * @param lit
      *            a literal in internal representation.
      */
+    @Impure
     void reset(int lit);
 
     /**
@@ -192,6 +210,7 @@ public interface ILits {
      * @return -1 if the literal is unassigned, or the decision level of the
      *         literal.
      */
+    @Pure
     int getLevel(int lit);
 
     /**
@@ -202,6 +221,7 @@ public interface ILits {
      * @param l
      *            a decision level, or -1
      */
+    @Impure
     void setLevel(int lit, int l);
 
     /**
@@ -211,6 +231,7 @@ public interface ILits {
      *            a literal in internal representation.
      * @return the constraint that propagated that literal, else null.
      */
+    @Pure
     Constr getReason(int lit);
 
     /**
@@ -222,6 +243,7 @@ public interface ILits {
      *            the constraint that forces the assignment of that literal,
      *            null if there are none.
      */
+    @Impure
     void setReason(int lit, Constr r);
 
     /**
@@ -232,6 +254,7 @@ public interface ILits {
      *            a literal in internal representation.
      * @return a list of methods to call on bactracking.
      */
+    @Pure
     IVec<Undoable> undos(int lit);
 
     /**
@@ -242,6 +265,7 @@ public interface ILits {
      * @param c
      *            a constraint that contains the negation of that literal.
      */
+    @Impure
     void watch(int lit, Propagatable c);
 
     /**
@@ -249,6 +273,7 @@ public interface ILits {
      *            a literal in internal representation.
      * @return the list of all the constraints that watch the negation of lit
      */
+    @Pure
     IVec<Propagatable> watches(int lit);
 
     /**
@@ -258,5 +283,7 @@ public interface ILits {
      *            a literal in internal representation.
      * @return one of T for true, F for False or ? for unassigned.
      */
+    @Pure
+    @Impure
     String valueToString(int lit);
 }

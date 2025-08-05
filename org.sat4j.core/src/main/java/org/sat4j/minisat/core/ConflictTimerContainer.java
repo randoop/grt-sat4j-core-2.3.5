@@ -29,6 +29,7 @@
  *******************************************************************************/
 package org.sat4j.minisat.core;
 
+import org.checkerframework.dataflow.qual.Impure;
 import java.io.Serializable;
 import java.util.Iterator;
 
@@ -50,16 +51,19 @@ public class ConflictTimerContainer implements Serializable, ConflictTimer {
 
     private final IVec<ConflictTimer> timers = new Vec<ConflictTimer>();
 
+    @Impure
     ConflictTimerContainer add(ConflictTimer timer) {
         this.timers.push(timer);
         return this;
     }
 
+    @Impure
     ConflictTimerContainer remove(ConflictTimer timer) {
         this.timers.remove(timer);
         return this;
     }
 
+    @Impure
     public void reset() {
         Iterator<ConflictTimer> it = this.timers.iterator();
         while (it.hasNext()) {
@@ -67,6 +71,7 @@ public class ConflictTimerContainer implements Serializable, ConflictTimer {
         }
     }
 
+    @Impure
     public void newConflict() {
         Iterator<ConflictTimer> it = this.timers.iterator();
         while (it.hasNext()) {

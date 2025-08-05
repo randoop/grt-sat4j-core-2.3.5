@@ -29,6 +29,8 @@
  *******************************************************************************/
 package org.sat4j.tools;
 
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.sat4j.specs.IConstr;
 import org.sat4j.specs.ISolverService;
 import org.sat4j.specs.Lbool;
@@ -43,54 +45,71 @@ public abstract class SearchListenerAdapter<S extends ISolverService>
 	 */
     private static final long serialVersionUID = 1L;
 
+    @Impure
     public void init(S solverService) {
     }
 
+    @Impure
     public void assuming(int p) {
     }
 
+    @Impure
     public void propagating(int p, IConstr reason) {
     }
 
+    @Impure
     public void backtracking(int p) {
     }
 
+    @Impure
     public void adding(int p) {
     }
 
+    @Impure
     public void learn(IConstr c) {
     }
 
+    @Impure
     public void learnUnit(int p) {
     }
 
+    @SideEffectFree
     public void delete(int[] clause) {
     }
 
+    @Impure
     public void conflictFound(IConstr confl, int dlevel, int trailLevel) {
     }
 
+    @Impure
     public void conflictFound(int p) {
     }
 
+    @Impure
     public void solutionFound(int[] model, RandomAccessModel lazyModel) {
     }
 
+    @SideEffectFree
     public void beginLoop() {
     }
 
+    @Impure
     public void start() {
     }
 
+    @Impure
     public void end(Lbool result) {
     }
 
+    @Impure
     public void restarting() {
     }
 
+    @Impure
     public void backjump(int backjumpLevel) {
     }
 
+    @Impure
     public void cleaning() {
     }
 

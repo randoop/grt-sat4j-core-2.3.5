@@ -29,6 +29,8 @@
  *******************************************************************************/
 package org.sat4j;
 
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -60,10 +62,12 @@ public final class MoreThanSAT {
      * class.
      * 
      */
+    @SideEffectFree
     private MoreThanSAT() {
         // to silent PMD audit
     }
 
+    @Impure
     public static void main(final String[] args) {
         final ISolver solver = SolverFactory.newDefault();
         final SolutionCounter sc = new SolutionCounter(solver);

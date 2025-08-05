@@ -29,6 +29,9 @@
  *******************************************************************************/
 package org.sat4j.core;
 
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.dataflow.qual.Impure;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Iterator;
@@ -70,6 +73,8 @@ public final class Vec<T> implements IVec<T> {
     /**
      * Create a Vector with an initial capacity of 5 elements.
      */
+    @SideEffectFree
+    @Impure
     public Vec() {
         this(5);
     }
@@ -84,6 +89,7 @@ public final class Vec<T> implements IVec<T> {
      * @param elts
      *            a filled array of T.
      */
+    @SideEffectFree
     public Vec(T[] elts) { // NOPMD
         this.myarray = elts;
         this.nbelem = elts.length;
@@ -95,6 +101,7 @@ public final class Vec<T> implements IVec<T> {
      * @param size
      *            the capacity of the vector.
      */
+    @SideEffectFree
     @SuppressWarnings("unchecked")
     public Vec(int size) {
         this.myarray = (T[]) new Object[size];
@@ -109,6 +116,7 @@ public final class Vec<T> implements IVec<T> {
      * @param pad
      *            l'objet servant a remplir le vecteur
      */
+    @Impure
     @SuppressWarnings("unchecked")
     public Vec(int size, T pad) {
         this.myarray = (T[]) new Object[size];
@@ -118,6 +126,7 @@ public final class Vec<T> implements IVec<T> {
         this.nbelem = size;
     }
 
+    @Pure
     public int size() {
         return this.nbelem;
     }
@@ -130,6 +139,7 @@ public final class Vec<T> implements IVec<T> {
      * @param nofelems
      *            the number of elements to remove.
      */
+    @Impure
     public void shrink(int nofelems) {
         // assert nofelems <= nbelem;
         while (nofelems-- > 0) {
@@ -143,6 +153,7 @@ public final class Vec<T> implements IVec<T> {
      * @param newsize
      *            the new size of the vector.
      */
+    @Impure
     public void shrinkTo(final int newsize) {
         // assert newsize <= size();
         for (int i = this.nbelem; i > newsize; i--) {
@@ -156,11 +167,13 @@ public final class Vec<T> implements IVec<T> {
      * Pop the last element on the stack. It is assumed that the stack is not
      * empty!
      */
+    @Impure
     public void pop() {
         // assert size() > 0;
         this.myarray[--this.nbelem] = null;
     }
 
+    @Impure
     public void growTo(final int newsize, final T pad) {
         // assert newsize >= size();
         ensure(newsize);
@@ -170,6 +183,7 @@ public final class Vec<T> implements IVec<T> {
         this.nbelem = newsize;
     }
 
+    @Impure
     @SuppressWarnings("unchecked")
     public void ensure(final int nsize) {
         if (nsize >= this.myarray.length) {
@@ -179,12 +193,14 @@ public final class Vec<T> implements IVec<T> {
         }
     }
 
+    @Impure
     public IVec<T> push(final T elem) {
         ensure(this.nbelem + 1);
         this.myarray[this.nbelem++] = elem;
         return this;
     }
 
+    @Impure
     public void unsafePush(final T elem) {
         this.myarray[this.nbelem++] = elem;
     }
@@ -197,6 +213,7 @@ public final class Vec<T> implements IVec<T> {
      * @param elem
      *            the element to put first in the vector.
      */
+    @Impure
     public void insertFirst(final T elem) {
         if (this.nbelem > 0) {
             push(this.myarray[0]);
@@ -206,6 +223,7 @@ public final class Vec<T> implements IVec<T> {
         push(elem);
     }
 
+    @Impure
     public void insertFirstWithShifting(final T elem) {
         if (this.nbelem > 0) {
             ensure(this.nbelem + 1);
@@ -219,6 +237,7 @@ public final class Vec<T> implements IVec<T> {
         push(elem);
     }
 
+    @Impure
     public void clear() {
         Arrays.fill(this.myarray, 0, this.nbelem, null);
         this.nbelem = 0;
@@ -230,15 +249,18 @@ public final class Vec<T> implements IVec<T> {
      * 
      * @return the last element on the stack (the one on the top)
      */
+    @Pure
     public T last() {
         // assert size() != 0;
         return this.myarray[this.nbelem - 1];
     }
 
+    @Pure
     public T get(final int index) {
         return this.myarray[index];
     }
 
+    @Impure
     public void set(int index, T elem) {
         this.myarray[index] = elem;
     }
@@ -250,6 +272,7 @@ public final class Vec<T> implements IVec<T> {
      * @param elem
      *            an element from the vector.
      */
+    @Impure
     public void remove(T elem) {
         // assert size() > 0;
         int j = 0;
@@ -271,6 +294,7 @@ public final class Vec<T> implements IVec<T> {
      * @return the former ith element of the vector that is now removed from the
      *         vector
      */
+    @Impure
     public T delete(int index) {
         // assert index >= 0 && index < nbelem;
         T ith = this.myarray[index];
@@ -285,6 +309,7 @@ public final class Vec<T> implements IVec<T> {
      * 
      * @param copy
      */
+    @Impure
     public void copyTo(IVec<T> copy) {
         final Vec<T> ncopy = (Vec<T>) copy;
         final int nsize = this.nbelem + ncopy.nbelem;
@@ -297,6 +322,7 @@ public final class Vec<T> implements IVec<T> {
     /**
      * @param dest
      */
+    @SideEffectFree
     public <E> void copyTo(E[] dest) {
         // assert dest.length >= nbelem;
         System.arraycopy(this.myarray, 0, dest, 0, this.nbelem);
@@ -305,11 +331,13 @@ public final class Vec<T> implements IVec<T> {
     /*
      * Copy one vector to another (cleaning the first), in constant time.
      */
+    @Impure
     public void moveTo(IVec<T> dest) {
         copyTo(dest);
         clear();
     }
 
+    @Impure
     public void moveTo(int dest, int source) {
         if (dest != source) {
             this.myarray[dest] = this.myarray[source];
@@ -317,6 +345,7 @@ public final class Vec<T> implements IVec<T> {
         }
     }
 
+    @Pure
     public T[] toArray() {
         // DLB findbugs ok
         return this.myarray;
@@ -331,6 +360,7 @@ public final class Vec<T> implements IVec<T> {
      * 
      * @see java.lang.Object#toString()
      */
+    @Impure
     @Override
     public String toString() {
         StringBuffer stb = new StringBuffer();
@@ -344,6 +374,7 @@ public final class Vec<T> implements IVec<T> {
         return stb.toString();
     }
 
+    @Impure
     void selectionSort(int from, int to, Comparator<T> cmp) {
         int i, j, besti;
         T tmp;
@@ -361,6 +392,7 @@ public final class Vec<T> implements IVec<T> {
         }
     }
 
+    @Impure
     void sort(int from, int to, Comparator<T> cmp) {
         int width = to - from;
         if (width <= 15) {
@@ -396,10 +428,12 @@ public final class Vec<T> implements IVec<T> {
     /**
      * @param comparator
      */
+    @Impure
     public void sort(Comparator<T> comparator) {
         sort(0, this.nbelem, comparator);
     }
 
+    @Impure
     public void sortUnique(Comparator<T> cmp) {
         int i, j;
         T last;
@@ -427,6 +461,7 @@ public final class Vec<T> implements IVec<T> {
      * 
      * @see java.lang.Object#equals(java.lang.Object)
      */
+    @Impure
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof IVec<?>) {
@@ -449,6 +484,7 @@ public final class Vec<T> implements IVec<T> {
      * 
      * @see java.lang.Object#hashCode()
      */
+    @Pure
     @Override
     public int hashCode() {
         int sum = 0;
@@ -458,14 +494,17 @@ public final class Vec<T> implements IVec<T> {
         return sum;
     }
 
+    @Impure
     public Iterator<T> iterator() {
         return new Iterator<T>() {
             private int i = 0;
 
+            @Pure
             public boolean hasNext() {
                 return this.i < Vec.this.nbelem;
             }
 
+            @Impure
             public T next() {
                 if (this.i == Vec.this.nbelem) {
                     throw new NoSuchElementException();
@@ -473,12 +512,14 @@ public final class Vec<T> implements IVec<T> {
                 return Vec.this.myarray[this.i++];
             }
 
+            @SideEffectFree
             public void remove() {
                 throw new UnsupportedOperationException();
             }
         };
     }
 
+    @Pure
     public boolean isEmpty() {
         return this.nbelem == 0;
     }
@@ -486,6 +527,7 @@ public final class Vec<T> implements IVec<T> {
     /**
      * @since 2.1
      */
+    @Pure
     public boolean contains(T e) {
         for (int i = 0; i < this.nbelem; i++) {
             if (this.myarray[i].equals(e)) {
@@ -498,6 +540,7 @@ public final class Vec<T> implements IVec<T> {
     /**
      * @since 2.2
      */
+    @Pure
     public int indexOf(T element) {
         for (int i = 0; i < this.nbelem; i++) {
             if (this.myarray[i].equals(element)) {

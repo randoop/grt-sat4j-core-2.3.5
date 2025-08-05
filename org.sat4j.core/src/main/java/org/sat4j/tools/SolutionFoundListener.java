@@ -29,6 +29,8 @@
  *******************************************************************************/
 package org.sat4j.tools;
 
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.sat4j.specs.IVecInt;
 
 /**
@@ -44,14 +46,17 @@ public interface SolutionFoundListener {
 
     SolutionFoundListener VOID = new SolutionFoundListener() {
 
+        @SideEffectFree
         public void onSolutionFound(int[] model) {
             // do nothing
         }
 
+        @SideEffectFree
         public void onSolutionFound(IVecInt solution) {
             // do nothing
         }
 
+        @SideEffectFree
         public void onUnsatTermination() {
             // do nothing
         }
@@ -65,6 +70,7 @@ public interface SolutionFoundListener {
      * @param solution
      *            a set of Dimacs literals.
      */
+    @Impure
     void onSolutionFound(int[] solution);
 
     /**
@@ -75,11 +81,13 @@ public interface SolutionFoundListener {
      * @param solution
      *            a set of Dimacs literals.
      */
+    @Impure
     void onSolutionFound(IVecInt solution);
 
     /**
      * Callback method called when the search is finished (either unsat problem
      * or no more solutions found)
      */
+    @Impure
     void onUnsatTermination();
 }

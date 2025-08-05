@@ -29,6 +29,7 @@
  *******************************************************************************/
 package org.sat4j.minisat.core;
 
+import org.checkerframework.dataflow.qual.Impure;
 import java.io.PrintWriter;
 import java.io.Serializable;
 import java.lang.reflect.Field;
@@ -78,6 +79,7 @@ public class SolverStats implements Serializable {
 
     public int importedUnits;
 
+    @Impure
     public void reset() {
         this.starts = 0;
         this.decisions = 0;
@@ -98,6 +100,7 @@ public class SolverStats implements Serializable {
         this.importedUnits = 0;
     }
 
+    @Impure
     public void printStat(PrintWriter out, String prefix) {
         out.println(prefix + "starts\t\t: " + this.starts);
         out.println(prefix + "conflicts\t\t: " + this.conflicts);
@@ -125,6 +128,7 @@ public class SolverStats implements Serializable {
                 + this.importedUnits);
     }
 
+    @Impure
     public Map<String, Number> toMap() {
         Map<String, Number> map = new HashMap<String, Number>();
         for (Field f : this.getClass().getFields()) {

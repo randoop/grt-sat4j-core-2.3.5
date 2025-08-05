@@ -29,6 +29,9 @@
  *******************************************************************************/
 package org.sat4j.tools.xplain;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.Pure;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -65,14 +68,19 @@ public class Xplain<T extends ISolver> extends FullClauseSelectorSolver<T>
 
     private MinimizationStrategy xplainStrategy = new DeletionStrategy();
 
+    @SideEffectFree
+    @Impure
     public Xplain(T solver, boolean skipDuplicatedEntries) {
         super(solver, skipDuplicatedEntries);
     }
 
+    @SideEffectFree
+    @Impure
     public Xplain(T solver) {
         this(solver, true);
     }
 
+    @Pure
     @Override
     public IConstr addExactly(IVecInt literals, int n)
             throws ContradictionException {
@@ -80,6 +88,7 @@ public class Xplain<T extends ISolver> extends FullClauseSelectorSolver<T>
                 "Explanation requires Pseudo Boolean support. See XplainPB class instead.");
     }
 
+    @Pure
     @Override
     public IConstr addAtLeast(IVecInt literals, int degree)
             throws ContradictionException {
@@ -87,6 +96,7 @@ public class Xplain<T extends ISolver> extends FullClauseSelectorSolver<T>
                 "Explanation requires Pseudo Boolean support. See XplainPB class instead.");
     }
 
+    @Pure
     @Override
     public IConstr addAtMost(IVecInt literals, int degree)
             throws ContradictionException {
@@ -104,6 +114,7 @@ public class Xplain<T extends ISolver> extends FullClauseSelectorSolver<T>
      * @return
      * @throws TimeoutException
      */
+    @Impure
     private IVecInt explanationKeys() throws TimeoutException {
         assert !isSatisfiable(this.assump);
         ISolver solver = decorated();
@@ -123,6 +134,7 @@ public class Xplain<T extends ISolver> extends FullClauseSelectorSolver<T>
      * @throws TimeoutException
      * @see {@link #explain()}
      */
+    @Impure
     public int[] minimalExplanation() throws TimeoutException {
         IVecInt keys = explanationKeys();
         keys.sort();
@@ -146,6 +158,7 @@ public class Xplain<T extends ISolver> extends FullClauseSelectorSolver<T>
      * @throws TimeoutException
      * @see {@link #minimalExplanation()}
      */
+    @Impure
     public Collection<IConstr> explain() throws TimeoutException {
         IVecInt keys = explanationKeys();
         Collection<IConstr> explanation = new ArrayList<IConstr>(keys.size());
@@ -158,40 +171,47 @@ public class Xplain<T extends ISolver> extends FullClauseSelectorSolver<T>
     /**
      * @since 2.1
      */
+    @Impure
     public void cancelExplanation() {
         this.xplainStrategy.cancelExplanationComputation();
     }
 
+    @Impure
     @Override
     public int[] findModel() throws TimeoutException {
         this.assump = VecInt.EMPTY;
         return super.findModel();
     }
 
+    @Impure
     @Override
     public int[] findModel(IVecInt assumps) throws TimeoutException {
         this.assump = assumps;
         return super.findModel(assumps);
     }
 
+    @Impure
     @Override
     public boolean isSatisfiable() throws TimeoutException {
         this.assump = VecInt.EMPTY;
         return super.isSatisfiable();
     }
 
+    @Impure
     @Override
     public boolean isSatisfiable(boolean global) throws TimeoutException {
         this.assump = VecInt.EMPTY;
         return super.isSatisfiable(global);
     }
 
+    @Impure
     @Override
     public boolean isSatisfiable(IVecInt assumps) throws TimeoutException {
         this.assump = assumps;
         return super.isSatisfiable(assumps);
     }
 
+    @Impure
     @Override
     public boolean isSatisfiable(IVecInt assumps, boolean global)
             throws TimeoutException {
@@ -199,6 +219,7 @@ public class Xplain<T extends ISolver> extends FullClauseSelectorSolver<T>
         return super.isSatisfiable(assumps, global);
     }
 
+    @Impure
     @Override
     public String toString(String prefix) {
         System.out.println(prefix + "Explanation (MUS) enabled solver");
@@ -206,10 +227,12 @@ public class Xplain<T extends ISolver> extends FullClauseSelectorSolver<T>
         return super.toString(prefix);
     }
 
+    @Impure
     public void setMinimizationStrategy(MinimizationStrategy strategy) {
         this.xplainStrategy = strategy;
     }
 
+    @Impure
     @Override
     public boolean removeConstr(IConstr c) {
         if (getLastConstr() == c) {
@@ -219,6 +242,7 @@ public class Xplain<T extends ISolver> extends FullClauseSelectorSolver<T>
         return super.removeConstr(c);
     }
 
+    @Impure
     @Override
     public boolean removeSubsumedConstr(IConstr c) {
         if (getLastConstr() == c) {

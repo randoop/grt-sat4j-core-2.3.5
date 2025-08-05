@@ -29,6 +29,9 @@
  *******************************************************************************/
 package org.sat4j.core;
 
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -78,140 +81,177 @@ public final class VecInt implements IVecInt {
 		 */
         private static final long serialVersionUID = 1L;
 
+        @Pure
         public int size() {
             return 0;
         }
 
+        @SideEffectFree
         public void shrink(int nofelems) {
         }
 
+        @SideEffectFree
         public void shrinkTo(int newsize) {
         }
 
+        @Pure
         public IVecInt pop() {
             throw new UnsupportedOperationException();
         }
 
+        @SideEffectFree
         public void growTo(int newsize, int pad) {
         }
 
+        @SideEffectFree
         public void ensure(int nsize) {
         }
 
+        @Pure
         public IVecInt push(int elem) {
             throw new UnsupportedOperationException();
         }
 
+        @SideEffectFree
         public void unsafePush(int elem) {
             throw new UnsupportedOperationException();
         }
 
+        @SideEffectFree
         public void clear() {
         }
 
+        @Pure
         public int last() {
             throw new UnsupportedOperationException();
         }
 
+        @Pure
         public int get(int i) {
             throw new UnsupportedOperationException();
         }
 
+        @SideEffectFree
         public void set(int i, int o) {
             throw new UnsupportedOperationException();
         }
 
+        @Pure
         public boolean contains(int e) {
             return false;
         }
 
+        @SideEffectFree
         public void copyTo(IVecInt copy) {
         }
 
+        @SideEffectFree
         public void copyTo(int[] is) {
         }
 
+        @SideEffectFree
         public void moveTo(IVecInt dest) {
         }
 
+        @SideEffectFree
         public void moveTo2(IVecInt dest) {
         }
 
+        @SideEffectFree
         public void moveTo(int[] dest) {
         }
 
+        @SideEffectFree
         public void insertFirst(int elem) {
             throw new UnsupportedOperationException();
         }
 
+        @SideEffectFree
         public void remove(int elem) {
             throw new UnsupportedOperationException();
         }
 
+        @Pure
         public int delete(int i) {
             throw new UnsupportedOperationException();
         }
 
+        @SideEffectFree
         public void sort() {
         }
 
+        @SideEffectFree
         public void sortUnique() {
         }
 
+        @Pure
         public int unsafeGet(int eleem) {
             throw new UnsupportedOperationException();
         }
 
+        @Pure
         public int containsAt(int e) {
             throw new UnsupportedOperationException();
         }
 
+        @Pure
         public int containsAt(int e, int from) {
             throw new UnsupportedOperationException();
         }
 
+        @SideEffectFree
         public void moveTo(int dest, int source) {
             throw new UnsupportedOperationException();
         }
 
+        @Pure
         public boolean isEmpty() {
             return true;
         }
 
+        @Impure
         public IteratorInt iterator() {
             return new IteratorInt() {
 
+                @Pure
                 public boolean hasNext() {
                     return false;
                 }
 
+                @Pure
                 public int next() {
                     throw new UnsupportedOperationException();
                 }
             };
         }
 
+        @Pure
         public int[] toArray() {
             throw new UnsupportedOperationException();
         }
 
+        @Pure
         public int indexOf(int e) {
             return -1;
         }
 
+        @Pure
         @Override
         public String toString() {
             return "[]";
         }
 
+        @SideEffectFree
         public void moveTo(int sourceStartingIndex, int[] dest) {
             throw new UnsupportedOperationException();
         }
 
+        @Pure
         public IVecInt[] subset(int cardinal) {
             return new IVecInt[0];
         };
 
+        @Impure
         @Override
         public boolean equals(Object o) {
             if (o instanceof IVecInt) {
@@ -220,6 +260,7 @@ public final class VecInt implements IVecInt {
             return false;
         }
 
+        @Pure
         @Override
         public int hashCode() {
             return 0;
@@ -230,6 +271,7 @@ public final class VecInt implements IVecInt {
         this(5);
     }
 
+    @SideEffectFree
     public VecInt(int size) {
         this.myarray = new int[size];
     }
@@ -244,6 +286,7 @@ public final class VecInt implements IVecInt {
      * @param lits
      *            a filled array of int.
      */
+    @SideEffectFree
     public VecInt(int[] lits) { // NOPMD
         this.myarray = lits;
         this.nbelem = lits.length;
@@ -257,6 +300,7 @@ public final class VecInt implements IVecInt {
      * @param pad
      *            the integer to fill the vector with
      */
+    @Impure
     public VecInt(int size, int pad) {
         this.myarray = new int[size];
         for (int i = 0; i < size; i++) {
@@ -265,6 +309,7 @@ public final class VecInt implements IVecInt {
         this.nbelem = size;
     }
 
+    @Pure
     public int size() {
         return this.nbelem;
     }
@@ -274,12 +319,14 @@ public final class VecInt implements IVecInt {
      * 
      * @param nofelems
      */
+    @Impure
     public void shrink(int nofelems) {
         // assert nofelems >= 0;
         // assert nofelems <= size();
         this.nbelem -= nofelems;
     }
 
+    @Impure
     public void shrinkTo(int newsize) {
         // assert newsize >= 0;
         // assert newsize < nbelem;
@@ -290,12 +337,14 @@ public final class VecInt implements IVecInt {
      * depile le dernier element du vecteur. Si le vecteur est vide, ne fait
      * rien.
      */
+    @Impure
     public IVecInt pop() {
         // assert size() != 0;
         --this.nbelem;
         return this;
     }
 
+    @Impure
     public void growTo(int newsize, final int pad) {
         // assert newsize > size();
         ensure(newsize);
@@ -304,6 +353,7 @@ public final class VecInt implements IVecInt {
         }
     }
 
+    @Impure
     public void ensure(int nsize) {
         if (nsize >= this.myarray.length) {
             int[] narray = new int[Math.max(nsize, this.nbelem * 2)];
@@ -312,39 +362,47 @@ public final class VecInt implements IVecInt {
         }
     }
 
+    @Impure
     public IVecInt push(int elem) {
         ensure(this.nbelem + 1);
         this.myarray[this.nbelem++] = elem;
         return this;
     }
 
+    @Impure
     public void unsafePush(int elem) {
         this.myarray[this.nbelem++] = elem;
     }
 
+    @Impure
     public void clear() {
         this.nbelem = 0;
     }
 
+    @Pure
     public int last() {
         // assert nbelem > 0;
         return this.myarray[this.nbelem - 1];
     }
 
+    @Pure
     public int get(int i) {
         // assert i >= 0 && i < nbelem;
         return this.myarray[i];
     }
 
+    @Pure
     public int unsafeGet(int i) {
         return this.myarray[i];
     }
 
+    @Impure
     public void set(int i, int o) {
         assert i >= 0 && i < this.nbelem;
         this.myarray[i] = o;
     }
 
+    @Pure
     public boolean contains(int e) {
         final int[] workArray = this.myarray; // dvh, faster access
         for (int i = 0; i < this.nbelem; i++) {
@@ -358,6 +416,7 @@ public final class VecInt implements IVecInt {
     /**
      * @since 2.2
      */
+    @Pure
     public int indexOf(int e) {
         final int[] workArray = this.myarray; // dvh, faster access
         for (int i = 0; i < this.nbelem; i++) {
@@ -368,10 +427,13 @@ public final class VecInt implements IVecInt {
         return -1;
     }
 
+    @Pure
+    @Impure
     public int containsAt(int e) {
         return containsAt(e, -1);
     }
 
+    @Pure
     public int containsAt(int e, int from) {
         final int[] workArray = this.myarray; // dvh, faster access
         for (int i = from + 1; i < this.nbelem; i++) {
@@ -388,6 +450,7 @@ public final class VecInt implements IVecInt {
      * 
      * @param copy
      */
+    @Impure
     public void copyTo(IVecInt copy) {
         VecInt ncopy = (VecInt) copy;
         int nsize = this.nbelem + ncopy.nbelem;
@@ -403,16 +466,19 @@ public final class VecInt implements IVecInt {
      * 
      * @param is
      */
+    @SideEffectFree
     public void copyTo(int[] is) {
         // assert is.length >= nbelem;
         System.arraycopy(this.myarray, 0, is, 0, this.nbelem);
     }
 
+    @Impure
     public void moveTo(IVecInt dest) {
         copyTo(dest);
         this.nbelem = 0;
     }
 
+    @Impure
     public void moveTo2(IVecInt dest) {
         VecInt ndest = (VecInt) dest;
         int tmp[] = ndest.myarray;
@@ -422,15 +488,18 @@ public final class VecInt implements IVecInt {
         this.nbelem = 0;
     }
 
+    @Impure
     public void moveTo(int dest, int source) {
         this.myarray[dest] = this.myarray[source];
     }
 
+    @Impure
     public void moveTo(int[] dest) {
         System.arraycopy(this.myarray, 0, dest, 0, this.nbelem);
         this.nbelem = 0;
     }
 
+    @Impure
     public void moveTo(int sourceStartingIndex, int[] dest) {
         System.arraycopy(this.myarray, sourceStartingIndex, dest, 0,
                 this.nbelem - sourceStartingIndex);
@@ -445,6 +514,7 @@ public final class VecInt implements IVecInt {
      * @param elem
      *            the element to put first in the vector.
      */
+    @Impure
     public void insertFirst(final int elem) {
         if (this.nbelem > 0) {
             push(this.myarray[0]);
@@ -460,6 +530,7 @@ public final class VecInt implements IVecInt {
      * @param elem
      *            un element du vecteur
      */
+    @Impure
     public void remove(int elem) {
         // assert size() > 0;
         int j = 0;
@@ -479,6 +550,7 @@ public final class VecInt implements IVecInt {
      * @return the former ith element of the vector that is now removed from the
      *         vector
      */
+    @Impure
     public int delete(int i) {
         // assert i >= 0 && i < nbelem;
         int ith = this.myarray[i];
@@ -495,6 +567,7 @@ public final class VecInt implements IVecInt {
      * 
      * @see java.lang.int#toString()
      */
+    @Impure
     @Override
     public String toString() {
         StringBuffer stb = new StringBuffer();
@@ -508,6 +581,7 @@ public final class VecInt implements IVecInt {
         return stb.toString();
     }
 
+    @Impure
     void selectionSort(int from, int to) {
         int i, j, besti;
         int tmp;
@@ -525,6 +599,7 @@ public final class VecInt implements IVecInt {
         }
     }
 
+    @Impure
     void sort(int from, int to) {
         int width = to - from;
         if (width <= 15) {
@@ -561,10 +636,12 @@ public final class VecInt implements IVecInt {
     /**
      * sort the vector using a custom quicksort.
      */
+    @Impure
     public void sort() {
         sort(0, this.nbelem);
     }
 
+    @Impure
     public void sortUnique() {
         int i, j;
         int last;
@@ -596,6 +673,7 @@ public final class VecInt implements IVecInt {
      * 
      * @see java.lang.Object#equals(java.lang.Object)
      */
+    @Impure
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof IVecInt) {
@@ -618,6 +696,7 @@ public final class VecInt implements IVecInt {
      * 
      * @see java.lang.Object#hashCode()
      */
+    @Pure
     @Override
     public int hashCode() {
         long sum = 0;
@@ -632,6 +711,7 @@ public final class VecInt implements IVecInt {
      * 
      * @see org.sat4j.specs.IVecInt2#pushAll(org.sat4j.specs.IVecInt2)
      */
+    @Impure
     public void pushAll(IVecInt vec) {
         VecInt nvec = (VecInt) vec;
         int nsize = this.nbelem + nvec.nbelem;
@@ -649,6 +729,7 @@ public final class VecInt implements IVecInt {
      *            a vector
      * @return true iff the current vector is a subset of vec
      */
+    @Pure
     public boolean isSubsetOf(VecInt vec) {
         int i = 0;
         int j = 0;
@@ -664,14 +745,17 @@ public final class VecInt implements IVecInt {
         return true;
     }
 
+    @Impure
     public IteratorInt iterator() {
         return new IteratorInt() {
             private int i = 0;
 
+            @Pure
             public boolean hasNext() {
                 return this.i < VecInt.this.nbelem;
             }
 
+            @Impure
             public int next() {
                 if (this.i == VecInt.this.nbelem) {
                     throw new NoSuchElementException();
@@ -681,6 +765,7 @@ public final class VecInt implements IVecInt {
         };
     }
 
+    @Pure
     public boolean isEmpty() {
         return this.nbelem == 0;
     }
@@ -688,6 +773,7 @@ public final class VecInt implements IVecInt {
     /**
      * @since 2.1
      */
+    @Pure
     public int[] toArray() {
         return this.myarray;
     }
@@ -696,6 +782,7 @@ public final class VecInt implements IVecInt {
      * @since 2.3.1
      * @author sroussel
      */
+    @Impure
     public IVecInt[] subset(int cardinal) {
         List<IVecInt> liste = new ArrayList<IVecInt>();
 

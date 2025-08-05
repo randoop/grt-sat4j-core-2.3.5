@@ -29,6 +29,7 @@
  *******************************************************************************/
 package org.sat4j.minisat.core;
 
+import org.checkerframework.dataflow.qual.Impure;
 import java.io.Serializable;
 
 /**
@@ -45,5 +46,6 @@ public interface VarActivityListener extends Serializable {
      * @param p
      *            a literal (v<<1 or v<<1^1)
      */
+    @Impure
     void varBumpActivity(int p);
 }

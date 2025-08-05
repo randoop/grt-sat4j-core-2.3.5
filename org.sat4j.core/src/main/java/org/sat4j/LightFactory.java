@@ -29,6 +29,7 @@
  *******************************************************************************/
 package org.sat4j;
 
+import org.checkerframework.dataflow.qual.Impure;
 import org.sat4j.core.ASolverFactory;
 import org.sat4j.minisat.constraints.MixedDataStructureDanielWL;
 import org.sat4j.minisat.core.DataStructureFactory;
@@ -54,6 +55,7 @@ public class LightFactory extends ASolverFactory<ISolver> {
     private static final long serialVersionUID = 1460304168178023681L;
     private static LightFactory instance;
 
+    @Impure
     private static synchronized void createInstance() {
         if (instance == null) {
             instance = new LightFactory();
@@ -65,6 +67,7 @@ public class LightFactory extends ASolverFactory<ISolver> {
      * 
      * @return the singleton of that class.
      */
+    @Impure
     public static LightFactory instance() {
         if (instance == null) {
             createInstance();
@@ -72,6 +75,7 @@ public class LightFactory extends ASolverFactory<ISolver> {
         return instance;
     }
 
+    @Impure
     @Override
     public ISolver defaultSolver() {
         MiniSATLearning<DataStructureFactory> learning = new MiniSATLearning<DataStructureFactory>();
@@ -84,11 +88,13 @@ public class LightFactory extends ASolverFactory<ISolver> {
         return solver;
     }
 
+    @Impure
     @Override
     public ISolver lightSolver() {
         return defaultSolver();
     }
 
+    @Impure
     public static void main(final String[] args) {
         AbstractLauncher lanceur = new BasicLauncher<ISolver>(
                 LightFactory.instance());

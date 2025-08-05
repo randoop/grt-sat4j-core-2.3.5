@@ -29,6 +29,9 @@
  *******************************************************************************/
 package org.sat4j.minisat.core;
 
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import java.io.Serializable;
 
 /**
@@ -49,10 +52,12 @@ public class CircularBuffer implements Serializable {
     private long sum = 0;
     private boolean full = false;
 
+    @SideEffectFree
     public CircularBuffer(int capacity) {
         this.values = new int[capacity];
     }
 
+    @Impure
     public void push(int value) {
         if (!this.full) {
             this.values[this.index++] = value;
@@ -73,6 +78,7 @@ public class CircularBuffer implements Serializable {
         this.sum += value;
     }
 
+    @Pure
     public long average() {
         if (this.full) {
             return this.sum / this.values.length;
@@ -83,12 +89,14 @@ public class CircularBuffer implements Serializable {
         return this.sum / this.index;
     }
 
+    @Impure
     public void clear() {
         this.index = 0;
         this.full = false;
         this.sum = 0;
     }
 
+    @Pure
     public boolean isFull() {
         return this.full;
     }

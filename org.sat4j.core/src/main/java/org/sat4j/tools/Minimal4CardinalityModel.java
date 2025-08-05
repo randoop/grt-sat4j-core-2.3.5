@@ -29,6 +29,7 @@
  *******************************************************************************/
 package org.sat4j.tools;
 
+import org.checkerframework.dataflow.qual.Impure;
 import org.sat4j.core.VecInt;
 import org.sat4j.specs.ContradictionException;
 import org.sat4j.specs.IConstr;
@@ -54,19 +55,23 @@ public class Minimal4CardinalityModel extends AbstractMinimalModel {
     /**
      * @param solver
      */
+    @Impure
     public Minimal4CardinalityModel(ISolver solver) {
         super(solver);
     }
 
+    @Impure
     public Minimal4CardinalityModel(ISolver solver, IVecInt p,
             SolutionFoundListener modelListener) {
         super(solver, p, modelListener);
     }
 
+    @Impure
     public Minimal4CardinalityModel(ISolver solver, IVecInt p) {
         super(solver, p);
     }
 
+    @Impure
     public Minimal4CardinalityModel(ISolver solver,
             SolutionFoundListener modelListener) {
         super(solver, modelListener);
@@ -77,6 +82,7 @@ public class Minimal4CardinalityModel extends AbstractMinimalModel {
      * 
      * @see org.sat4j.ISolver#model()
      */
+    @Impure
     @Override
     public int[] model() {
         int[] prevmodel = null;
@@ -108,6 +114,7 @@ public class Minimal4CardinalityModel extends AbstractMinimalModel {
         return prevmodel;
     }
 
+    @Impure
     @Override
     public int[] modelWithInternalVariables() {
         model();

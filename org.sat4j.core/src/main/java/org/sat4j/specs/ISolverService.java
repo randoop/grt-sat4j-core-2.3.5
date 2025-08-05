@@ -28,6 +28,9 @@
  *   CRIL - initial API and implementation
  *******************************************************************************/
 package org.sat4j.specs;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 
 /**
  * The aim on that interface is to allow power users to communicate with the SAT
@@ -42,6 +45,7 @@ public interface ISolverService {
     /**
      * Ask the SAT solver to stop the search.
      */
+    @Impure
     void stop();
 
     /**
@@ -55,6 +59,7 @@ public interface ISolverService {
      *            a set of literals, in Dimacs format, currently falsified, i.e.
      *            for (int l : reason) assert truthValue(l) == Lbool.FALSE
      */
+    @Impure
     void backtrack(int[] reason);
 
     /**
@@ -69,6 +74,7 @@ public interface ISolverService {
      * @param literals
      *            a set of literals in Dimacs format.
      */
+    @Impure
     IConstr addClauseOnTheFly(int[] literals);
 
     /**
@@ -80,6 +86,7 @@ public interface ISolverService {
      * @param degree
      *            the maximal number of literals which can be satisfied.
      */
+    @Impure
     IConstr addAtMostOnTheFly(int[] literals, int degree);
 
     /**
@@ -89,11 +96,14 @@ public interface ISolverService {
      *            a Dimacs literal, i.e. a non-zero integer.
      * @return true or false if the literal is assigned, else undefined.
      */
+    @Pure
+    @Impure
     Lbool truthValue(int literal);
 
     /**
      * To access the current decision level
      */
+    @Impure
     int currentDecisionLevel();
 
     /**
@@ -102,6 +112,7 @@ public interface ISolverService {
      * @param decisionLevel
      *            a decision level between 0 and #currentDecisionLevel()
      */
+    @Pure
     int[] getLiteralsPropagatedAt(int decisionLevel);
 
     /**
@@ -110,6 +121,7 @@ public interface ISolverService {
      * @param l
      *            a literal in Dimacs format.
      */
+    @SideEffectFree
     void suggestNextLiteralToBranchOn(int l);
 
     /**
@@ -120,6 +132,8 @@ public interface ISolverService {
      * @return the value of the heuristics for each variable (using Dimacs
      *         index).
      */
+    @Pure
+    @Impure
     double[] getVariableHeuristics();
 
     /**
@@ -130,6 +144,7 @@ public interface ISolverService {
      * 
      * @return the constraints learned and kept so far by the solver.
      */
+    @Pure
     IVec<? extends IConstr> getLearnedConstraints();
 
     /**
@@ -137,6 +152,8 @@ public interface ISolverService {
      * 
      * @return the maximum variable id (Dimacs format) reserved in the solver.
      */
+    @Pure
+    @Impure
     int nVars();
 
     /**
@@ -158,6 +175,7 @@ public interface ISolverService {
      *            latest constr added to the solver.
      * @return true if the constraint was successfully removed.
      */
+    @Impure
     boolean removeSubsumedConstr(IConstr c);
 
     /**
@@ -165,5 +183,6 @@ public interface ISolverService {
      * @return the string used to prefix the output.
      * @since 2.3.3
      */
+    @Pure
     String getLogPrefix();
 }

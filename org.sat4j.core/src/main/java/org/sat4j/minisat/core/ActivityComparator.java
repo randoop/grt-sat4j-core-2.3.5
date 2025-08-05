@@ -29,6 +29,7 @@
  *******************************************************************************/
 package org.sat4j.minisat.core;
 
+import org.checkerframework.dataflow.qual.Impure;
 import java.io.Serializable;
 import java.util.Comparator;
 
@@ -47,6 +48,7 @@ public class ActivityComparator implements Comparator<Constr>, Serializable {
      * 
      * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
      */
+    @Impure
     public int compare(Constr c1, Constr c2) {
         long delta = Math.round(c1.getActivity() - c2.getActivity());
         if (delta == 0) {

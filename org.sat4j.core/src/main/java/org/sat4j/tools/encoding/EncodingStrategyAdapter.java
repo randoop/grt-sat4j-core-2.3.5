@@ -30,6 +30,8 @@
 
 package org.sat4j.tools.encoding;
 
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.Impure;
 import java.io.Serializable;
 
 import org.sat4j.core.VecInt;
@@ -52,6 +54,7 @@ public abstract class EncodingStrategyAdapter implements Serializable {
      */
     private static final long serialVersionUID = 1L;
 
+    @Impure
     public IConstr addAtLeast(ISolver solver, IVecInt literals, int degree)
             throws ContradictionException {
         final int n = literals.size();
@@ -62,31 +65,38 @@ public abstract class EncodingStrategyAdapter implements Serializable {
         return this.addAtMost(solver, newLiterals, n - degree);
     }
 
+    @Impure
     public IConstr addAtLeastOne(ISolver solver, IVecInt literals)
             throws ContradictionException {
         return solver.addClause(literals);
     }
 
+    @Impure
     public IConstr addAtMost(ISolver solver, IVecInt literals, int degree)
             throws ContradictionException {
         return solver.addAtMost(literals, degree);
     }
 
+    @Impure
     public IConstr addAtMostOne(ISolver solver, IVecInt literals)
             throws ContradictionException {
         return this.addAtMost(solver, literals, 1);
     }
 
+    @Impure
     public IConstr addExactly(ISolver solver, IVecInt literals, int degree)
             throws ContradictionException {
         return solver.addExactly(literals, degree);
     }
 
+    @Impure
     public IConstr addExactlyOne(ISolver solver, IVecInt literals)
             throws ContradictionException {
         return this.addExactly(solver, literals, 1);
     }
 
+    @Pure
+    @Impure
     @Override
     public String toString() {
         return this.getClass().getName();

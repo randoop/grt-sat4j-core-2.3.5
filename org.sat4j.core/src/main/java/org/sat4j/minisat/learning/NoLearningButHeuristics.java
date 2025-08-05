@@ -29,6 +29,7 @@
  *******************************************************************************/
 package org.sat4j.minisat.learning;
 
+import org.checkerframework.dataflow.qual.Impure;
 import org.sat4j.minisat.core.Constr;
 import org.sat4j.minisat.core.DataStructureFactory;
 
@@ -44,6 +45,7 @@ public final class NoLearningButHeuristics<D extends DataStructureFactory>
 
     private static final long serialVersionUID = 1L;
 
+    @Impure
     public void learns(Constr reason) {
         claBumpActivity(reason);
     }

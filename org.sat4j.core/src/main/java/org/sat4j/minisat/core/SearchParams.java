@@ -29,6 +29,9 @@
  *******************************************************************************/
 package org.sat4j.minisat.core;
 
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import java.io.Serializable;
 import java.lang.reflect.Field;
 
@@ -46,6 +49,8 @@ public class SearchParams implements Serializable {
      * Default search parameters.
      * 
      */
+    @SideEffectFree
+    @Impure
     public SearchParams() {
         this(0.95, 0.999, 1.5, 100);
     }
@@ -55,10 +60,14 @@ public class SearchParams implements Serializable {
      * @param conflictBound
      *            the initial conflict bound for the first restart.
      */
+    @SideEffectFree
+    @Impure
     public SearchParams(int conflictBound) {
         this(0.95, 0.999, 1.5, conflictBound);
     }
 
+    @SideEffectFree
+    @Impure
     public SearchParams(double confincfactor, int conflictBound) {
         this(0.95, 0.999, confincfactor, conflictBound);
     }
@@ -73,6 +82,7 @@ public class SearchParams implements Serializable {
      * @param i
      *            initialConflictBound
      */
+    @SideEffectFree
     public SearchParams(double d, double e, double f, int i) {
         this.varDecay = d;
         this.claDecay = e;
@@ -83,6 +93,7 @@ public class SearchParams implements Serializable {
     /**
      * @return la valeur de clause decay
      */
+    @Pure
     public double getClaDecay() {
         return this.claDecay;
     }
@@ -90,6 +101,7 @@ public class SearchParams implements Serializable {
     /**
      * @return la valeur de var decay
      */
+    @Pure
     public double getVarDecay() {
         return this.varDecay;
     }
@@ -107,6 +119,7 @@ public class SearchParams implements Serializable {
      * 
      * @see java.lang.Object#toString()
      */
+    @Impure
     @Override
     public String toString() {
         StringBuffer stb = new StringBuffer();
@@ -132,6 +145,7 @@ public class SearchParams implements Serializable {
      * @param conflictBoundIncFactor
      *            the conflictBoundIncFactor to set
      */
+    @Impure
     public void setConflictBoundIncFactor(double conflictBoundIncFactor) {
         this.conflictBoundIncFactor = conflictBoundIncFactor;
     }
@@ -140,6 +154,7 @@ public class SearchParams implements Serializable {
      * @param initConflictBound
      *            the initConflictBound to set
      */
+    @Impure
     public void setInitConflictBound(int initConflictBound) {
         this.initConflictBound = initConflictBound;
     }
@@ -147,6 +162,7 @@ public class SearchParams implements Serializable {
     /**
      * @return the conflictBoundIncFactor
      */
+    @Pure
     public double getConflictBoundIncFactor() {
         return this.conflictBoundIncFactor;
     }
@@ -154,6 +170,7 @@ public class SearchParams implements Serializable {
     /**
      * @return the initConflictBound
      */
+    @Pure
     public int getInitConflictBound() {
         return this.initConflictBound;
     }
@@ -162,6 +179,7 @@ public class SearchParams implements Serializable {
      * @param claDecay
      *            the claDecay to set
      */
+    @Impure
     public void setClaDecay(double claDecay) {
         this.claDecay = claDecay;
     }
@@ -170,6 +188,7 @@ public class SearchParams implements Serializable {
      * @param varDecay
      *            the varDecay to set
      */
+    @Impure
     public void setVarDecay(double varDecay) {
         this.varDecay = varDecay;
     }

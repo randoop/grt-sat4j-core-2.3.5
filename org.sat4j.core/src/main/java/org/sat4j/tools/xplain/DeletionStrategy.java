@@ -29,6 +29,8 @@
  *******************************************************************************/
 package org.sat4j.tools.xplain;
 
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.Impure;
 import java.io.PrintWriter;
 import java.util.Map;
 import java.util.Set;
@@ -54,10 +56,12 @@ public class DeletionStrategy implements MinimizationStrategy {
 
     private boolean computationCanceled;
 
+    @Impure
     public void cancelExplanationComputation() {
         this.computationCanceled = true;
     }
 
+    @Impure
     public IVecInt explain(ISolver solver, Map<Integer, ?> constrs,
             IVecInt assumps) throws TimeoutException {
         this.computationCanceled = false;
@@ -160,6 +164,7 @@ public class DeletionStrategy implements MinimizationStrategy {
         return results;
     }
 
+    @Pure
     @Override
     public String toString() {
         return "Deletion based minimization strategy";

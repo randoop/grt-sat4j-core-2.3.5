@@ -28,6 +28,7 @@
  *   CRIL - initial API and implementation
  *******************************************************************************/
 package org.sat4j.specs;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 
 /**
  * That exception is launched whenever a trivial contradiction is found (e.g.
@@ -42,6 +43,7 @@ public class ContradictionException extends Exception {
     /**
      * 
      */
+    @SideEffectFree
     public ContradictionException() {
         super();
     }
@@ -50,6 +52,7 @@ public class ContradictionException extends Exception {
      * @param message
      *            un message
      */
+    @SideEffectFree
     public ContradictionException(final String message) {
         super(message);
     }
@@ -58,6 +61,7 @@ public class ContradictionException extends Exception {
      * @param cause
      *            la cause de l'exception
      */
+    @SideEffectFree
     public ContradictionException(final Throwable cause) {
         super(cause);
     }
@@ -68,6 +72,7 @@ public class ContradictionException extends Exception {
      * @param cause
      *            une cause
      */
+    @SideEffectFree
     public ContradictionException(final String message, final Throwable cause) {
         super(message, cause);
     }

@@ -29,6 +29,8 @@
  *******************************************************************************/
 package org.sat4j.reader;
 
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.Impure;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
@@ -78,15 +80,18 @@ public class DimacsReader extends Reader implements Serializable {
      */
     protected EfficientScanner scanner;
 
+    @Impure
     public DimacsReader(ISolver solver) {
         this(solver, "cnf");
     }
 
+    @Impure
     public DimacsReader(ISolver solver, String format) {
         this.solver = solver;
         this.formatString = format;
     }
 
+    @Impure
     public void disableNumberOfConstraintCheck() {
         this.checkConstrNb = false;
     }
@@ -100,6 +105,7 @@ public class DimacsReader extends Reader implements Serializable {
      *             if an IO problem occurs.
      * @since 2.1
      */
+    @Impure
     protected void skipComments() throws IOException {
         this.scanner.skipComments();
     }
@@ -113,6 +119,7 @@ public class DimacsReader extends Reader implements Serializable {
      *             if the input stream does not comply with the DIMACS format.
      * @since 2.1
      */
+    @Impure
     protected void readProblemLine() throws IOException, ParseFormatException {
 
         String line = this.scanner.nextLine().trim();
@@ -155,6 +162,7 @@ public class DimacsReader extends Reader implements Serializable {
      *             si le probl?me est trivialement inconsistant.
      * @since 2.1
      */
+    @Impure
     protected void readConstrs() throws IOException, ParseFormatException,
             ContradictionException {
         int realNbOfConstr = 0;
@@ -204,6 +212,7 @@ public class DimacsReader extends Reader implements Serializable {
      * @throws ContradictionException
      * @since 2.1
      */
+    @Impure
     protected void flushConstraint() throws ContradictionException {
         try {
             this.solver.addClause(this.literals);
@@ -217,6 +226,7 @@ public class DimacsReader extends Reader implements Serializable {
     /**
      * @since 2.1
      */
+    @Impure
     protected boolean handleLine() throws ContradictionException, IOException,
             ParseFormatException {
         int lit;
@@ -236,6 +246,7 @@ public class DimacsReader extends Reader implements Serializable {
         return added;
     }
 
+    @Impure
     @Override
     public IProblem parseInstance(InputStream in) throws ParseFormatException,
             ContradictionException, IOException {
@@ -251,6 +262,7 @@ public class DimacsReader extends Reader implements Serializable {
      * @throws ContradictionException
      *             si le probl?me est trivialement inconsitant
      */
+    @Impure
     private IProblem parseInstance() throws ParseFormatException,
             ContradictionException {
         this.solver.reset();
@@ -267,6 +279,7 @@ public class DimacsReader extends Reader implements Serializable {
         }
     }
 
+    @Impure
     @Override
     public String decode(int[] model) {
         StringBuffer stb = new StringBuffer();
@@ -278,6 +291,7 @@ public class DimacsReader extends Reader implements Serializable {
         return stb.toString();
     }
 
+    @Impure
     @Override
     public void decode(int[] model, PrintWriter out) {
         for (int element : model) {
@@ -287,6 +301,7 @@ public class DimacsReader extends Reader implements Serializable {
         out.print("0");
     }
 
+    @Pure
     protected ISolver getSolver() {
         return this.solver;
     }

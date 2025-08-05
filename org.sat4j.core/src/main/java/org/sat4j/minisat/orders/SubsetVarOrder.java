@@ -29,12 +29,14 @@
  *******************************************************************************/
 package org.sat4j.minisat.orders;
 
+import org.checkerframework.dataflow.qual.Impure;
 import org.sat4j.minisat.core.Heap;
 
 public class SubsetVarOrder extends VarOrderHeap {
 
     private final int[] varsToTest;
 
+    @Impure
     public SubsetVarOrder(int[] varsToTest) {
         this.varsToTest = new int[varsToTest.length];
         System.arraycopy(varsToTest, 0, this.varsToTest, 0, varsToTest.length);
@@ -45,6 +47,7 @@ public class SubsetVarOrder extends VarOrderHeap {
 	 */
     private static final long serialVersionUID = 1L;
 
+    @Impure
     @Override
     public void init() {
         int nlength = this.lits.nVars() + 1;

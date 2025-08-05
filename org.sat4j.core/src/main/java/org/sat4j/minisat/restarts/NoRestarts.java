@@ -29,6 +29,8 @@
  *******************************************************************************/
 package org.sat4j.minisat.restarts;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.dataflow.qual.Pure;
 import org.sat4j.minisat.core.Constr;
 import org.sat4j.minisat.core.RestartStrategy;
 import org.sat4j.minisat.core.SearchParams;
@@ -44,38 +46,47 @@ public final class NoRestarts implements RestartStrategy {
 
     private static final long serialVersionUID = 1L;
 
+    @SideEffectFree
     public void init(SearchParams params, SolverStats stats) {
     }
 
+    @Pure
     public long nextRestartNumberOfConflict() {
         return Long.MAX_VALUE;
     }
 
+    @SideEffectFree
     public void onRestart() {
         // do nothing
     }
 
+    @SideEffectFree
     public void reset() {
         // do nothing
     }
 
+    @SideEffectFree
     public void newConflict() {
         // do nothing
     }
 
+    @Pure
     public boolean shouldRestart() {
         return false;
     }
 
+    @SideEffectFree
     public void onBackjumpToRootLevel() {
         // do nothing
     }
 
+    @Pure
     @Override
     public String toString() {
         return "NoRestarts";
     }
 
+    @SideEffectFree
     public void newLearnedClause(Constr learned, int trailLevel) {
     }
 

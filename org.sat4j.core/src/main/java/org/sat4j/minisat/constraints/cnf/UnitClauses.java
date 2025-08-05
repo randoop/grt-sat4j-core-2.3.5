@@ -29,6 +29,9 @@
  *******************************************************************************/
 package org.sat4j.minisat.constraints.cnf;
 
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.sat4j.minisat.core.Constr;
 import org.sat4j.specs.IVecInt;
 import org.sat4j.specs.UnitPropagationListener;
@@ -40,88 +43,109 @@ public class UnitClauses implements Constr {
 
     protected final int[] literals;
 
+    @Impure
     public UnitClauses(IVecInt values) {
         this.literals = new int[values.size()];
         values.copyTo(this.literals);
     }
 
+    @Impure
     public void assertConstraint(UnitPropagationListener s) {
         for (int p : this.literals) {
             s.enqueue(p, this);
         }
     }
 
+    @Impure
     public void assertConstraintIfNeeded(UnitPropagationListener s) {
         assertConstraint(s);
     }
 
+    @SideEffectFree
     public void calcReason(int p, IVecInt outReason) {
         throw new UnsupportedOperationException();
 
     }
 
+    @Pure
     public double getActivity() {
         throw new UnsupportedOperationException();
     }
 
+    @SideEffectFree
     public void incActivity(double claInc) {
         // silent to prevent problems with xplain trick.
     }
 
+    @SideEffectFree
     public void setActivity(double claInc) {
         // do nothing
     }
 
+    @Pure
     public boolean locked() {
         throw new UnsupportedOperationException();
     }
 
+    @SideEffectFree
     public void register() {
         throw new UnsupportedOperationException();
     }
 
+    @Impure
     public void remove(UnitPropagationListener upl) {
         for (int i = this.literals.length - 1; i >= 0; i--) {
             upl.unset(this.literals[i]);
         }
     }
 
+    @SideEffectFree
     public void rescaleBy(double d) {
         throw new UnsupportedOperationException();
     }
 
+    @SideEffectFree
     public void setLearnt() {
         throw new UnsupportedOperationException();
     }
 
+    @Pure
     public boolean simplify() {
         return false;
     }
 
+    @Pure
     public boolean propagate(UnitPropagationListener s, int p) {
         throw new UnsupportedOperationException();
     }
 
+    @Pure
     public int get(int i) {
         throw new UnsupportedOperationException();
     }
 
+    @Pure
     public boolean learnt() {
         throw new UnsupportedOperationException();
     }
 
+    @Pure
     public int size() {
         throw new UnsupportedOperationException();
     }
 
+    @SideEffectFree
     public void forwardActivity(double claInc) {
         // silent to prevent problems with xplain trick.
     }
 
+    @Pure
     public boolean canBePropagatedMultipleTimes() {
         return false;
     }
 
+    @SideEffectFree
+    @Impure
     public void calcReasonOnTheFly(int p, IVecInt trail, IVecInt outReason) {
         calcReason(p, outReason);
     }

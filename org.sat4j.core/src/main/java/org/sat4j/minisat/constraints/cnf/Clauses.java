@@ -29,6 +29,7 @@
  *******************************************************************************/
 package org.sat4j.minisat.constraints.cnf;
 
+import org.checkerframework.dataflow.qual.Impure;
 import org.sat4j.minisat.core.ILits;
 import org.sat4j.specs.ContradictionException;
 import org.sat4j.specs.IVecInt;
@@ -59,6 +60,7 @@ public abstract class Clauses {
      * @throws ContradictionException
      *             if discovered by unit propagation
      */
+    @Impure
     public static IVecInt sanityCheck(IVecInt ps, ILits voc,
             UnitPropagationListener s) throws ContradictionException {
         // si un litt???ral de ps est vrai, retourner vrai
@@ -111,6 +113,7 @@ public abstract class Clauses {
      * @throws ContradictionException
      *             when detected by unit propagation
      */
+    @Impure
     static boolean propagationCheck(IVecInt ps, UnitPropagationListener s)
             throws ContradictionException {
         if (ps.size() == 0) {

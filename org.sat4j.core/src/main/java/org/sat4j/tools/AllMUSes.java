@@ -29,6 +29,8 @@
  *******************************************************************************/
 package org.sat4j.tools;
 
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.Impure;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,6 +56,7 @@ public class AllMUSes {
     private final List<IVecInt> musList;
     private final ASolverFactory<? extends ISolver> factory;
 
+    @Impure
     public AllMUSes(boolean group, ASolverFactory<? extends ISolver> factory) {
         if (!group) {
             this.css = new FullClauseSelectorSolver<ISolver>(
@@ -68,6 +71,7 @@ public class AllMUSes {
         this.factory = factory;
     }
 
+    @Impure
     public AllMUSes(ASolverFactory<? extends ISolver> factory) {
         this(false, factory);
     }
@@ -77,10 +81,12 @@ public class AllMUSes {
      * 
      * @return the instance of ISolver to which the clauses will be added
      */
+    @Pure
     public <T extends ISolver> T getSolverInstance() {
         return (T) this.css;
     }
 
+    @Impure
     public List<IVecInt> computeAllMUSes() {
         return computeAllMUSes(SolutionFoundListener.VOID);
     }
@@ -93,6 +99,7 @@ public class AllMUSes {
      *            the <code>ISolver</code> that contains the set of clauses
      * @return a list containing all the MUSes
      */
+    @Impure
     public List<IVecInt> computeAllMUSes(SolutionFoundListener listener) {
         if (secondPhaseClauses.isEmpty()) {
             computeAllMSS();
@@ -110,6 +117,7 @@ public class AllMUSes {
         return computeAllMUSes(listener, minSolver);
     }
 
+    @Impure
     public List<IVecInt> computeAllMUSesOrdered(SolutionFoundListener listener) {
         if (secondPhaseClauses.isEmpty()) {
             computeAllMSS();
@@ -127,6 +135,7 @@ public class AllMUSes {
         return computeAllMUSes(listener, minSolver);
     }
 
+    @Impure
     private List<IVecInt> computeAllMUSes(SolutionFoundListener listener,
             ISolver minSolver) {
         if (css.isVerbose()) {
@@ -169,10 +178,12 @@ public class AllMUSes {
         return musList;
     }
 
+    @Impure
     public List<IVecInt> computeAllMSS() {
         return computeAllMSS(SolutionFoundListener.VOID);
     }
 
+    @Impure
     public List<IVecInt> computeAllMSS(SolutionFoundListener listener) {
         IVecInt pLits = new VecInt();
         for (Integer i : css.getAddedVars()) {
@@ -183,6 +194,7 @@ public class AllMUSes {
         return computeAllMSS(listener, min4Inc, pLits);
     }
 
+    @Impure
     public List<IVecInt> computeAllMSSOrdered(SolutionFoundListener listener) {
         IVecInt pLits = new VecInt();
         for (Integer i : css.getAddedVars()) {
@@ -193,6 +205,7 @@ public class AllMUSes {
         return computeAllMSS(listener, min4Inc, pLits);
     }
 
+    @Impure
     private List<IVecInt> computeAllMSS(SolutionFoundListener listener,
             ISolver min4Inc, IVecInt pLits) {
         if (css.isVerbose()) {
@@ -255,6 +268,7 @@ public class AllMUSes {
         return mssList;
     }
 
+    @Pure
     public List<IVecInt> getMssList() {
         return mssList;
     }

@@ -29,6 +29,9 @@
  *******************************************************************************/
 package org.sat4j.minisat.orders;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.Impure;
 import static org.sat4j.core.LiteralsUtils.var;
 
 /**
@@ -45,18 +48,22 @@ public final class PhaseInLastLearnedClauseSelectionStrategy extends
      */
     private static final long serialVersionUID = 1L;
 
+    @Impure
     public void updateVar(int p) {
         this.phase[var(p)] = p;
     }
 
+    @Pure
     @Override
     public String toString() {
         return "phase appearing in latest learned clause";
     }
 
+    @SideEffectFree
     public void assignLiteral(int p) {
     }
 
+    @SideEffectFree
     public void updateVarAtDecisionLevel(int q) {
     }
 }

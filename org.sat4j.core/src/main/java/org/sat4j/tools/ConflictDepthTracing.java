@@ -29,6 +29,7 @@
  *******************************************************************************/
 package org.sat4j.tools;
 
+import org.checkerframework.dataflow.qual.Impure;
 import org.sat4j.specs.IConstr;
 import org.sat4j.specs.ISolverService;
 import org.sat4j.specs.Lbool;
@@ -50,6 +51,7 @@ public class ConflictDepthTracing extends SearchListenerAdapter<ISolverService> 
     private final IVisualizationTool conflictDepthRestartVisu;
     private final IVisualizationTool conflictDepthCleanVisu;
 
+    @Impure
     public ConflictDepthTracing(IVisualizationTool conflictDepthVisu,
             IVisualizationTool conflictDepthRestartVisu,
             IVisualizationTool conflictDepthCleanVisu) {
@@ -59,6 +61,7 @@ public class ConflictDepthTracing extends SearchListenerAdapter<ISolverService> 
         this.counter = 0;
     }
 
+    @Impure
     @Override
     public void conflictFound(IConstr confl, int dlevel, int trailLevel) {
         this.conflictDepthVisu.addPoint(this.counter, trailLevel);
@@ -68,6 +71,7 @@ public class ConflictDepthTracing extends SearchListenerAdapter<ISolverService> 
         this.counter++;
     }
 
+    @Impure
     @Override
     public void end(Lbool result) {
         this.conflictDepthVisu.end();
@@ -75,6 +79,7 @@ public class ConflictDepthTracing extends SearchListenerAdapter<ISolverService> 
         this.conflictDepthCleanVisu.end();
     }
 
+    @Impure
     @Override
     public void start() {
         this.conflictDepthVisu.init();
@@ -83,6 +88,7 @@ public class ConflictDepthTracing extends SearchListenerAdapter<ISolverService> 
         this.counter = 0;
     }
 
+    @Impure
     @Override
     public void restarting() {
         this.conflictDepthRestartVisu.addPoint(this.counter, this.nVar);
@@ -90,11 +96,13 @@ public class ConflictDepthTracing extends SearchListenerAdapter<ISolverService> 
         this.conflictDepthVisu.addInvisiblePoint(this.counter, this.nVar);
     }
 
+    @Impure
     @Override
     public void init(ISolverService solverService) {
         this.nVar = solverService.nVars();
     }
 
+    @Impure
     @Override
     public void cleaning() {
         this.conflictDepthRestartVisu.addPoint(this.counter, 0);

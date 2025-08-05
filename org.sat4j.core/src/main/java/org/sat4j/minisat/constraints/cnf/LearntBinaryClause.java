@@ -29,6 +29,9 @@
  *******************************************************************************/
 package org.sat4j.minisat.constraints.cnf;
 
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.dataflow.qual.Pure;
 import org.sat4j.minisat.core.ILits;
 import org.sat4j.specs.IVecInt;
 
@@ -44,18 +47,22 @@ public class LearntBinaryClause extends BinaryClause {
 	 */
     private static final long serialVersionUID = 1L;
 
+    @Impure
     public LearntBinaryClause(IVecInt ps, ILits voc) {
         super(ps, voc);
     }
 
+    @SideEffectFree
     public void setLearnt() {
         // do nothing
     }
 
+    @Pure
     public boolean learnt() {
         return true;
     }
 
+    @SideEffectFree
     public void forwardActivity(double claInc) {
 
     }
@@ -63,10 +70,12 @@ public class LearntBinaryClause extends BinaryClause {
     /**
      * @param claInc
      */
+    @Impure
     public void incActivity(double claInc) {
         this.activity += claInc;
     }
 
+    @Impure
     public void setActivity(double d) {
         this.activity = d;
     }

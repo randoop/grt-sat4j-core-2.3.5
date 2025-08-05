@@ -29,6 +29,8 @@
  *******************************************************************************/
 package org.sat4j.minisat.learning;
 
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.Pure;
 import org.sat4j.minisat.core.Constr;
 import org.sat4j.minisat.core.DataStructureFactory;
 
@@ -49,38 +51,46 @@ public final class PercentLengthLearning<D extends DataStructureFactory>
     private int maxpercent;
     private int bound;
 
+    @Impure
     public PercentLengthLearning() {
         this(10);
     }
 
+    @Impure
     public PercentLengthLearning(int percent) {
         this.maxpercent = percent;
     }
 
+    @Impure
     public void setLimit(int percent) {
         this.maxpercent = percent;
     }
 
+    @Pure
     public int getLimit() {
         return this.maxpercent;
     }
 
+    @Impure
     @Override
     public void init() {
         super.init();
         setBound(this.lits.realnVars() * this.maxpercent / 100);
     }
 
+    @Pure
     @Override
     public String toString() {
         return "Limit learning to clauses of size smaller or equal to " //$NON-NLS-1$
                 + this.maxpercent + "% of the number of variables"; //$NON-NLS-1$
     }
 
+    @Impure
     protected void setBound(int newbound) {
         this.bound = newbound;
     }
 
+    @Impure
     @Override
     protected boolean learningCondition(Constr constr) {
         return constr.size() <= this.bound;

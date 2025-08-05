@@ -29,6 +29,9 @@
  *******************************************************************************/
 package org.sat4j.minisat.orders;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.Impure;
 import static org.sat4j.core.LiteralsUtils.posLit;
 
 import org.sat4j.minisat.core.IPhaseSelectionStrategy;
@@ -41,27 +44,35 @@ public final class PositiveLiteralSelectionStrategy implements
      */
     private static final long serialVersionUID = 1L;
 
+    @SideEffectFree
     public void assignLiteral(int p) {
     }
 
+    @SideEffectFree
     public void init(int nlength) {
     }
 
+    @SideEffectFree
     public void init(int var, int p) {
     }
 
+    @Pure
+    @Impure
     public int select(int var) {
         return posLit(var);
     }
 
+    @SideEffectFree
     public void updateVar(int p) {
     }
 
+    @Pure
     @Override
     public String toString() {
         return "positive phase selection";
     }
 
+    @SideEffectFree
     public void updateVarAtDecisionLevel(int q) {
     }
 }

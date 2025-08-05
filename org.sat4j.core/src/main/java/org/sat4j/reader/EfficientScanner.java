@@ -29,6 +29,7 @@
  *******************************************************************************/
 package org.sat4j.reader;
 
+import org.checkerframework.dataflow.qual.Impure;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -62,20 +63,24 @@ public class EfficientScanner implements Serializable {
     /*
      * nomFichier repr?sente le nom du fichier ? lire
      */
+    @Impure
     public EfficientScanner(final InputStream input, char commentChar) {
         this.in = new BufferedInputStream(input, EfficientScanner.TAILLE_BUF);
         this.commentChar = commentChar;
     }
 
+    @Impure
     public EfficientScanner(final InputStream input) {
         this(input, 'c');
     }
 
+    @Impure
     public void close() throws IOException {
         this.in.close();
     }
 
     /** Skip commented lines. */
+    @Impure
     public void skipComments() throws IOException {
         char currentChar;
         for (;;) {
@@ -97,6 +102,7 @@ public class EfficientScanner implements Serializable {
      * @throws IOException
      * @throws ParseFormatException
      */
+    @Impure
     public int nextInt() throws IOException, ParseFormatException {
         int val = 0;
         boolean neg = false;
@@ -123,6 +129,7 @@ public class EfficientScanner implements Serializable {
         return neg ? -val : val;
     }
 
+    @Impure
     public BigInteger nextBigInteger() throws IOException, ParseFormatException {
         StringBuffer stb = new StringBuffer();
         char currentChar = skipSpaces();
@@ -148,6 +155,7 @@ public class EfficientScanner implements Serializable {
      * @throws ParseFormatException
      *             never used in that method.
      */
+    @Impure
     public String next() throws IOException, ParseFormatException {
         StringBuffer stb = new StringBuffer();
         char currentChar = skipSpaces();
@@ -158,6 +166,7 @@ public class EfficientScanner implements Serializable {
         return stb.toString();
     }
 
+    @Impure
     public char skipSpaces() throws IOException {
         char car;
 
@@ -168,6 +177,7 @@ public class EfficientScanner implements Serializable {
         return car;
     }
 
+    @Impure
     public String nextLine() throws IOException {
         StringBuffer stb = new StringBuffer();
         char car;
@@ -178,6 +188,7 @@ public class EfficientScanner implements Serializable {
         return stb.toString();
     }
 
+    @Impure
     public void skipRestOfLine() throws IOException {
         char car;
         do {
@@ -185,10 +196,12 @@ public class EfficientScanner implements Serializable {
         } while (car != '\n' && car != EOF);
     }
 
+    @Impure
     public boolean eof() throws IOException {
         return currentChar() == EOF;
     }
 
+    @Impure
     public char currentChar() throws IOException {
         this.in.mark(10);
         char car = (char) this.in.read();

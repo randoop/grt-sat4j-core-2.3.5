@@ -29,6 +29,7 @@
  *******************************************************************************/
 package org.sat4j.reader;
 
+import org.checkerframework.dataflow.qual.Impure;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -73,10 +74,12 @@ public class LecteurDimacs extends Reader implements Serializable {
     /*
      * nomFichier repr?sente le nom du fichier ? lire
      */
+    @Impure
     public LecteurDimacs(ISolver s) {
         this.s = s;
     }
 
+    @Impure
     @Override
     public final IProblem parseInstance(final InputStream input)
             throws ParseFormatException, ContradictionException, IOException {
@@ -103,6 +106,7 @@ public class LecteurDimacs extends Reader implements Serializable {
     }
 
     /** on passe les commentaires et on lit le nombre de literaux */
+    @Impure
     private char passerCommentaire() throws IOException {
         char car;
         for (;;) {
@@ -122,6 +126,7 @@ public class LecteurDimacs extends Reader implements Serializable {
     }
 
     /** lit le nombre repr?sentant le nombre de literaux */
+    @Impure
     private char lectureNombreLiteraux() throws IOException {
         char car = nextChiffre(); /* on lit le prchain chiffre */
         if (car != EOF) {
@@ -154,6 +159,7 @@ public class LecteurDimacs extends Reader implements Serializable {
      * 
      * @throws ParseFormatException
      */
+    @Impure
     private void ajouterClauses(char car) throws IOException,
             ContradictionException, ParseFormatException {
         final IVecInt lit = new VecInt();
@@ -201,6 +207,7 @@ public class LecteurDimacs extends Reader implements Serializable {
     }
 
     /** passe tout les caract?res d'espacement (espace ou \n) */
+    @Impure
     private char passerEspaces() throws IOException {
         char car;
 
@@ -212,6 +219,7 @@ public class LecteurDimacs extends Reader implements Serializable {
     }
 
     /** passe tout les caract?res jusqu? rencontrer une fin de la ligne */
+    @Impure
     private char nextLine() throws IOException {
         char car;
         do {
@@ -221,6 +229,7 @@ public class LecteurDimacs extends Reader implements Serializable {
     }
 
     /** passe tout les caract?re jusqu'? rencontrer un chiffre */
+    @Impure
     private char nextChiffre() throws IOException {
         char car;
         do {
@@ -229,6 +238,7 @@ public class LecteurDimacs extends Reader implements Serializable {
         return car;
     }
 
+    @Impure
     @Override
     public String decode(int[] model) {
         StringBuffer stb = new StringBuffer();
@@ -240,6 +250,7 @@ public class LecteurDimacs extends Reader implements Serializable {
         return stb.toString();
     }
 
+    @Impure
     @Override
     public void decode(int[] model, PrintWriter out) {
         for (int element : model) {

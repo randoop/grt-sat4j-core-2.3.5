@@ -28,6 +28,7 @@
  *   CRIL - initial API and implementation
  *******************************************************************************/
 package org.sat4j.specs;
+import org.checkerframework.dataflow.qual.Impure;
 
 /**
  * Represents a CNF in which clauses are grouped into levels. It was first used
@@ -47,6 +48,7 @@ public interface IGroupSolver extends ISolver {
      * @return on object representing that clause in the solver.
      * @throws ContradictionException
      */
+    @Impure
     IConstr addClause(IVecInt literals, int desc) throws ContradictionException;
 
 }

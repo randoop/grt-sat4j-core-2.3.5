@@ -28,6 +28,8 @@
  *   CRIL - initial API and implementation
  *******************************************************************************/
 package org.sat4j.minisat.orders;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 
 /**
  * Utility class used to order the literals according to a specific heuristics.
@@ -38,11 +40,13 @@ final class ValuedLit implements Comparable<ValuedLit> {
 
     final int count;
 
+    @SideEffectFree
     ValuedLit(int id, int count) {
         this.id = id;
         this.count = count;
     }
 
+    @Pure
     public int compareTo(ValuedLit t) {
         if (this.count == 0) {
             return Integer.MAX_VALUE;
@@ -53,6 +57,7 @@ final class ValuedLit implements Comparable<ValuedLit> {
         return this.count - t.count;
     }
 
+    @Pure
     @Override
     public boolean equals(Object o) {
         if (o == null) {
@@ -64,11 +69,13 @@ final class ValuedLit implements Comparable<ValuedLit> {
         return false;
     }
 
+    @Pure
     @Override
     public int hashCode() {
         return this.id;
     }
 
+    @Pure
     @Override
     public String toString() {
         return "" + this.id + "(" + this.count + ")"; //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$

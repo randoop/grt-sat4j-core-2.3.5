@@ -29,6 +29,7 @@
  *******************************************************************************/
 package org.sat4j.tools;
 
+import org.checkerframework.dataflow.qual.Impure;
 import org.sat4j.specs.ISolverService;
 import org.sat4j.specs.RandomAccessModel;
 
@@ -41,20 +42,24 @@ public class HeuristicsTracing extends SearchListenerAdapter<ISolverService> {
     private ISolverService solverService;
     private final IVisualizationTool visuTool;
 
+    @Impure
     public HeuristicsTracing(IVisualizationTool visuTool) {
         this.visuTool = visuTool;
     }
 
+    @Impure
     @Override
     public void solutionFound(int[] model, RandomAccessModel lazyModel) {
         trace();
     }
 
+    @Impure
     @Override
     public void restarting() {
         trace();
     }
 
+    @Impure
     private void trace() {
         this.visuTool.init();
 
@@ -66,6 +71,7 @@ public class HeuristicsTracing extends SearchListenerAdapter<ISolverService> {
         this.visuTool.end();
     }
 
+    @Impure
     @Override
     public void init(ISolverService solverService) {
         this.solverService = solverService;

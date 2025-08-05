@@ -29,6 +29,8 @@
  *******************************************************************************/
 package org.sat4j.minisat.learning;
 
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.Impure;
 import org.sat4j.minisat.core.Constr;
 import org.sat4j.minisat.core.DataStructureFactory;
 import org.sat4j.minisat.core.IOrder;
@@ -50,28 +52,34 @@ public final class ActiveLearning<D extends DataStructureFactory> extends
 
     private int maxpercent;
 
+    @Impure
     public ActiveLearning() {
         this(0.95);
     }
 
+    @Impure
     public ActiveLearning(double d) {
         this.percent = d;
     }
 
+    @Impure
     public void setOrder(IOrder order) {
         this.order = order;
     }
 
+    @Impure
     @Override
     public void setSolver(Solver<D> s) {
         super.setSolver(s);
         this.order = s.getOrder();
     }
 
+    @Impure
     public void setActivityPercent(double d) {
         this.percent = d;
     }
 
+    @Pure
     public double getActivityPercent() {
         return this.percent;
     }
@@ -83,6 +91,7 @@ public final class ActiveLearning<D extends DataStructureFactory> extends
      * org.sat4j.minisat.LimitedLearning#learningCondition(org.sat4j.minisat
      * .Constr)
      */
+    @Impure
     @Override
     protected boolean learningCondition(Constr clause) {
         int nbactivevars = 0;
@@ -94,15 +103,18 @@ public final class ActiveLearning<D extends DataStructureFactory> extends
         return nbactivevars > clause.size() * this.percent;
     }
 
+    @Pure
     @Override
     public String toString() {
         return "Limit learning to clauses containing active literals (" + this.percent * 100 + "%)"; //$NON-NLS-1$
     }
 
+    @Impure
     public void setLimit(int percent) {
         this.maxpercent = percent;
     }
 
+    @Pure
     public int getLimit() {
         return this.maxpercent;
     }

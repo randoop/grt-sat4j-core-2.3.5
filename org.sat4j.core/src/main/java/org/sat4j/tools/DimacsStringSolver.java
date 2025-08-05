@@ -29,6 +29,9 @@
  *******************************************************************************/
 package org.sat4j.tools;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.Impure;
 import java.io.PrintWriter;
 
 import org.sat4j.specs.ContradictionException;
@@ -60,34 +63,41 @@ public class DimacsStringSolver extends AbstractOutputSolver {
 
     private int maxvarid = 0;
 
+    @Impure
     public DimacsStringSolver() {
         this(16);
     }
 
+    @Impure
     public DimacsStringSolver(int initSize) {
         this.out = new StringBuffer(initSize);
         this.initBuilderSize = initSize;
     }
 
+    @Pure
     public StringBuffer getOut() {
         return this.out;
     }
 
+    @Pure
     public int newVar() {
         return 0;
     }
 
+    @Impure
     @Override
     public int newVar(int howmany) {
         setNbVars(howmany);
         return howmany;
     }
 
+    @Impure
     protected void setNbVars(int howmany) {
         this.nbvars = howmany;
         this.maxvarid = howmany;
     }
 
+    @Impure
     public void setExpectedNumberOfClauses(int nb) {
         this.out.append(" ");
         this.out.append(nb);
@@ -95,6 +105,7 @@ public class DimacsStringSolver extends AbstractOutputSolver {
         this.fixedNbClauses = true;
     }
 
+    @Impure
     public IConstr addClause(IVecInt literals) throws ContradictionException {
         if (this.firstConstr) {
             if (!this.fixedNbClauses) {
@@ -115,6 +126,7 @@ public class DimacsStringSolver extends AbstractOutputSolver {
         return null;
     }
 
+    @Impure
     public IConstr addAtMost(IVecInt literals, int degree)
             throws ContradictionException {
         if (degree > 1) {
@@ -144,6 +156,7 @@ public class DimacsStringSolver extends AbstractOutputSolver {
         return null;
     }
 
+    @Impure
     public IConstr addExactly(IVecInt literals, int n)
             throws ContradictionException {
         if (n > 1) {
@@ -156,6 +169,7 @@ public class DimacsStringSolver extends AbstractOutputSolver {
         return null;
     }
 
+    @Impure
     public IConstr addAtLeast(IVecInt literals, int degree)
             throws ContradictionException {
         if (degree > 1) {
@@ -166,6 +180,7 @@ public class DimacsStringSolver extends AbstractOutputSolver {
         return addClause(literals);
     }
 
+    @Impure
     public void reset() {
         this.fixedNbClauses = false;
         this.firstConstr = true;
@@ -173,20 +188,24 @@ public class DimacsStringSolver extends AbstractOutputSolver {
         this.maxvarid = 0;
     }
 
+    @Pure
     public String toString(String prefix) {
         return "Dimacs output solver";
     }
 
+    @Pure
     @Override
     public int nConstraints() {
         return this.nbclauses;
     }
 
+    @Pure
     @Override
     public int nVars() {
         return this.maxvarid;
     }
 
+    @Impure
     @Override
     public String toString() {
         this.out.insert(this.firstCharPos, "p cnf " + this.maxvarid + " "
@@ -197,6 +216,7 @@ public class DimacsStringSolver extends AbstractOutputSolver {
     /**
      * @since 2.1
      */
+    @Impure
     public int nextFreeVarId(boolean reserve) {
         if (reserve) {
             return ++this.maxvarid;
@@ -207,14 +227,17 @@ public class DimacsStringSolver extends AbstractOutputSolver {
     /**
      * @since 2.3.1
      */
+    @Pure
     public int[] modelWithInternalVariables() {
         throw new UnsupportedOperationException();
     }
 
+    @Pure
     public int realNumberOfVariables() {
         return this.maxvarid;
     }
 
+    @SideEffectFree
     public void registerLiteral(int p) {
         throw new UnsupportedOperationException();
     }
@@ -222,6 +245,7 @@ public class DimacsStringSolver extends AbstractOutputSolver {
     /**
      * @since 2.3.2
      */
+    @Pure
     public boolean primeImplicant(int p) {
         throw new UnsupportedOperationException();
     }
@@ -229,6 +253,7 @@ public class DimacsStringSolver extends AbstractOutputSolver {
     /**
      * @since 2.3.3
      */
+    @SideEffectFree
     public void printStat(PrintWriter out) {
         throw new UnsupportedOperationException();
 
@@ -237,6 +262,7 @@ public class DimacsStringSolver extends AbstractOutputSolver {
     /**
      * @since 2.3.3
      */
+    @SideEffectFree
     public void printInfos(PrintWriter out) {
         throw new UnsupportedOperationException();
 

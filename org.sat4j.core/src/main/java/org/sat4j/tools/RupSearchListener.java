@@ -29,6 +29,7 @@
  *******************************************************************************/
 package org.sat4j.tools;
 
+import org.checkerframework.dataflow.qual.Impure;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -59,10 +60,12 @@ public class RupSearchListener<S extends ISolverService> extends
     private PrintStream out;
     private final File file;
 
+    @Impure
     public RupSearchListener(String filename) {
         file = new File(filename);
     }
 
+    @Impure
     @Override
     public void init(S solverService) {
         try {
@@ -72,6 +75,7 @@ public class RupSearchListener<S extends ISolverService> extends
         }
     }
 
+    @Impure
     @Override
     public void end(Lbool result) {
         if (result == Lbool.FALSE) {
@@ -83,6 +87,7 @@ public class RupSearchListener<S extends ISolverService> extends
         }
     }
 
+    @Impure
     @Override
     public void learn(IConstr c) {
         for (int i = 0; i < c.size(); i++) {
@@ -92,6 +97,7 @@ public class RupSearchListener<S extends ISolverService> extends
         out.println("0");
     }
 
+    @Impure
     @Override
     public void learnUnit(int p) {
         out.print(p);

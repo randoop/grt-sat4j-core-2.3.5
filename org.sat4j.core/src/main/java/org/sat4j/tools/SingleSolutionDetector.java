@@ -29,6 +29,8 @@
  *******************************************************************************/
 package org.sat4j.tools;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.dataflow.qual.Impure;
 import org.sat4j.core.VecInt;
 import org.sat4j.specs.ContradictionException;
 import org.sat4j.specs.IConstr;
@@ -68,6 +70,8 @@ public class SingleSolutionDetector extends SolverDecorator<ISolver> {
      */
     private static final long serialVersionUID = 1L;
 
+    @SideEffectFree
+    @Impure
     public SingleSolutionDetector(ISolver solver) {
         super(solver);
     }
@@ -87,6 +91,7 @@ public class SingleSolutionDetector extends SolverDecorator<ISolver> {
      * @throws TimeoutException
      * @see {@link ISolver#removeConstr(IConstr)}
      */
+    @Impure
     public boolean hasASingleSolution() throws TimeoutException {
         return hasASingleSolution(new VecInt());
     }
@@ -101,6 +106,7 @@ public class SingleSolutionDetector extends SolverDecorator<ISolver> {
      *         the solver using the provided set of assumptions.
      * @throws TimeoutException
      */
+    @Impure
     public boolean hasASingleSolution(IVecInt assumptions)
             throws TimeoutException {
         int[] firstmodel = model();

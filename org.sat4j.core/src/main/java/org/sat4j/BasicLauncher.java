@@ -29,6 +29,8 @@
  *******************************************************************************/
 package org.sat4j;
 
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.Impure;
 import org.sat4j.core.ASolverFactory;
 import org.sat4j.minisat.SolverFactory;
 import org.sat4j.reader.InstanceReader;
@@ -51,6 +53,7 @@ public class BasicLauncher<T extends ISolver> extends AbstractLauncher {
 
     private final ASolverFactory<T> factory;
 
+    @Impure
     public BasicLauncher(ASolverFactory<T> factory) {
         this.factory = factory;
     }
@@ -62,6 +65,7 @@ public class BasicLauncher<T extends ISolver> extends AbstractLauncher {
      *            doit contenir le nom d'un fichier Dimacs, eventuellement
      *            compress?.
      */
+    @Impure
     public static void main(final String[] args) {
         BasicLauncher<ISolver> lanceur = new BasicLauncher<ISolver>(
                 SolverFactory.instance());
@@ -73,6 +77,7 @@ public class BasicLauncher<T extends ISolver> extends AbstractLauncher {
         System.exit(lanceur.getExitCode().value());
     }
 
+    @Impure
     @Override
     protected ISolver configureSolver(String[] args) {
         ISolver asolver;
@@ -87,16 +92,19 @@ public class BasicLauncher<T extends ISolver> extends AbstractLauncher {
         return asolver;
     }
 
+    @Impure
     @Override
     protected Reader createReader(ISolver theSolver, String problemname) {
         return new InstanceReader(theSolver);
     }
 
+    @Impure
     @Override
     public void usage() {
         log("java -jar org.sat4j.core.jar <cnffile>");
     }
 
+    @Pure
     @Override
     protected String getInstanceName(String[] args) {
         if (args.length == 0) {

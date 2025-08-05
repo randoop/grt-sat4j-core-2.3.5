@@ -29,6 +29,9 @@ package org.sat4j.core;
  * Contributors:
  *   CRIL - initial API and implementation
  *******************************************************************************/
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.dataflow.qual.Impure;
 import java.util.Comparator;
 import java.util.Iterator;
 
@@ -51,103 +54,128 @@ public final class ReadOnlyVec<T> implements IVec<T> {
 
     private final IVec<T> vec;
 
+    @SideEffectFree
     public ReadOnlyVec(IVec<T> vec) {
         this.vec = vec;
     }
 
+    @SideEffectFree
     public void clear() {
         throw new UnsupportedOperationException();
     }
 
+    @Impure
     public void copyTo(IVec<T> copy) {
         this.vec.copyTo(copy);
     }
 
+    @Impure
     public <E> void copyTo(E[] dest) {
         this.vec.copyTo(dest);
     }
 
+    @Pure
     public T delete(int i) {
         throw new UnsupportedOperationException();
     }
 
+    @SideEffectFree
     public void ensure(int nsize) {
         throw new UnsupportedOperationException();
 
     }
 
+    @Impure
     public T get(int i) {
         return this.vec.get(i);
     }
 
+    @SideEffectFree
     public void growTo(int newsize, T pad) {
         throw new UnsupportedOperationException();
     }
 
+    @SideEffectFree
     public void insertFirst(T elem) {
         throw new UnsupportedOperationException();
     }
 
+    @SideEffectFree
     public void insertFirstWithShifting(T elem) {
         throw new UnsupportedOperationException();
     }
 
+    @Impure
     public boolean isEmpty() {
         return this.vec.isEmpty();
     }
 
+    @Impure
     public Iterator<T> iterator() {
         return this.vec.iterator();
     }
 
+    @Impure
     public T last() {
         return this.vec.last();
     }
 
+    @SideEffectFree
     public void moveTo(IVec<T> dest) {
         throw new UnsupportedOperationException();
     }
 
+    @SideEffectFree
     public void moveTo(int dest, int source) {
         throw new UnsupportedOperationException();
     }
 
+    @SideEffectFree
     public void pop() {
         throw new UnsupportedOperationException();
     }
 
+    @Pure
     public IVec<T> push(T elem) {
         throw new UnsupportedOperationException();
     }
 
+    @SideEffectFree
     public void remove(T elem) {
         throw new UnsupportedOperationException();
     }
 
+    @SideEffectFree
     public void set(int i, T o) {
         throw new UnsupportedOperationException();
     }
 
+    @SideEffectFree
     public void shrink(int nofelems) {
         throw new UnsupportedOperationException();
     }
 
+    @SideEffectFree
     public void shrinkTo(int newsize) {
         throw new UnsupportedOperationException();
     }
 
+    @Impure
     public int size() {
         return this.vec.size();
     }
 
+    @SideEffectFree
     public void sort(Comparator<T> comparator) {
         throw new UnsupportedOperationException();
     }
 
+    @SideEffectFree
     public void sortUnique(Comparator<T> comparator) {
         throw new UnsupportedOperationException();
     }
 
+    @Impure
     @SuppressWarnings("unchecked")
     public T[] toArray() {
         T[] array = (T[]) new Object[this.vec.size()];
@@ -155,6 +183,7 @@ public final class ReadOnlyVec<T> implements IVec<T> {
         return array;
     }
 
+    @SideEffectFree
     public void unsafePush(T elem) {
         throw new UnsupportedOperationException();
     }
@@ -162,6 +191,7 @@ public final class ReadOnlyVec<T> implements IVec<T> {
     /**
      * @since 2.1
      */
+    @Impure
     public boolean contains(T element) {
         return this.vec.contains(element);
     }
@@ -169,20 +199,24 @@ public final class ReadOnlyVec<T> implements IVec<T> {
     /**
      * @since 2.2
      */
+    @Impure
     public int indexOf(T element) {
         return this.vec.indexOf(element);
     }
 
+    @SideEffectFree
     @Override
     public String toString() {
         return this.vec.toString();
     }
 
+    @Pure
     @Override
     public int hashCode() {
         return this.vec.hashCode();
     }
 
+    @Pure
     @Override
     public boolean equals(Object obj) {
         return this.vec.equals(obj);

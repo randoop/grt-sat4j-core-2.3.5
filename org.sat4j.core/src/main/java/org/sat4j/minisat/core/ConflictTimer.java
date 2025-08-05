@@ -28,6 +28,7 @@
  *   CRIL - initial API and implementation
  *******************************************************************************/
 package org.sat4j.minisat.core;
+import org.checkerframework.dataflow.qual.Impure;
 
 /**
  * Conflict based timer.
@@ -39,7 +40,9 @@ package org.sat4j.minisat.core;
  */
 public interface ConflictTimer {
 
+    @Impure
     void reset();
 
+    @Impure
     void newConflict();
 }

@@ -29,6 +29,9 @@
  *******************************************************************************/
 package org.sat4j.tools;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.Impure;
 import org.sat4j.core.VecInt;
 import org.sat4j.specs.ContradictionException;
 import org.sat4j.specs.ISolver;
@@ -83,6 +86,8 @@ public class ModelIterator extends SolverDecorator<ISolver> {
      * @see #isSatisfiable(IVecInt, boolean)
      * @see #model()
      */
+    @SideEffectFree
+    @Impure
     public ModelIterator(ISolver solver) {
         this(solver, Long.MAX_VALUE);
     }
@@ -105,6 +110,8 @@ public class ModelIterator extends SolverDecorator<ISolver> {
      * @see #isSatisfiable(IVecInt, boolean)
      * @see #model()
      */
+    @SideEffectFree
+    @Impure
     public ModelIterator(ISolver solver, long bound) {
         super(solver);
         this.bound = bound;
@@ -115,6 +122,7 @@ public class ModelIterator extends SolverDecorator<ISolver> {
      * 
      * @see org.sat4j.ISolver#model()
      */
+    @Impure
     @Override
     public int[] model() {
         int[] last = super.model();
@@ -136,6 +144,7 @@ public class ModelIterator extends SolverDecorator<ISolver> {
      * 
      * @see org.sat4j.ISolver#isSatisfiable()
      */
+    @Impure
     @Override
     public boolean isSatisfiable() throws TimeoutException {
         if (this.trivialfalsity || this.nbModelFound >= this.bound) {
@@ -150,6 +159,7 @@ public class ModelIterator extends SolverDecorator<ISolver> {
      * 
      * @see org.sat4j.ISolver#isSatisfiable(org.sat4j.datatype.VecInt)
      */
+    @Impure
     @Override
     public boolean isSatisfiable(IVecInt assumps) throws TimeoutException {
         if (this.trivialfalsity || this.nbModelFound >= this.bound) {
@@ -164,6 +174,7 @@ public class ModelIterator extends SolverDecorator<ISolver> {
      * 
      * @see org.sat4j.ISolver#reset()
      */
+    @Impure
     @Override
     public void reset() {
         this.trivialfalsity = false;
@@ -171,6 +182,7 @@ public class ModelIterator extends SolverDecorator<ISolver> {
         super.reset();
     }
 
+    @Impure
     @Override
     public int[] primeImplicant() {
         int[] last = super.primeImplicant();
@@ -193,6 +205,7 @@ public class ModelIterator extends SolverDecorator<ISolver> {
      * @return the number of models found so far.
      * @since 2.3
      */
+    @Pure
     public long numberOfModelsFoundSoFar() {
         return this.nbModelFound;
     }

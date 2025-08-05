@@ -29,6 +29,7 @@
  *******************************************************************************/
 package org.sat4j.minisat.core;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.sat4j.specs.IConstr;
 import org.sat4j.specs.ISolverService;
 import org.sat4j.specs.Lbool;
@@ -45,54 +46,71 @@ import org.sat4j.specs.SearchListener;
 final class VoidTracing implements SearchListener<ISolverService> {
     private static final long serialVersionUID = 1L;
 
+    @SideEffectFree
     public void assuming(int p) {
     }
 
+    @SideEffectFree
     public void propagating(int p, IConstr reason) {
     }
 
+    @SideEffectFree
     public void backtracking(int p) {
     }
 
+    @SideEffectFree
     public void adding(int p) {
     }
 
+    @SideEffectFree
     public void learn(IConstr clause) {
     }
 
+    @SideEffectFree
     public void learnUnit(int p) {
     }
 
+    @SideEffectFree
     public void delete(int[] clause) {
     }
 
+    @SideEffectFree
     public void conflictFound(IConstr confl, int dlevel, int trailLevel) {
     }
 
+    @SideEffectFree
     public void conflictFound(int p) {
     }
 
+    @SideEffectFree
     public void solutionFound(int[] model, RandomAccessModel lazyModel) {
     }
 
+    @SideEffectFree
     public void beginLoop() {
     }
 
+    @SideEffectFree
     public void start() {
     }
 
+    @SideEffectFree
     public void end(Lbool result) {
     }
 
+    @SideEffectFree
     public void restarting() {
     }
 
+    @SideEffectFree
     public void backjump(int backjumpLevel) {
     }
 
+    @SideEffectFree
     public void init(ISolverService solverService) {
     }
 
+    @SideEffectFree
     public void cleaning() {
     }
 }

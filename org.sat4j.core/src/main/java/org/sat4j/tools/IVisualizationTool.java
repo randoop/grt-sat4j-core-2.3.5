@@ -29,18 +29,23 @@
  *******************************************************************************/
 package org.sat4j.tools;
 
+import org.checkerframework.dataflow.qual.Impure;
 import java.io.Serializable;
 
 public interface IVisualizationTool extends Serializable {
 
     Integer NOTGOOD = Integer.MIN_VALUE;
 
+    @Impure
     void addPoint(double x, double y);
 
+    @Impure
     void addInvisiblePoint(double x, double y);
 
+    @Impure
     void init();
 
+    @Impure
     void end();
 
 }

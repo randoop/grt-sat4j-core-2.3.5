@@ -29,6 +29,8 @@
  *******************************************************************************/
 package org.sat4j.tools;
 
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import java.util.Collection;
 
 import org.sat4j.core.VecInt;
@@ -46,12 +48,16 @@ public abstract class AbstractClauseSelectorSolver<T extends ISolver> extends
 
     private interface SelectorState {
 
+        @Impure
         boolean isSatisfiable(boolean global) throws TimeoutException;
 
+        @Impure
         boolean isSatisfiable() throws TimeoutException;
 
+        @Impure
         boolean isSatisfiable(IVecInt assumps) throws TimeoutException;
 
+        @Impure
         boolean isSatisfiable(IVecInt assumps, boolean global)
                 throws TimeoutException;
 
@@ -59,6 +65,7 @@ public abstract class AbstractClauseSelectorSolver<T extends ISolver> extends
 
     private final SelectorState external = new SelectorState() {
 
+        @Impure
         private IVecInt getNegatedSelectors() {
             IVecInt assumps = new VecInt();
             for (int var : getAddedVars()) {
@@ -67,10 +74,12 @@ public abstract class AbstractClauseSelectorSolver<T extends ISolver> extends
             return assumps;
         }
 
+        @Impure
         public boolean isSatisfiable(boolean global) throws TimeoutException {
             return decorated().isSatisfiable(getNegatedSelectors(), global);
         }
 
+        @Impure
         public boolean isSatisfiable(IVecInt assumps, boolean global)
                 throws TimeoutException {
             IVecInt all = getNegatedSelectors();
@@ -78,10 +87,12 @@ public abstract class AbstractClauseSelectorSolver<T extends ISolver> extends
             return decorated().isSatisfiable(all, global);
         }
 
+        @Impure
         public boolean isSatisfiable() throws TimeoutException {
             return decorated().isSatisfiable(getNegatedSelectors());
         }
 
+        @Impure
         public boolean isSatisfiable(IVecInt assumps) throws TimeoutException {
             IVecInt all = getNegatedSelectors();
             assumps.copyTo(all);
@@ -92,18 +103,22 @@ public abstract class AbstractClauseSelectorSolver<T extends ISolver> extends
 
     private final SelectorState internal = new SelectorState() {
 
+        @Impure
         public boolean isSatisfiable(boolean global) throws TimeoutException {
             return decorated().isSatisfiable(global);
         }
 
+        @Impure
         public boolean isSatisfiable() throws TimeoutException {
             return decorated().isSatisfiable();
         }
 
+        @Impure
         public boolean isSatisfiable(IVecInt assumps) throws TimeoutException {
             return decorated().isSatisfiable(assumps);
         }
 
+        @Impure
         public boolean isSatisfiable(IVecInt assumps, boolean global)
                 throws TimeoutException {
             return decorated().isSatisfiable(assumps, global);
@@ -112,10 +127,13 @@ public abstract class AbstractClauseSelectorSolver<T extends ISolver> extends
 
     private SelectorState selectedState = external;
 
+    @SideEffectFree
+    @Impure
     public AbstractClauseSelectorSolver(T solver) {
         super(solver);
     }
 
+    @SideEffectFree
     public abstract Collection<Integer> getAddedVars();
 
     /**
@@ -124,6 +142,7 @@ public abstract class AbstractClauseSelectorSolver<T extends ISolver> extends
      * @return
      * @since 2.1
      */
+    @Impure
     protected int createNewVar(IVecInt literals) {
         for (IteratorInt it = literals.iterator(); it.hasNext();) {
             if (Math.abs(it.next()) > nextFreeVarId(false)) {
@@ -139,26 +158,31 @@ public abstract class AbstractClauseSelectorSolver<T extends ISolver> extends
         return this.lastCreatedVar;
     }
 
+    @Impure
     protected void discardLastestVar() {
         this.pooledVarId = true;
     }
 
+    @Impure
     @Override
     public boolean isSatisfiable(boolean global) throws TimeoutException {
         return selectedState.isSatisfiable(global);
     }
 
+    @Impure
     @Override
     public boolean isSatisfiable(IVecInt assumps, boolean global)
             throws TimeoutException {
         return selectedState.isSatisfiable(assumps, global);
     }
 
+    @Impure
     @Override
     public boolean isSatisfiable() throws TimeoutException {
         return selectedState.isSatisfiable();
     }
 
+    @Impure
     @Override
     public boolean isSatisfiable(IVecInt assumps) throws TimeoutException {
         return selectedState.isSatisfiable(assumps);
@@ -170,6 +194,7 @@ public abstract class AbstractClauseSelectorSolver<T extends ISolver> extends
      * an UNSAT problem. it is the responsibility of the user to take into
      * account the meaning of the selector variables.
      */
+    @Impure
     public void internalState() {
         this.selectedState = internal;
     }
@@ -180,6 +205,7 @@ public abstract class AbstractClauseSelectorSolver<T extends ISolver> extends
      * problem will answer "false" to isSatisfiable().
      */
 
+    @Impure
     public void externalState() {
         this.selectedState = external;
     }

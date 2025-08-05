@@ -29,6 +29,9 @@
  *******************************************************************************/
 package org.sat4j.tools;
 
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import java.io.Serializable;
 
 import org.sat4j.core.VecInt;
@@ -52,10 +55,12 @@ public class DimacsArrayReader implements Serializable {
 
     protected final ISolver solver;
 
+    @SideEffectFree
     public DimacsArrayReader(ISolver solver) {
         this.solver = solver;
     }
 
+    @Impure
     protected boolean handleConstr(int gateType, int output, int[] inputs)
             throws ContradictionException {
         IVecInt literals = new VecInt(inputs);
@@ -80,6 +85,7 @@ public class DimacsArrayReader implements Serializable {
      * @throws ContradictionException
      *             si le probleme est trivialement inconsitant
      */
+    @Impure
     public ISolver parseInstance(int[] gateType, int[] outputs, int[][] inputs,
             int maxVar) throws ContradictionException {
         this.solver.reset();
@@ -91,6 +97,7 @@ public class DimacsArrayReader implements Serializable {
         return this.solver;
     }
 
+    @Impure
     public String decode(int[] model) {
         StringBuffer stb = new StringBuffer(4 * model.length);
         for (int element : model) {
@@ -101,6 +108,7 @@ public class DimacsArrayReader implements Serializable {
         return stb.toString();
     }
 
+    @Pure
     protected ISolver getSolver() {
         return this.solver;
     }

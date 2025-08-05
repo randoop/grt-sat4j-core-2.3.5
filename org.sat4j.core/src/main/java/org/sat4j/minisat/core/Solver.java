@@ -29,6 +29,9 @@
  *******************************************************************************/
 package org.sat4j.minisat.core;
 
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import static org.sat4j.core.LiteralsUtils.neg;
 import static org.sat4j.core.LiteralsUtils.toDimacs;
 import static org.sat4j.core.LiteralsUtils.toInternal;
@@ -167,6 +170,7 @@ public class Solver<D extends DataStructureFactory> implements ISolverService,
 
     private UnitClauseProvider unitClauseProvider = UnitClauseProvider.VOID;
 
+    @Impure
     protected IVecInt dimacs2internal(IVecInt in) {
         this.__dimacs_out.clear();
         this.__dimacs_out.ensure(in.size());
@@ -185,6 +189,7 @@ public class Solver<D extends DataStructureFactory> implements ISolverService,
     /*
      * @since 2.3.1
      */
+    @Impure
     public void registerLiteral(int p) {
         this.voc.getFromPool(p);
     }
@@ -195,16 +200,19 @@ public class Solver<D extends DataStructureFactory> implements ISolverService,
      * must be provided, else it won't work either.
      */
 
+    @Impure
     public Solver(LearningStrategy<D> learner, D dsf, IOrder order,
             RestartStrategy restarter) {
         this(learner, dsf, new SearchParams(), order, restarter);
     }
 
+    @Impure
     public Solver(LearningStrategy<D> learner, D dsf, SearchParams params,
             IOrder order, RestartStrategy restarter) {
         this(learner, dsf, params, order, restarter, ILogAble.CONSOLE);
     }
 
+    @Impure
     public Solver(LearningStrategy<D> learner, D dsf, SearchParams params,
             IOrder order, RestartStrategy restarter, ILogAble logger) {
         this.order = order;
@@ -221,6 +229,7 @@ public class Solver<D extends DataStructureFactory> implements ISolverService,
      * 
      * @see org.sat4j.minisat.core.ICDCL#setDataStructureFactory(D)
      */
+    @Impure
     public final void setDataStructureFactory(D dsf) {
         this.dsfactory = dsf;
         this.dsfactory.setUnitPropagationListener(this);
@@ -232,6 +241,7 @@ public class Solver<D extends DataStructureFactory> implements ISolverService,
     /**
      * @since 2.2
      */
+    @Pure
     public boolean isVerbose() {
         return this.verbose;
     }
@@ -240,6 +250,7 @@ public class Solver<D extends DataStructureFactory> implements ISolverService,
      * @param value
      * @since 2.2
      */
+    @Impure
     public void setVerbose(boolean value) {
         this.verbose = value;
     }
@@ -251,6 +262,7 @@ public class Solver<D extends DataStructureFactory> implements ISolverService,
      * org.sat4j.minisat.core.ICDCL#setSearchListener(org.sat4j.specs.SearchListener
      * )
      */
+    @Impure
     public <S extends ISolverService> void setSearchListener(
             SearchListener<S> sl) {
         this.slistener = sl;
@@ -261,6 +273,7 @@ public class Solver<D extends DataStructureFactory> implements ISolverService,
      * 
      * @see org.sat4j.minisat.core.ICDCL#getSearchListener()
      */
+    @Pure
     public <S extends ISolverService> SearchListener<S> getSearchListener() {
         return this.slistener;
     }
@@ -271,6 +284,7 @@ public class Solver<D extends DataStructureFactory> implements ISolverService,
      * @see org.sat4j.minisat.core.ICDCL#setLearner(org.sat4j.minisat.core.
      * LearningStrategy)
      */
+    @Impure
     public void setLearner(LearningStrategy<D> strategy) {
         setLearningStrategy(strategy);
     }
@@ -282,6 +296,7 @@ public class Solver<D extends DataStructureFactory> implements ISolverService,
      * org.sat4j.minisat.core.ICDCL#setLearningStrategy(org.sat4j.minisat.core.
      * LearningStrategy)
      */
+    @Impure
     public void setLearningStrategy(LearningStrategy<D> strategy) {
         if (this.learner != null) {
             this.learner.setSolver(null);
@@ -290,16 +305,19 @@ public class Solver<D extends DataStructureFactory> implements ISolverService,
         strategy.setSolver(this);
     }
 
+    @Impure
     public void setTimeout(int t) {
         this.timeout = t * 1000L;
         this.timeBasedTimeout = true;
     }
 
+    @Impure
     public void setTimeoutMs(long t) {
         this.timeout = t;
         this.timeBasedTimeout = true;
     }
 
+    @Impure
     public void setTimeoutOnConflicts(int count) {
         this.timeout = count;
         this.timeBasedTimeout = false;
@@ -311,10 +329,12 @@ public class Solver<D extends DataStructureFactory> implements ISolverService,
      * @see org.sat4j.minisat.core.ICDCL#setSearchParams(org.sat4j.minisat.core.
      * SearchParams)
      */
+    @Impure
     public void setSearchParams(SearchParams sp) {
         this.params = sp;
     }
 
+    @Pure
     public SearchParams getSearchParams() {
         return this.params;
     }
@@ -326,6 +346,7 @@ public class Solver<D extends DataStructureFactory> implements ISolverService,
      * org.sat4j.minisat.core.ICDCL#setRestartStrategy(org.sat4j.minisat.core
      * .RestartStrategy)
      */
+    @Impure
     public void setRestartStrategy(RestartStrategy restarter) {
         this.restarter = restarter;
     }
@@ -335,10 +356,12 @@ public class Solver<D extends DataStructureFactory> implements ISolverService,
      * 
      * @see org.sat4j.minisat.core.ICDCL#getRestartStrategy()
      */
+    @Pure
     public RestartStrategy getRestartStrategy() {
         return this.restarter;
     }
 
+    @Impure
     public void expireTimeout() {
         this.undertimeout = false;
         if (this.timeBasedTimeout) {
@@ -353,14 +376,17 @@ public class Solver<D extends DataStructureFactory> implements ISolverService,
         }
     }
 
+    @Impure
     protected int nAssigns() {
         return this.trail.size();
     }
 
+    @Impure
     public int nConstraints() {
         return this.constrs.size();
     }
 
+    @Impure
     public void learn(Constr c) {
         this.slistener.learn(c);
         this.learnts.push(c);
@@ -379,10 +405,12 @@ public class Solver<D extends DataStructureFactory> implements ISolverService,
         }
     }
 
+    @Impure
     public final int decisionLevel() {
         return this.trailLim.size();
     }
 
+    @Impure
     @Deprecated
     public int newVar() {
         int index = this.voc.nVars() + 1;
@@ -390,17 +418,20 @@ public class Solver<D extends DataStructureFactory> implements ISolverService,
         return index;
     }
 
+    @Impure
     public int newVar(int howmany) {
         this.voc.ensurePool(howmany);
         this.declaredMaxVarId = howmany;
         return howmany;
     }
 
+    @Impure
     public IConstr addClause(IVecInt literals) throws ContradictionException {
         IVecInt vlits = dimacs2internal(literals);
         return addConstr(this.dsfactory.createClause(vlits));
     }
 
+    @Impure
     public boolean removeConstr(IConstr co) {
         if (co == null) {
             throw new IllegalArgumentException(
@@ -418,6 +449,7 @@ public class Solver<D extends DataStructureFactory> implements ISolverService,
     /**
      * @since 2.1
      */
+    @Impure
     public boolean removeSubsumedConstr(IConstr co) {
         if (co == null) {
             throw new IllegalArgumentException(
@@ -435,6 +467,7 @@ public class Solver<D extends DataStructureFactory> implements ISolverService,
         return true;
     }
 
+    @Impure
     public void addAllClauses(IVec<IVecInt> clauses)
             throws ContradictionException {
         for (Iterator<IVecInt> iterator = clauses.iterator(); iterator
@@ -443,6 +476,7 @@ public class Solver<D extends DataStructureFactory> implements ISolverService,
         }
     }
 
+    @Impure
     public IConstr addAtMost(IVecInt literals, int degree)
             throws ContradictionException {
         int n = literals.size();
@@ -453,6 +487,7 @@ public class Solver<D extends DataStructureFactory> implements ISolverService,
         return addAtLeast(opliterals, n - degree);
     }
 
+    @Impure
     public IConstr addAtLeast(IVecInt literals, int degree)
             throws ContradictionException {
         IVecInt vlits = dimacs2internal(literals);
@@ -460,6 +495,7 @@ public class Solver<D extends DataStructureFactory> implements ISolverService,
                 degree));
     }
 
+    @Impure
     public IConstr addExactly(IVecInt literals, int n)
             throws ContradictionException {
         ConstrGroup group = new ConstrGroup(false);
@@ -468,6 +504,7 @@ public class Solver<D extends DataStructureFactory> implements ISolverService,
         return group;
     }
 
+    @Impure
     @SuppressWarnings("unchecked")
     public boolean simplifyDB() {
         // Simplifie la base de clauses apres la premiere propagation des
@@ -493,6 +530,7 @@ public class Solver<D extends DataStructureFactory> implements ISolverService,
      * 
      * @return un mod?le de la formule.
      */
+    @SideEffectFree
     public int[] model() {
         if (this.model == null) {
             throw new UnsupportedOperationException(
@@ -508,6 +546,7 @@ public class Solver<D extends DataStructureFactory> implements ISolverService,
      * 
      * @see org.sat4j.minisat.core.ICDCL#enqueue(int)
      */
+    @Impure
     public boolean enqueue(int p) {
         return enqueue(p, null);
     }
@@ -518,6 +557,7 @@ public class Solver<D extends DataStructureFactory> implements ISolverService,
      * @see org.sat4j.minisat.core.ICDCL#enqueue(int,
      * org.sat4j.minisat.core.Constr)
      */
+    @Impure
     public boolean enqueue(int p, Constr from) {
         assert p > 1;
         if (this.voc.isSatisfied(p)) {
@@ -549,6 +589,7 @@ public class Solver<D extends DataStructureFactory> implements ISolverService,
      * @throws TimeoutException
      *             if the timeout is reached during conflict analysis.
      */
+    @Impure
     public void analyze(Constr confl, Pair results) throws TimeoutException {
         assert confl != null;
 
@@ -633,6 +674,7 @@ public class Solver<D extends DataStructureFactory> implements ISolverService,
      * @return a subset of assumps causing the inconsistency.
      * @since 2.2
      */
+    @Impure
     public IVecInt analyzeFinalConflictInTermsOfAssumptions(Constr confl,
             IVecInt assumps, int conflictingLiteral) {
         if (assumps.size() == 0) {
@@ -716,9 +758,11 @@ public class Solver<D extends DataStructureFactory> implements ISolverService,
          */
         private static final long serialVersionUID = 1L;
 
+        @SideEffectFree
         public void simplify(IVecInt outLearnt) {
         }
 
+        @Pure
         @Override
         public String toString() {
             return "No reason simplification"; //$NON-NLS-1$
@@ -731,10 +775,12 @@ public class Solver<D extends DataStructureFactory> implements ISolverService,
          */
         private static final long serialVersionUID = 1L;
 
+        @Impure
         public void simplify(IVecInt conflictToReduce) {
             simpleSimplification(conflictToReduce);
         }
 
+        @Pure
         @Override
         public String toString() {
             return "Simple reason simplification"; //$NON-NLS-1$
@@ -748,10 +794,12 @@ public class Solver<D extends DataStructureFactory> implements ISolverService,
          */
         private static final long serialVersionUID = 1L;
 
+        @Impure
         public void simplify(IVecInt conflictToReduce) {
             expensiveSimplification(conflictToReduce);
         }
 
+        @Pure
         @Override
         public String toString() {
             return "Expensive reason simplification"; //$NON-NLS-1$
@@ -765,10 +813,12 @@ public class Solver<D extends DataStructureFactory> implements ISolverService,
          */
         private static final long serialVersionUID = 1L;
 
+        @Impure
         public void simplify(IVecInt conflictToReduce) {
             expensiveSimplificationWLOnly(conflictToReduce);
         }
 
+        @Pure
         @Override
         public String toString() {
             return "Expensive reason simplification specific for WL data structure"; //$NON-NLS-1$
@@ -782,6 +832,7 @@ public class Solver<D extends DataStructureFactory> implements ISolverService,
      * 
      * @see org.sat4j.minisat.core.ICDCL#setSimplifier(java.lang.String)
      */
+    @Impure
     public void setSimplifier(SimplificationType simp) {
         Field f;
         try {
@@ -800,6 +851,7 @@ public class Solver<D extends DataStructureFactory> implements ISolverService,
      * org.sat4j.minisat.core.ICDCL#setSimplifier(org.sat4j.minisat.core.Solver
      * .ISimplifier)
      */
+    @Impure
     public void setSimplifier(ISimplifier simp) {
         this.simplifier = simp;
     }
@@ -809,6 +861,7 @@ public class Solver<D extends DataStructureFactory> implements ISolverService,
      * 
      * @see org.sat4j.minisat.core.ICDCL#getSimplifier()
      */
+    @Pure
     public ISimplifier getSimplifier() {
         return this.simplifier;
     }
@@ -835,6 +888,7 @@ public class Solver<D extends DataStructureFactory> implements ISolverService,
     // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
     // Taken from MiniSAT 1.14: Simplify conflict clause (a little):
+    @Impure
     private void simpleSimplification(IVecInt conflictToReduce) {
         int i, j, p;
         final boolean[] seen = this.mseen;
@@ -863,6 +917,7 @@ public class Solver<D extends DataStructureFactory> implements ISolverService,
     private final IVecInt analyzestack = new VecInt();
 
     // Taken from MiniSAT 1.14
+    @Impure
     private void expensiveSimplification(IVecInt conflictToReduce) {
         // Simplify conflict clause (a lot):
         //
@@ -883,6 +938,7 @@ public class Solver<D extends DataStructureFactory> implements ISolverService,
     // Check if 'p' can be removed.' min_level' is used to abort early if
     // visiting literals at a level that cannot be removed.
     //
+    @Impure
     private boolean analyzeRemovable(int p) {
         assert this.voc.getReason(p) != null;
         ILits lvoc = this.voc;
@@ -927,6 +983,7 @@ public class Solver<D extends DataStructureFactory> implements ISolverService,
     }
 
     // Taken from MiniSAT 1.14
+    @Impure
     private void expensiveSimplificationWLOnly(IVecInt conflictToReduce) {
         // Simplify conflict clause (a lot):
         //
@@ -947,6 +1004,7 @@ public class Solver<D extends DataStructureFactory> implements ISolverService,
     // Check if 'p' can be removed.' min_level' is used to abort early if
     // visiting literals at a level that cannot be removed.
     //
+    @Impure
     private boolean analyzeRemovableWLOnly(int p) {
         assert this.voc.getReason(p) != null;
         this.analyzestack.clear();
@@ -984,6 +1042,7 @@ public class Solver<D extends DataStructureFactory> implements ISolverService,
     /**
      * 
      */
+    @Impure
     protected void undoOne() {
         // gather last assigned literal
         int p = this.trail.last();
@@ -1014,6 +1073,7 @@ public class Solver<D extends DataStructureFactory> implements ISolverService,
      * @param confl
      *            a constraint
      */
+    @Impure
     public void claBumpActivity(Constr confl) {
         confl.incActivity(this.claInc);
         if (confl.getActivity() > CLAUSE_RESCALE_BOUND) {
@@ -1024,10 +1084,12 @@ public class Solver<D extends DataStructureFactory> implements ISolverService,
         }
     }
 
+    @Impure
     public void varBumpActivity(int p) {
         this.order.updateVar(p);
     }
 
+    @Impure
     private void claRescalActivity() {
         for (int i = 0; i < this.learnts.size(); i++) {
             this.learnts.get(i).rescaleBy(CLAUSE_RESCALE_FACTOR);
@@ -1040,6 +1102,7 @@ public class Solver<D extends DataStructureFactory> implements ISolverService,
     /**
      * @return null if not conflict is found, else a conflicting constraint.
      */
+    @Impure
     public final Constr propagate() {
         IVecInt ltrail = this.trail;
         SolverStats lstats = this.stats;
@@ -1060,6 +1123,7 @@ public class Solver<D extends DataStructureFactory> implements ISolverService,
         return null;
     }
 
+    @Impure
     private Constr reduceClausesForFalsifiedLiteral(int p) {
         // p is the literal to propagate
         // Moved original MiniSAT code to dsfactory to avoid
@@ -1094,6 +1158,7 @@ public class Solver<D extends DataStructureFactory> implements ISolverService,
         return null;
     }
 
+    @Impure
     void record(Constr constr) {
         constr.assertConstraint(this);
         int p = toDimacs(constr.get(0));
@@ -1109,6 +1174,7 @@ public class Solver<D extends DataStructureFactory> implements ISolverService,
     /**
      * @return false ssi conflit imm?diat.
      */
+    @Impure
     public boolean assume(int p) {
         // Precondition: assume propagation queue is empty
         assert this.trail.size() == this.qhead;
@@ -1120,6 +1186,7 @@ public class Solver<D extends DataStructureFactory> implements ISolverService,
     /**
      * Revert to the state before the last assume()
      */
+    @Impure
     private void cancel() {
         // assert trail.size() == qhead || !undertimeout;
         int decisionvar = this.trail.unsafeGet(this.trailLim.last());
@@ -1134,6 +1201,7 @@ public class Solver<D extends DataStructureFactory> implements ISolverService,
     /**
      * Restore literals
      */
+    @Impure
     private void cancelLearntLiterals(int learnedLiteralsLimit) {
         this.learnedLiterals.clear();
         // assert trail.size() == qhead || !undertimeout;
@@ -1150,6 +1218,7 @@ public class Solver<D extends DataStructureFactory> implements ISolverService,
      * 
      * @param level
      */
+    @Impure
     protected void cancelUntil(int level) {
         while (decisionLevel() > level) {
             cancel();
@@ -1162,6 +1231,7 @@ public class Solver<D extends DataStructureFactory> implements ISolverService,
 
     private IVecInt unsatExplanationInTermsOfAssumptions;
 
+    @Impure
     Lbool search(IVecInt assumps) {
         assert this.rootLevel == decisionLevel();
         this.stats.starts++;
@@ -1273,6 +1343,7 @@ public class Solver<D extends DataStructureFactory> implements ISolverService,
         return Lbool.UNDEFINED; // timeout occured
     }
 
+    @Impure
     private Constr preventTheSameDecisionsToBeMade() {
         IVecInt clause = new VecInt(nVars());
         int p;
@@ -1285,6 +1356,7 @@ public class Solver<D extends DataStructureFactory> implements ISolverService,
         return this.dsfactory.createUnregisteredClause(clause);
     }
 
+    @SideEffectFree
     protected void analyzeAtRootLevel(Constr conflict) {
     }
 
@@ -1296,6 +1368,7 @@ public class Solver<D extends DataStructureFactory> implements ISolverService,
     /**
      * 
      */
+    @Impure
     void modelFound() {
         IVecInt tempmodel = new VecInt(nVars());
         this.userbooleanmodel = new boolean[realNumberOfVariables()];
@@ -1347,6 +1420,7 @@ public class Solver<D extends DataStructureFactory> implements ISolverService,
      * @return a conflicting constraint resulting from the disparition of those
      *         literals.
      */
+    @Impure
     private Constr forget(int var) {
         boolean satisfied = this.voc.isSatisfied(toInternal(var));
         this.voc.forgets(var);
@@ -1368,6 +1442,7 @@ public class Solver<D extends DataStructureFactory> implements ISolverService,
      *            a literal
      * @return true if no conflict is reached, false if a conflict is found.
      */
+    @Impure
     private boolean setAndPropagate(int p) {
         if (voc.isUnassigned(p)) {
             assert !trail.contains(p);
@@ -1379,6 +1454,7 @@ public class Solver<D extends DataStructureFactory> implements ISolverService,
 
     private int[] prime;
 
+    @Impure
     public int[] primeImplicant() {
         assert this.qhead == this.trail.size() + this.learnedLiterals.size();
         if (this.learnedLiterals.size() > 0) {
@@ -1467,6 +1543,8 @@ public class Solver<D extends DataStructureFactory> implements ISolverService,
         return implicant;
     }
 
+    @Pure
+    @Impure
     public boolean primeImplicant(int p) {
         if (p == 0 || Math.abs(p) > realNumberOfVariables()) {
             throw new IllegalArgumentException(
@@ -1479,6 +1557,8 @@ public class Solver<D extends DataStructureFactory> implements ISolverService,
         return this.prime[Math.abs(p)] == p;
     }
 
+    @Pure
+    @Impure
     public boolean model(int var) {
         if (var <= 0 || var > realNumberOfVariables()) {
             throw new IllegalArgumentException(
@@ -1491,6 +1571,7 @@ public class Solver<D extends DataStructureFactory> implements ISolverService,
         return this.userbooleanmodel[var - 1];
     }
 
+    @Impure
     public void clearLearntClauses() {
         for (Iterator<Constr> iterator = this.learnts.iterator(); iterator
                 .hasNext();) {
@@ -1500,6 +1581,7 @@ public class Solver<D extends DataStructureFactory> implements ISolverService,
         this.learnedLiterals.clear();
     }
 
+    @Impure
     protected final void reduceDB() {
         this.stats.reduceddb++;
         this.slistener.cleaning();
@@ -1510,6 +1592,7 @@ public class Solver<D extends DataStructureFactory> implements ISolverService,
     /**
      * @param learnts
      */
+    @Impure
     protected void sortOnActivity() {
         this.learnts.sort(this.comparator);
     }
@@ -1517,6 +1600,7 @@ public class Solver<D extends DataStructureFactory> implements ISolverService,
     /**
      * 
      */
+    @Impure
     protected void decayActivities() {
         this.order.varDecayActivity();
         claDecayActivity();
@@ -1525,6 +1609,7 @@ public class Solver<D extends DataStructureFactory> implements ISolverService,
     /**
      * 
      */
+    @Impure
     private void claDecayActivity() {
         this.claInc *= this.claDecay;
     }
@@ -1532,6 +1617,7 @@ public class Solver<D extends DataStructureFactory> implements ISolverService,
     /**
      * @return true iff the set of constraints is satisfiable, else false.
      */
+    @Impure
     public boolean isSatisfiable() throws TimeoutException {
         return isSatisfiable(VecInt.EMPTY);
     }
@@ -1539,6 +1625,7 @@ public class Solver<D extends DataStructureFactory> implements ISolverService,
     /**
      * @return true iff the set of constraints is satisfiable, else false.
      */
+    @Impure
     public boolean isSatisfiable(boolean global) throws TimeoutException {
         return isSatisfiable(VecInt.EMPTY, global);
     }
@@ -1551,10 +1638,12 @@ public class Solver<D extends DataStructureFactory> implements ISolverService,
 
     private transient Timer timer;
 
+    @Impure
     public boolean isSatisfiable(IVecInt assumps) throws TimeoutException {
         return isSatisfiable(assumps, false);
     }
 
+    @Impure
     public final LearnedConstraintsDeletionStrategy fixedSize(final int maxsize) {
         return new LearnedConstraintsDeletionStrategy() {
 
@@ -1564,12 +1653,14 @@ public class Solver<D extends DataStructureFactory> implements ISolverService,
 
                 private static final long serialVersionUID = 1L;
 
+                @Impure
                 @Override
                 public void run() {
                     Solver.this.needToReduceDB = true;
                 }
             };
 
+            @Impure
             public void reduce(IVec<Constr> learnedConstrs) {
                 int i, j, k;
                 for (i = j = k = 0; i < Solver.this.learnts.size()
@@ -1595,29 +1686,35 @@ public class Solver<D extends DataStructureFactory> implements ISolverService,
                 Solver.this.learnts.shrinkTo(j);
             }
 
+            @SideEffectFree
             public void onConflictAnalysis(Constr reason) {
                 // TODO Auto-generated method stub
 
             }
 
+            @SideEffectFree
             public void onClauseLearning(Constr outLearnt) {
                 // TODO Auto-generated method stub
 
             }
 
+            @Pure
             @Override
             public String toString() {
                 return "Fixed size (" + maxsize
                         + ") learned constraints deletion strategy";
             }
 
+            @SideEffectFree
             public void init() {
             }
 
+            @Pure
             public ConflictTimer getTimer() {
                 return this.aTimer;
             }
 
+            @SideEffectFree
             public void onPropagation(Constr from) {
                 // TODO Auto-generated method stub
 
@@ -1625,6 +1722,7 @@ public class Solver<D extends DataStructureFactory> implements ISolverService,
         };
     }
 
+    @Impure
     private LearnedConstraintsDeletionStrategy activityBased(
             final ConflictTimer timer) {
         return new LearnedConstraintsDeletionStrategy() {
@@ -1633,6 +1731,7 @@ public class Solver<D extends DataStructureFactory> implements ISolverService,
 
             private final ConflictTimer freeMem = timer;
 
+            @Impure
             public void reduce(IVec<Constr> learnedConstrs) {
                 sortOnActivity();
                 int i, j;
@@ -1657,30 +1756,36 @@ public class Solver<D extends DataStructureFactory> implements ISolverService,
                 Solver.this.learnts.shrinkTo(j);
             }
 
+            @Pure
             public ConflictTimer getTimer() {
                 return this.freeMem;
             }
 
+            @Pure
             @Override
             public String toString() {
                 return "Memory based learned constraints deletion strategy";
             }
 
+            @SideEffectFree
             public void init() {
                 // do nothing
             }
 
+            @SideEffectFree
             public void onClauseLearning(Constr constr) {
                 // do nothing
 
             }
 
+            @Impure
             public void onConflictAnalysis(Constr reason) {
                 if (reason.learnt()) {
                     claBumpActivity(reason);
                 }
             }
 
+            @SideEffectFree
             public void onPropagation(Constr from) {
                 // do nothing
             }
@@ -1691,6 +1796,7 @@ public class Solver<D extends DataStructureFactory> implements ISolverService,
         private static final long serialVersionUID = 1L;
         final long memorybound = Runtime.getRuntime().freeMemory() / 10;
 
+        @Impure
         @Override
         public void run() {
             long freemem = Runtime.getRuntime().freeMemory();
@@ -1716,10 +1822,12 @@ public class Solver<D extends DataStructureFactory> implements ISolverService,
 
         private final ConflictTimer clauseManagement;
 
+        @SideEffectFree
         GlucoseLCDS(ConflictTimer timer) {
             this.clauseManagement = timer;
         }
 
+        @Impure
         public void reduce(IVec<Constr> learnedConstrs) {
             sortOnActivity();
             int i, j;
@@ -1742,15 +1850,18 @@ public class Solver<D extends DataStructureFactory> implements ISolverService,
 
         }
 
+        @Pure
         public ConflictTimer getTimer() {
             return this.clauseManagement;
         }
 
+        @Pure
         @Override
         public String toString() {
             return "Glucose learned constraints deletion strategy";
         }
 
+        @Impure
         public void init() {
             final int howmany = Solver.this.voc.nVars();
             // wall = constrs.size() > 10000 ? constrs.size() : 10000;
@@ -1761,11 +1872,13 @@ public class Solver<D extends DataStructureFactory> implements ISolverService,
             this.clauseManagement.reset();
         }
 
+        @Impure
         public void onClauseLearning(Constr constr) {
             int nblevel = computeLBD(constr);
             constr.incActivity(nblevel);
         }
 
+        @Impure
         protected int computeLBD(Constr constr) {
             int nblevel = 1;
             this.flag++;
@@ -1780,10 +1893,12 @@ public class Solver<D extends DataStructureFactory> implements ISolverService,
             return nblevel;
         }
 
+        @SideEffectFree
         public void onConflictAnalysis(Constr reason) {
 
         }
 
+        @Impure
         public void onPropagation(Constr from) {
 
         }
@@ -1796,15 +1911,19 @@ public class Solver<D extends DataStructureFactory> implements ISolverService,
 		 */
         private static final long serialVersionUID = 1L;
 
+        @SideEffectFree
+        @Impure
         Glucose2LCDS(ConflictTimer timer) {
             super(timer);
         }
 
+        @Pure
         @Override
         public String toString() {
             return "Glucose 2 learned constraints deletion strategy";
         }
 
+        @Impure
         @Override
         public void onPropagation(Constr from) {
             if (from.getActivity() > 2.0) {
@@ -1825,6 +1944,7 @@ public class Solver<D extends DataStructureFactory> implements ISolverService,
         private static final int INC_CLAUSE = 1000;
         private int nextbound = MAX_CLAUSE;
 
+        @Impure
         @Override
         public void run() {
             this.nbconflict += bound();
@@ -1838,6 +1958,7 @@ public class Solver<D extends DataStructureFactory> implements ISolverService,
             }
         }
 
+        @Impure
         @Override
         public void reset() {
             super.reset();
@@ -1864,6 +1985,7 @@ public class Solver<D extends DataStructureFactory> implements ISolverService,
      * org.sat4j.minisat.core.ICDCL#setLearnedConstraintsDeletionStrategy(org
      * .sat4j.minisat.core.Solver.LearnedConstraintsDeletionStrategy)
      */
+    @Impure
     public void setLearnedConstraintsDeletionStrategy(
             LearnedConstraintsDeletionStrategy lcds) {
         if (this.conflictCount != null) {
@@ -1877,6 +1999,7 @@ public class Solver<D extends DataStructureFactory> implements ISolverService,
 
     private boolean lastConflictMeansUnsat;
 
+    @Impure
     public boolean isSatisfiable(IVecInt assumps, boolean global)
             throws TimeoutException {
         Lbool status = Lbool.UNDEFINED;
@@ -1976,6 +2099,7 @@ public class Solver<D extends DataStructureFactory> implements ISolverService,
                 firstTimeGlobal = true;
                 this.undertimeout = true;
                 TimerTask stopMe = new TimerTask() {
+                    @Impure
                     @Override
                     public void run() {
                         Solver.this.undertimeout = false;
@@ -1993,6 +2117,7 @@ public class Solver<D extends DataStructureFactory> implements ISolverService,
                         (int) this.timeout) {
                     private static final long serialVersionUID = 1L;
 
+                    @Impure
                     @Override
                     public void run() {
                         Solver.this.undertimeout = false;
@@ -2044,10 +2169,12 @@ public class Solver<D extends DataStructureFactory> implements ISolverService,
         return model != null;
     }
 
+    @Impure
     public void printInfos(PrintWriter out) {
         printInfos(out, prefix);
     }
 
+    @Impure
     public void printInfos(PrintWriter out, String prefix) {
         out.print(prefix);
         out.println("constraints type ");
@@ -2064,6 +2191,7 @@ public class Solver<D extends DataStructureFactory> implements ISolverService,
     /**
      * @since 2.1
      */
+    @Impure
     public void printLearntClausesInfos(PrintWriter out, String prefix) {
         Map<String, Counter> learntTypes = new HashMap<String, Counter>();
         for (Iterator<Constr> it = this.learnts.iterator(); it.hasNext();) {
@@ -2082,6 +2210,7 @@ public class Solver<D extends DataStructureFactory> implements ISolverService,
         }
     }
 
+    @Pure
     public SolverStats getStats() {
         return this.stats;
     }
@@ -2091,6 +2220,7 @@ public class Solver<D extends DataStructureFactory> implements ISolverService,
      * @param myStats
      * @since 2.2
      */
+    @Impure
     protected void initStats(SolverStats myStats) {
         this.stats = myStats;
     }
@@ -2100,6 +2230,7 @@ public class Solver<D extends DataStructureFactory> implements ISolverService,
      * 
      * @see org.sat4j.minisat.core.ICDCL#getOrder()
      */
+    @Pure
     public IOrder getOrder() {
         return this.order;
     }
@@ -2109,15 +2240,18 @@ public class Solver<D extends DataStructureFactory> implements ISolverService,
      * 
      * @see org.sat4j.minisat.core.ICDCL#setOrder(org.sat4j.minisat.core.IOrder)
      */
+    @Impure
     public void setOrder(IOrder h) {
         this.order = h;
         this.order.setLits(this.voc);
     }
 
+    @Pure
     public ILits getVocabulary() {
         return this.voc;
     }
 
+    @Impure
     public void reset() {
         if (this.timer != null) {
             this.timer.cancel();
@@ -2138,6 +2272,8 @@ public class Solver<D extends DataStructureFactory> implements ISolverService,
         this.constrTypes.clear();
     }
 
+    @Pure
+    @Impure
     public int nVars() {
         if (this.declaredMaxVarId == 0) {
             return this.voc.nVars();
@@ -2150,6 +2286,7 @@ public class Solver<D extends DataStructureFactory> implements ISolverService,
      *            a constraint implementing the Constr interface.
      * @return a reference to the constraint for external use.
      */
+    @Impure
     protected IConstr addConstr(Constr constr) {
         if (constr == null) {
             Counter count = this.constrTypes
@@ -2173,10 +2310,12 @@ public class Solver<D extends DataStructureFactory> implements ISolverService,
         return constr;
     }
 
+    @Pure
     public DataStructureFactory getDSFactory() {
         return this.dsfactory;
     }
 
+    @Pure
     public IVecInt getOutLearnt() {
         return this.moutLearnt;
     }
@@ -2188,6 +2327,7 @@ public class Solver<D extends DataStructureFactory> implements ISolverService,
      *            the constraint number (begins at 0)
      * @return the ith constraint
      */
+    @Impure
     public IConstr getIthConstr(int i) {
         return this.constrs.get(i);
     }
@@ -2198,14 +2338,17 @@ public class Solver<D extends DataStructureFactory> implements ISolverService,
      * @see org.sat4j.specs.ISolver#printStat(java.io.PrintStream,
      * java.lang.String)
      */
+    @Impure
     public void printStat(PrintStream out, String prefix) {
         printStat(new PrintWriter(out, true), prefix);
     }
 
+    @Impure
     public void printStat(PrintWriter out) {
         printStat(out, prefix);
     }
 
+    @Impure
     public void printStat(PrintWriter out, String prefix) {
         this.stats.printStat(out, prefix);
         double cputime = (System.currentTimeMillis() - this.timebegin) / 1000;
@@ -2221,6 +2364,7 @@ public class Solver<D extends DataStructureFactory> implements ISolverService,
      * 
      * @see java.lang.Object#toString()
      */
+    @Impure
     public String toString(String prefix) {
         StringBuffer stb = new StringBuffer();
         Object[] objs = { this.dsfactory, this.learner, this.params,
@@ -2265,11 +2409,13 @@ public class Solver<D extends DataStructureFactory> implements ISolverService,
      * 
      * @see java.lang.Object#toString()
      */
+    @Impure
     @Override
     public String toString() {
         return toString(""); //$NON-NLS-1$
     }
 
+    @Pure
     public int getTimeout() {
         return (int) (this.timeBasedTimeout ? this.timeout / 1000
                 : this.timeout);
@@ -2278,6 +2424,7 @@ public class Solver<D extends DataStructureFactory> implements ISolverService,
     /**
      * @since 2.1
      */
+    @Pure
     public long getTimeoutMs() {
         if (!this.timeBasedTimeout) {
             throw new UnsupportedOperationException(
@@ -2286,14 +2433,17 @@ public class Solver<D extends DataStructureFactory> implements ISolverService,
         return this.timeout;
     }
 
+    @Impure
     public void setExpectedNumberOfClauses(int nb) {
         this.constrs.ensure(nb);
     }
 
+    @Impure
     public Map<String, Number> getStat() {
         return this.stats.toMap();
     }
 
+    @Impure
     public int[] findModel() throws TimeoutException {
         if (isSatisfiable()) {
             return model();
@@ -2303,6 +2453,7 @@ public class Solver<D extends DataStructureFactory> implements ISolverService,
         return null;
     }
 
+    @Impure
     public int[] findModel(IVecInt assumps) throws TimeoutException {
         if (isSatisfiable(assumps)) {
             return model();
@@ -2312,10 +2463,12 @@ public class Solver<D extends DataStructureFactory> implements ISolverService,
         return null;
     }
 
+    @Pure
     public boolean isDBSimplificationAllowed() {
         return this.isDBSimplificationAllowed;
     }
 
+    @Impure
     public void setDBSimplificationAllowed(boolean status) {
         this.isDBSimplificationAllowed = status;
     }
@@ -2323,6 +2476,7 @@ public class Solver<D extends DataStructureFactory> implements ISolverService,
     /**
      * @since 2.1
      */
+    @Impure
     public int nextFreeVarId(boolean reserve) {
         return this.voc.nextFreeVarId(reserve);
     }
@@ -2330,6 +2484,7 @@ public class Solver<D extends DataStructureFactory> implements ISolverService,
     /**
      * @since 2.1
      */
+    @Impure
     public IConstr addBlockingClause(IVecInt literals)
             throws ContradictionException {
         return addClause(literals);
@@ -2338,6 +2493,7 @@ public class Solver<D extends DataStructureFactory> implements ISolverService,
     /**
      * @since 2.1
      */
+    @Impure
     public void unset(int p) {
         // the literal might already have been
         // removed from the trail.
@@ -2359,6 +2515,7 @@ public class Solver<D extends DataStructureFactory> implements ISolverService,
     /**
      * @since 2.2
      */
+    @Impure
     public void setLogPrefix(String prefix) {
         this.prefix = prefix;
     }
@@ -2366,6 +2523,7 @@ public class Solver<D extends DataStructureFactory> implements ISolverService,
     /**
      * @since 2.2
      */
+    @Pure
     public String getLogPrefix() {
         return this.prefix;
     }
@@ -2373,6 +2531,7 @@ public class Solver<D extends DataStructureFactory> implements ISolverService,
     /**
      * @since 2.2
      */
+    @Impure
     public IVecInt unsatExplanation() {
         IVecInt copy = new VecInt(
                 this.unsatExplanationInTermsOfAssumptions.size());
@@ -2383,6 +2542,8 @@ public class Solver<D extends DataStructureFactory> implements ISolverService,
     /**
      * @since 2.3.1
      */
+    @SideEffectFree
+    @Impure
     public int[] modelWithInternalVariables() {
         if (this.model == null) {
             throw new UnsupportedOperationException(
@@ -2403,6 +2564,8 @@ public class Solver<D extends DataStructureFactory> implements ISolverService,
     /**
      * @since 2.3.1
      */
+    @Pure
+    @Impure
     public int realNumberOfVariables() {
         return this.voc.nVars();
     }
@@ -2410,6 +2573,7 @@ public class Solver<D extends DataStructureFactory> implements ISolverService,
     /**
      * @since 2.3.2
      */
+    @Impure
     public void stop() {
         expireTimeout();
     }
@@ -2419,6 +2583,7 @@ public class Solver<D extends DataStructureFactory> implements ISolverService,
     /**
      * @since 2.3.2
      */
+    @Impure
     public void backtrack(int[] reason) {
         IVecInt clause = new VecInt(reason.length);
         for (int d : reason) {
@@ -2431,6 +2596,8 @@ public class Solver<D extends DataStructureFactory> implements ISolverService,
     /**
      * @since 2.3.2
      */
+    @Pure
+    @Impure
     public Lbool truthValue(int literal) {
         int p = LiteralsUtils.toInternal(literal);
         if (this.voc.isFalsified(p)) {
@@ -2445,6 +2612,7 @@ public class Solver<D extends DataStructureFactory> implements ISolverService,
     /**
      * @since 2.3.2
      */
+    @Impure
     public int currentDecisionLevel() {
         return decisionLevel();
     }
@@ -2452,6 +2620,7 @@ public class Solver<D extends DataStructureFactory> implements ISolverService,
     /**
      * @since 2.3.2
      */
+    @Pure
     public int[] getLiteralsPropagatedAt(int decisionLevel) {
         throw new UnsupportedOperationException("Not implemented yet!");
     }
@@ -2459,30 +2628,38 @@ public class Solver<D extends DataStructureFactory> implements ISolverService,
     /**
      * @since 2.3.2
      */
+    @SideEffectFree
     public void suggestNextLiteralToBranchOn(int l) {
         throw new UnsupportedOperationException("Not implemented yet!");
     }
 
+    @Pure
     protected boolean isNeedToReduceDB() {
         return this.needToReduceDB;
     }
 
+    @Impure
     public void setNeedToReduceDB(boolean needToReduceDB) {
         this.needToReduceDB = needToReduceDB;
     }
 
+    @Impure
     public void setLogger(ILogAble out) {
         this.out = out;
     }
 
+    @Pure
     public ILogAble getLogger() {
         return this.out;
     }
 
+    @Pure
+    @Impure
     public double[] getVariableHeuristics() {
         return this.order.getVariableHeuristics();
     }
 
+    @Pure
     public IVec<Constr> getLearnedConstraints() {
         return this.learnts;
     }
@@ -2490,6 +2667,7 @@ public class Solver<D extends DataStructureFactory> implements ISolverService,
     /**
      * @since 2.3.2
      */
+    @Impure
     public void setLearnedConstraintsDeletionStrategy(ConflictTimer timer,
             LearnedConstraintsEvaluationType evaluation) {
         if (this.conflictCount != null) {
@@ -2516,6 +2694,7 @@ public class Solver<D extends DataStructureFactory> implements ISolverService,
     /**
      * @since 2.3.2
      */
+    @Impure
     public void setLearnedConstraintsDeletionStrategy(
             LearnedConstraintsEvaluationType evaluation) {
         ConflictTimer aTimer = this.learnedConstraintsDeletionStrategy
@@ -2536,20 +2715,25 @@ public class Solver<D extends DataStructureFactory> implements ISolverService,
         }
     }
 
+    @Pure
     public boolean isSolverKeptHot() {
         return this.keepHot;
     }
 
+    @Impure
     public void setKeepSolverHot(boolean keepHot) {
         this.keepHot = keepHot;
     }
 
     private final Comparator<Integer> dimacsLevel = new Comparator<Integer>() {
+        @Pure
+        @Impure
         public int compare(Integer i1, Integer i2) {
             return voc.getLevel(Math.abs(i2)) - voc.getLevel(Math.abs(i1));
         }
     };
 
+    @Impure
     public IConstr addClauseOnTheFly(int[] literals) {
         List<Integer> lliterals = new ArrayList<Integer>();
         for (Integer d : literals) {
@@ -2575,6 +2759,7 @@ public class Solver<D extends DataStructureFactory> implements ISolverService,
         return this.sharedConflict;
     }
 
+    @Pure
     public ISolver getSolvingEngine() {
         return this;
     }
@@ -2583,6 +2768,7 @@ public class Solver<D extends DataStructureFactory> implements ISolverService,
      * 
      * @param literals
      */
+    @Impure
     public IConstr addAtMostOnTheFly(int[] literals, int degree) {
         IVecInt clause = new VecInt(literals.length);
         for (int d : literals) {
@@ -2609,6 +2795,7 @@ public class Solver<D extends DataStructureFactory> implements ISolverService,
         return this.sharedConflict;
     }
 
+    @Impure
     protected Set<Integer> fromLastDecisionLevel(IVecInt lits) {
         Set<Integer> subset = new HashSet<Integer>();
         int max = -1, q, level;
@@ -2626,6 +2813,7 @@ public class Solver<D extends DataStructureFactory> implements ISolverService,
         return subset;
     }
 
+    @Impure
     public void setUnitClauseProvider(UnitClauseProvider ucp) {
         this.unitClauseProvider = ucp;
     }

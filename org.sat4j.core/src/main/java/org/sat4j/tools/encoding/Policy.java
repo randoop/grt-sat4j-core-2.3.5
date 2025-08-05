@@ -30,6 +30,8 @@
 
 package org.sat4j.tools.encoding;
 
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.Pure;
 import org.sat4j.specs.ContradictionException;
 import org.sat4j.specs.IConstr;
 import org.sat4j.specs.ISolver;
@@ -62,6 +64,7 @@ public class Policy extends EncodingStrategyAdapter {
     private EncodingStrategyAdapter atLeastOneEncoding = null;
     private EncodingStrategyAdapter atLeastKEncoding = null;
 
+    @Pure
     private EncodingStrategyAdapter getAdapterFromEncodingName(
             EncodingStrategy encodingName) {
         switch (encodingName) {
@@ -83,6 +86,7 @@ public class Policy extends EncodingStrategyAdapter {
         }
     }
 
+    @Pure
     private EncodingStrategy getEncodingTypeFromAdapter(
             EncodingStrategyAdapter adapter) {
         if (adapter instanceof Binary) {
@@ -103,78 +107,97 @@ public class Policy extends EncodingStrategyAdapter {
 
     }
 
+    @Pure
     public EncodingStrategyAdapter getAtMostOneEncoding() {
         return this.atMostOneEncoding;
     }
 
+    @Impure
     public void setAtMostOneEncoding(EncodingStrategyAdapter atMostOneEncoding) {
         this.atMostOneEncoding = atMostOneEncoding;
     }
 
+    @Impure
     public void setAtMostOneEncoding(EncodingStrategy atMostOneEncoding) {
         this.atMostOneEncoding = getAdapterFromEncodingName(atMostOneEncoding);
     }
 
+    @Pure
     public EncodingStrategyAdapter getAtMostKEncoding() {
         return this.atMostKEncoding;
     }
 
+    @Impure
     public void setAtMostKEncoding(EncodingStrategyAdapter atMostKEncoding) {
         this.atMostKEncoding = atMostKEncoding;
     }
 
+    @Impure
     public void setAtMostKEncoding(EncodingStrategy atMostKEncoding) {
         this.atMostKEncoding = getAdapterFromEncodingName(atMostKEncoding);
     }
 
+    @Pure
     public EncodingStrategyAdapter getExactlyOneEncoding() {
         return this.exactlyOneEncoding;
     }
 
+    @Impure
     public void setExactlyOneEncoding(EncodingStrategyAdapter exactlyOneEncoding) {
         this.exactlyOneEncoding = exactlyOneEncoding;
     }
 
+    @Impure
     public void setExactlyOneEncoding(EncodingStrategy exactlyOneEncoding) {
         this.exactlyOneEncoding = getAdapterFromEncodingName(exactlyOneEncoding);
     }
 
+    @Pure
     public EncodingStrategyAdapter getExactlyKEncoding() {
         return this.exactlyKEncoding;
     }
 
+    @Impure
     public void setExactlyKEncoding(EncodingStrategyAdapter exactlyKEncoding) {
         this.exactlyKEncoding = exactlyKEncoding;
     }
 
+    @Impure
     public void setExactlyKEncoding(EncodingStrategy exactlyKEncoding) {
         this.exactlyKEncoding = getAdapterFromEncodingName(exactlyKEncoding);
     }
 
+    @Pure
     public EncodingStrategyAdapter getAtLeastOneEncoding() {
         return this.atLeastOneEncoding;
     }
 
+    @Impure
     public void setAtLeastOneEncoding(EncodingStrategyAdapter atLeastOneEncoding) {
         this.atLeastOneEncoding = atLeastOneEncoding;
     }
 
+    @Impure
     public void setAtLeastOneEncoding(EncodingStrategy atLeastOneEncoding) {
         this.atLeastOneEncoding = getAdapterFromEncodingName(atLeastOneEncoding);
     }
 
+    @Pure
     public EncodingStrategyAdapter getAtLeastKEncoding() {
         return this.atLeastKEncoding;
     }
 
+    @Impure
     public void setAtLeastKEncoding(EncodingStrategyAdapter atLeastKEncoding) {
         this.atLeastKEncoding = atLeastKEncoding;
     }
 
+    @Impure
     public void setAtLeastKEncoding(EncodingStrategy atLeastKEncoding) {
         this.atLeastKEncoding = getAdapterFromEncodingName(atLeastKEncoding);
     }
 
+    @Impure
     @Override
     public IConstr addAtMost(ISolver solver, IVecInt literals, int k)
             throws ContradictionException {
@@ -200,6 +223,7 @@ public class Policy extends EncodingStrategyAdapter {
         return super.addAtMost(solver, literals, k);
     }
 
+    @Impure
     @Override
     public IConstr addExactly(ISolver solver, IVecInt literals, int n)
             throws ContradictionException {
@@ -216,6 +240,7 @@ public class Policy extends EncodingStrategyAdapter {
         return super.addExactly(solver, literals, n);
     }
 
+    @Impure
     @Override
     public IConstr addAtLeast(ISolver solver, IVecInt literals, int n)
             throws ContradictionException {
@@ -231,6 +256,8 @@ public class Policy extends EncodingStrategyAdapter {
 
     }
 
+    @Pure
+    @Impure
     @Override
     public String toString() {
         String s = "";

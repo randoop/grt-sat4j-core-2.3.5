@@ -28,6 +28,9 @@
  *   CRIL - initial API and implementation
  *******************************************************************************/
 package org.sat4j.minisat.core;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.dataflow.qual.Impure;
 
 /**
  * @since 2.1
@@ -35,14 +38,18 @@ package org.sat4j.minisat.core;
 public class Counter {
     private int value;
 
+    @SideEffectFree
+    @Impure
     public Counter() {
         this(1);
     }
 
+    @SideEffectFree
     public Counter(int initialValue) {
         this.value = initialValue;
     }
 
+    @Impure
     public void inc() {
         this.value++;
     }
@@ -50,10 +57,12 @@ public class Counter {
     /**
      * @since 2.1
      */
+    @Impure
     public void dec() {
         this.value--;
     }
 
+    @SideEffectFree
     @Override
     public String toString() {
         return String.valueOf(this.value);
@@ -64,6 +73,7 @@ public class Counter {
      * @return the value of the counter.
      * @since 2.3.1
      */
+    @Pure
     public int getValue() {
         return this.value;
     }

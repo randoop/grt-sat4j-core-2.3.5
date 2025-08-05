@@ -28,6 +28,7 @@
  *   CRIL - initial API and implementation
  *******************************************************************************/
 package org.sat4j.specs;
+import org.checkerframework.dataflow.qual.Impure;
 
 /**
  * That interface allows to efficiently retrieve the truth value of a given
@@ -48,5 +49,6 @@ public interface RandomAccessModel {
      * @since 1.6
      * @see #model()
      */
+    @Impure
     boolean model(int var);
 }

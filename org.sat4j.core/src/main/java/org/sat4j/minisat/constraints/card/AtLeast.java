@@ -29,6 +29,9 @@
  *******************************************************************************/
 package org.sat4j.minisat.constraints.card;
 
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import java.io.Serializable;
 
 import org.sat4j.core.VecInt;
@@ -69,6 +72,7 @@ public class AtLeast implements Propagatable, Constr, Undoable, Serializable {
      * @param degree
      *            the minimal number of satisfied literals
      */
+    @Impure
     public AtLeast(ILits voc, IVecInt ps, int degree) {
         this.maxUnsatisfied = ps.size() - degree;
         this.voc = voc;
@@ -77,6 +81,7 @@ public class AtLeast implements Propagatable, Constr, Undoable, Serializable {
         ps.moveTo(this.lits);
     }
 
+    @Impure
     protected static int niceParameters(UnitPropagationListener s, ILits voc,
             IVecInt ps, int deg) throws ContradictionException {
 
@@ -126,6 +131,7 @@ public class AtLeast implements Propagatable, Constr, Undoable, Serializable {
     /**
      * @since 2.1
      */
+    @Impure
     public static Constr atLeastNew(UnitPropagationListener s, ILits voc,
             IVecInt ps, int n) throws ContradictionException {
         int degree = niceParameters(s, voc, ps, n);
@@ -140,6 +146,7 @@ public class AtLeast implements Propagatable, Constr, Undoable, Serializable {
     /**
      * @since 2.1
      */
+    @Impure
     public void remove(UnitPropagationListener upl) {
         for (int q : this.lits) {
             this.voc.watches(q ^ 1).remove(this);
@@ -151,6 +158,7 @@ public class AtLeast implements Propagatable, Constr, Undoable, Serializable {
      * 
      * @see Constr#propagate(Solver, Lit)
      */
+    @Impure
     public boolean propagate(UnitPropagationListener s, int p) {
         // remet la clause dans la liste des clauses regardees
         this.voc.watch(p, this);
@@ -178,6 +186,7 @@ public class AtLeast implements Propagatable, Constr, Undoable, Serializable {
      * 
      * @see Constr#simplify(Solver)
      */
+    @Pure
     public boolean simplify() {
         return false;
     }
@@ -187,6 +196,7 @@ public class AtLeast implements Propagatable, Constr, Undoable, Serializable {
      * 
      * @see Constr#undo(Solver, Lit)
      */
+    @Impure
     public void undo(int p) {
         this.counter--;
     }
@@ -196,6 +206,7 @@ public class AtLeast implements Propagatable, Constr, Undoable, Serializable {
      * 
      * @see Constr#calcReason(Solver, Lit, Vec)
      */
+    @Impure
     public void calcReason(int p, IVecInt outReason) {
         int c = p == ILits.UNDEFINED ? -1 : 0;
         for (int q : this.lits) {
@@ -213,6 +224,7 @@ public class AtLeast implements Propagatable, Constr, Undoable, Serializable {
      * 
      * @see org.sat4j.minisat.datatype.Constr#learnt()
      */
+    @Pure
     public boolean learnt() {
         // Ces contraintes ne sont pas apprises pour le moment.
         return false;
@@ -223,10 +235,12 @@ public class AtLeast implements Propagatable, Constr, Undoable, Serializable {
      * 
      * @see org.sat4j.minisat.datatype.Constr#getActivity()
      */
+    @Pure
     public double getActivity() {
         return 0;
     }
 
+    @SideEffectFree
     public void setActivity(double d) {
     }
 
@@ -235,22 +249,26 @@ public class AtLeast implements Propagatable, Constr, Undoable, Serializable {
      * 
      * @see org.sat4j.minisat.datatype.Constr#incActivity(double)
      */
+    @SideEffectFree
     public void incActivity(double claInc) {
     }
 
     /*
      * For learnt clauses only @author leberre
      */
+    @Pure
     public boolean locked() {
         // FIXME need to be adapted to AtLeast
         // return lits[0].getReason() == this;
         return true;
     }
 
+    @SideEffectFree
     public void setLearnt() {
         throw new UnsupportedOperationException();
     }
 
+    @Impure
     public void register() {
         this.counter = 0;
         for (int q : this.lits) {
@@ -262,22 +280,27 @@ public class AtLeast implements Propagatable, Constr, Undoable, Serializable {
         }
     }
 
+    @Pure
     public int size() {
         return this.lits.length;
     }
 
+    @Pure
     public int get(int i) {
         return this.lits[i];
     }
 
+    @SideEffectFree
     public void rescaleBy(double d) {
         throw new UnsupportedOperationException();
     }
 
+    @SideEffectFree
     public void assertConstraint(UnitPropagationListener s) {
         throw new UnsupportedOperationException();
     }
 
+    @SideEffectFree
     public void assertConstraintIfNeeded(UnitPropagationListener s) {
         throw new UnsupportedOperationException();
     }
@@ -287,6 +310,7 @@ public class AtLeast implements Propagatable, Constr, Undoable, Serializable {
      * 
      * @return a string representing the constraint.
      */
+    @Impure
     @Override
     public String toString() {
         StringBuffer stb = new StringBuffer();
@@ -310,19 +334,23 @@ public class AtLeast implements Propagatable, Constr, Undoable, Serializable {
     /**
      * @since 2.1
      */
+    @SideEffectFree
     public void forwardActivity(double claInc) {
         // TODO Auto-generated method stub
 
     }
 
+    @Pure
     public boolean canBePropagatedMultipleTimes() {
         return true;
     }
 
+    @Pure
     public Constr toConstraint() {
         return this;
     }
 
+    @Impure
     public void calcReasonOnTheFly(int p, IVecInt trail, IVecInt outReason) {
         int c = p == ILits.UNDEFINED ? -1 : 0;
         IVecInt vlits = new VecInt(this.lits);

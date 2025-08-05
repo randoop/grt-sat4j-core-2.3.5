@@ -29,6 +29,9 @@
  *******************************************************************************/
 package org.sat4j.tools;
 
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.dataflow.qual.Pure;
 import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -91,6 +94,7 @@ public class ManyCore<S extends ISolver> extends
 
     private final IVec<Counter> solversStats = new Vec<Counter>();
 
+    @Impure
     public ManyCore(ASolverFactory<S> factory, String... solverNames) {
         this.availableSolvers = solverNames;
         this.numberOfSolvers = solverNames.length;
@@ -113,6 +117,7 @@ public class ManyCore<S extends ISolver> extends
      * @param solverObjects
      *            the solvers
      */
+    @Impure
     public ManyCore(String[] names, S... solverObjects) {
         this(solverObjects);
         for (int i = 0; i < names.length; i++) {
@@ -120,6 +125,7 @@ public class ManyCore<S extends ISolver> extends
         }
     }
 
+    @Impure
     public ManyCore(S... solverObjects) {
         this.availableSolvers = new String[solverObjects.length];
         for (int i = 0; i < solverObjects.length; i++) {
@@ -135,6 +141,7 @@ public class ManyCore<S extends ISolver> extends
         }
     }
 
+    @Impure
     public void addAllClauses(IVec<IVecInt> clauses)
             throws ContradictionException {
         for (int i = 0; i < this.numberOfSolvers; i++) {
@@ -142,6 +149,7 @@ public class ManyCore<S extends ISolver> extends
         }
     }
 
+    @Impure
     public IConstr addAtLeast(IVecInt literals, int degree)
             throws ContradictionException {
         ConstrGroup group = new ConstrGroup(false);
@@ -151,6 +159,7 @@ public class ManyCore<S extends ISolver> extends
         return group;
     }
 
+    @Impure
     public IConstr addAtMost(IVecInt literals, int degree)
             throws ContradictionException {
         ConstrGroup group = new ConstrGroup(false);
@@ -160,6 +169,7 @@ public class ManyCore<S extends ISolver> extends
         return group;
     }
 
+    @Impure
     public IConstr addExactly(IVecInt literals, int n)
             throws ContradictionException {
         ConstrGroup group = new ConstrGroup(false);
@@ -169,6 +179,7 @@ public class ManyCore<S extends ISolver> extends
         return group;
     }
 
+    @Impure
     public IConstr addClause(IVecInt literals) throws ContradictionException {
         ConstrGroup group = new ConstrGroup(false);
         for (int i = 0; i < this.numberOfSolvers; i++) {
@@ -177,12 +188,14 @@ public class ManyCore<S extends ISolver> extends
         return group;
     }
 
+    @Impure
     public void clearLearntClauses() {
         for (int i = 0; i < this.numberOfSolvers; i++) {
             this.solvers.get(i).clearLearntClauses();
         }
     }
 
+    @Impure
     public void expireTimeout() {
         for (int i = 0; i < this.numberOfSolvers; i++) {
             this.solvers.get(i).expireTimeout();
@@ -190,22 +203,27 @@ public class ManyCore<S extends ISolver> extends
         this.sleepTime = FAST_SLEEP;
     }
 
+    @Impure
     public Map<String, Number> getStat() {
         return this.solvers.get(this.winnerId).getStat();
     }
 
+    @Impure
     public int getTimeout() {
         return this.solvers.get(0).getTimeout();
     }
 
+    @Impure
     public long getTimeoutMs() {
         return this.solvers.get(0).getTimeoutMs();
     }
 
+    @Pure
     public int newVar() {
         throw new UnsupportedOperationException();
     }
 
+    @Impure
     public int newVar(int howmany) {
         int result = 0;
         for (int i = 0; i < this.numberOfSolvers; i++) {
@@ -214,6 +232,7 @@ public class ManyCore<S extends ISolver> extends
         return result;
     }
 
+    @Impure
     @Deprecated
     public void printStat(PrintStream out, String prefix) {
         for (int i = 0; i < this.numberOfSolvers; i++) {
@@ -224,6 +243,7 @@ public class ManyCore<S extends ISolver> extends
         }
     }
 
+    @Impure
     public void printStat(PrintWriter out, String prefix) {
         for (int i = 0; i < this.numberOfSolvers; i++) {
             out.printf(
@@ -233,6 +253,7 @@ public class ManyCore<S extends ISolver> extends
         }
     }
 
+    @Impure
     public boolean removeConstr(IConstr c) {
         if (c instanceof ConstrGroup) {
             ConstrGroup group = (ConstrGroup) c;
@@ -251,6 +272,7 @@ public class ManyCore<S extends ISolver> extends
                 "Can only remove a group of constraints!");
     }
 
+    @Impure
     public void reset() {
         for (int i = 0; i < this.numberOfSolvers; i++) {
             this.solvers.get(i).reset();
@@ -258,30 +280,35 @@ public class ManyCore<S extends ISolver> extends
         sharedUnitClauses.clear();
     }
 
+    @Impure
     public void setExpectedNumberOfClauses(int nb) {
         for (int i = 0; i < this.numberOfSolvers; i++) {
             this.solvers.get(i).setExpectedNumberOfClauses(nb);
         }
     }
 
+    @Impure
     public void setTimeout(int t) {
         for (int i = 0; i < this.numberOfSolvers; i++) {
             this.solvers.get(i).setTimeout(t);
         }
     }
 
+    @Impure
     public void setTimeoutMs(long t) {
         for (int i = 0; i < this.numberOfSolvers; i++) {
             this.solvers.get(i).setTimeoutMs(t);
         }
     }
 
+    @Impure
     public void setTimeoutOnConflicts(int count) {
         for (int i = 0; i < this.numberOfSolvers; i++) {
             this.solvers.get(i).setTimeoutOnConflicts(count);
         }
     }
 
+    @Impure
     public String toString(String prefix) {
         StringBuffer res = new StringBuffer();
         res.append(prefix);
@@ -302,6 +329,7 @@ public class ManyCore<S extends ISolver> extends
         return res.toString();
     }
 
+    @Impure
     public int[] findModel() throws TimeoutException {
         if (isSatisfiable()) {
             return model();
@@ -310,6 +338,7 @@ public class ManyCore<S extends ISolver> extends
         return null;
     }
 
+    @Impure
     public int[] findModel(IVecInt assumps) throws TimeoutException {
         if (isSatisfiable(assumps)) {
             return model();
@@ -318,10 +347,12 @@ public class ManyCore<S extends ISolver> extends
         return null;
     }
 
+    @Impure
     public boolean isSatisfiable() throws TimeoutException {
         return isSatisfiable(VecInt.EMPTY, false);
     }
 
+    @Impure
     public synchronized boolean isSatisfiable(IVecInt assumps,
             boolean globalTimeout) throws TimeoutException {
         this.remainingSolvers = new AtomicInteger(this.numberOfSolvers);
@@ -345,30 +376,37 @@ public class ManyCore<S extends ISolver> extends
         return this.resultFound;
     }
 
+    @Pure
     public boolean isSatisfiable(boolean globalTimeout) throws TimeoutException {
         throw new UnsupportedOperationException();
     }
 
+    @Pure
     public boolean isSatisfiable(IVecInt assumps) throws TimeoutException {
         throw new UnsupportedOperationException();
     }
 
+    @Impure
     public int[] model() {
         return this.solvers.get(this.winnerId).model();
     }
 
+    @Impure
     public boolean model(int var) {
         return this.solvers.get(this.winnerId).model(var);
     }
 
+    @Impure
     public int nConstraints() {
         return this.solvers.get(0).nConstraints();
     }
 
+    @Impure
     public int nVars() {
         return this.solvers.get(0).nVars();
     }
 
+    @Impure
     public void printInfos(PrintWriter out, String prefix) {
         for (int i = 0; i < this.numberOfSolvers; i++) {
             out.printf("%s>>>>>>>>>> Solver number %d <<<<<<<<<<<<<<<<<<%n",
@@ -377,6 +415,7 @@ public class ManyCore<S extends ISolver> extends
         }
     }
 
+    @Impure
     public synchronized void onFinishWithAnswer(boolean finished,
             boolean result, int index) {
         if (finished && !this.solved) {
@@ -396,16 +435,19 @@ public class ManyCore<S extends ISolver> extends
         this.remainingSolvers.getAndDecrement();
     }
 
+    @Impure
     public boolean isDBSimplificationAllowed() {
         return this.solvers.get(0).isDBSimplificationAllowed();
     }
 
+    @Impure
     public void setDBSimplificationAllowed(boolean status) {
         for (int i = 0; i < this.numberOfSolvers; i++) {
             this.solvers.get(0).setDBSimplificationAllowed(status);
         }
     }
 
+    @Impure
     public <I extends ISolverService> void setSearchListener(
             SearchListener<I> sl) {
         for (int i = 0; i < this.numberOfSolvers; i++) {
@@ -416,10 +458,12 @@ public class ManyCore<S extends ISolver> extends
     /**
      * @since 2.2
      */
+    @Impure
     public <I extends ISolverService> SearchListener<I> getSearchListener() {
         return this.solvers.get(0).getSearchListener();
     }
 
+    @Impure
     public int nextFreeVarId(boolean reserve) {
         int res = -1;
         for (int i = 0; i < this.numberOfSolvers; ++i) {
@@ -428,6 +472,7 @@ public class ManyCore<S extends ISolver> extends
         return res;
     }
 
+    @Impure
     public IConstr addBlockingClause(IVecInt literals)
             throws ContradictionException {
         ConstrGroup group = new ConstrGroup(false);
@@ -437,6 +482,7 @@ public class ManyCore<S extends ISolver> extends
         return group;
     }
 
+    @Impure
     public boolean removeSubsumedConstr(IConstr c) {
         if (c instanceof ConstrGroup) {
             ConstrGroup group = (ConstrGroup) c;
@@ -456,16 +502,19 @@ public class ManyCore<S extends ISolver> extends
                 "Can only remove a group of constraints!");
     }
 
+    @Impure
     public boolean isVerbose() {
         return this.solvers.get(0).isVerbose();
     }
 
+    @Impure
     public void setVerbose(boolean value) {
         for (int i = 0; i < this.numberOfSolvers; i++) {
             this.solvers.get(i).setVerbose(value);
         }
     }
 
+    @Impure
     public void setLogPrefix(String prefix) {
         for (int i = 0; i < this.numberOfSolvers; i++) {
             this.solvers.get(i).setLogPrefix(prefix);
@@ -473,14 +522,17 @@ public class ManyCore<S extends ISolver> extends
 
     }
 
+    @Impure
     public String getLogPrefix() {
         return this.solvers.get(0).getLogPrefix();
     }
 
+    @Impure
     public IVecInt unsatExplanation() {
         return this.solvers.get(this.winnerId).unsatExplanation();
     }
 
+    @Impure
     public int[] primeImplicant() {
         return this.solvers.get(this.winnerId).primeImplicant();
     }
@@ -488,22 +540,27 @@ public class ManyCore<S extends ISolver> extends
     /**
      * @since 2.3.2
      */
+    @Impure
     public boolean primeImplicant(int p) {
         return this.solvers.get(this.winnerId).primeImplicant(p);
     }
 
+    @SideEffectFree
     public List<S> getSolvers() {
         return new ArrayList<S>(this.solvers);
     }
 
+    @Impure
     public int[] modelWithInternalVariables() {
         return this.solvers.get(this.winnerId).modelWithInternalVariables();
     }
 
+    @Impure
     public int realNumberOfVariables() {
         return this.solvers.get(0).realNumberOfVariables();
     }
 
+    @Impure
     public void registerLiteral(int p) {
         for (int i = 0; i < this.numberOfSolvers; i++) {
             this.solvers.get(i).registerLiteral(p);
@@ -511,10 +568,12 @@ public class ManyCore<S extends ISolver> extends
 
     }
 
+    @Impure
     public boolean isSolverKeptHot() {
         return this.solvers.get(0).isSolverKeptHot();
     }
 
+    @Impure
     public void setKeepSolverHot(boolean value) {
         for (int i = 0; i < this.numberOfSolvers; i++) {
             this.solvers.get(i).setKeepSolverHot(value);
@@ -522,6 +581,7 @@ public class ManyCore<S extends ISolver> extends
 
     }
 
+    @Pure
     public ISolver getSolvingEngine() {
         throw new UnsupportedOperationException("Not supported yet in ManyCore");
     }
@@ -529,6 +589,7 @@ public class ManyCore<S extends ISolver> extends
     /**
      * @since 2.3.3
      */
+    @Impure
     public void printStat(PrintWriter out) {
         printStat(out, getLogPrefix());
     }
@@ -536,6 +597,7 @@ public class ManyCore<S extends ISolver> extends
     /**
      * @since 2.3.3
      */
+    @Impure
     public void printInfos(PrintWriter out) {
         for (int i = 0; i < this.numberOfSolvers; i++) {
             out.printf("%s>>>>>>>>>> Solver number %d <<<<<<<<<<<<<<<<<<%n",
@@ -545,17 +607,20 @@ public class ManyCore<S extends ISolver> extends
 
     }
 
+    @Impure
     @Override
     public synchronized void learnUnit(int p) {
         sharedUnitClauses.push(LiteralsUtils.toInternal(p));
     }
 
+    @Impure
     public synchronized void provideUnitClauses(UnitPropagationListener upl) {
         for (int i = 0; i < sharedUnitClauses.size(); i++) {
             upl.enqueue(sharedUnitClauses.get(i));
         }
     }
 
+    @SideEffectFree
     public void setUnitClauseProvider(UnitClauseProvider ucp) {
         throw new UnsupportedOperationException(
                 "Does not make sense in the parallel context");
@@ -571,6 +636,7 @@ class RunnableSolver implements Runnable {
     private final IVecInt assumps;
     private final boolean globalTimeout;
 
+    @SideEffectFree
     public RunnableSolver(int i, ISolver solver, IVecInt assumps,
             boolean globalTimeout, OutcomeListener ol) {
         this.index = i;
@@ -580,6 +646,7 @@ class RunnableSolver implements Runnable {
         this.globalTimeout = globalTimeout;
     }
 
+    @Impure
     public void run() {
         try {
             boolean result = this.solver.isSatisfiable(this.assumps,

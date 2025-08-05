@@ -30,6 +30,7 @@
 
 package org.sat4j.tools.encoding;
 
+import org.checkerframework.dataflow.qual.Impure;
 import org.sat4j.core.ConstrGroup;
 import org.sat4j.core.VecInt;
 import org.sat4j.specs.ContradictionException;
@@ -64,6 +65,7 @@ public class Commander extends EncodingStrategyAdapter {
      * claim that the fewest clauses are produced when the size of the groups is
      * 3, thus leading to 3.5 clauses and introducing n/2 variables.
      */
+    @Impure
     @Override
     public IConstr addAtMostOne(ISolver solver, IVecInt literals)
             throws ContradictionException {
@@ -71,6 +73,7 @@ public class Commander extends EncodingStrategyAdapter {
         return addAtMostOne(solver, literals, 3);
     }
 
+    @Impure
     private IConstr addAtMostOne(ISolver solver, IVecInt literals, int groupSize)
             throws ContradictionException {
 
@@ -144,12 +147,14 @@ public class Commander extends EncodingStrategyAdapter {
         return constrGroup;
     }
 
+    @Impure
     @Override
     public IConstr addAtMost(ISolver solver, IVecInt literals, int degree)
             throws ContradictionException {
         return super.addAtMost(solver, literals, degree);
     }
 
+    @Impure
     @Override
     public IConstr addExactlyOne(ISolver solver, IVecInt literals)
             throws ContradictionException {
@@ -161,6 +166,7 @@ public class Commander extends EncodingStrategyAdapter {
         return group;
     }
 
+    @Impure
     @Override
     public IConstr addExactly(ISolver solver, IVecInt literals, int degree)
             throws ContradictionException {

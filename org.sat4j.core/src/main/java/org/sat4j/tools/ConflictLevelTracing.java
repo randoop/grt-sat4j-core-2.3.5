@@ -29,6 +29,7 @@
  *******************************************************************************/
 package org.sat4j.tools;
 
+import org.checkerframework.dataflow.qual.Impure;
 import org.sat4j.specs.IConstr;
 import org.sat4j.specs.ISolverService;
 import org.sat4j.specs.Lbool;
@@ -52,6 +53,7 @@ public class ConflictLevelTracing extends SearchListenerAdapter<ISolverService> 
     private final IVisualizationTool restartVisuTool;
     private final IVisualizationTool cleanTool;
 
+    @Impure
     public ConflictLevelTracing(IVisualizationTool visuTool,
             IVisualizationTool restartVisuTool, IVisualizationTool cleanTool) {
         this.visuTool = visuTool;
@@ -62,6 +64,7 @@ public class ConflictLevelTracing extends SearchListenerAdapter<ISolverService> 
         this.maxDLevel = 0;
     }
 
+    @Impure
     @Override
     public void conflictFound(IConstr confl, int dlevel, int trailLevel) {
         if (dlevel > this.maxDLevel) {
@@ -73,6 +76,7 @@ public class ConflictLevelTracing extends SearchListenerAdapter<ISolverService> 
         this.counter++;
     }
 
+    @Impure
     @Override
     public void restarting() {
         this.restartVisuTool.addPoint(this.counter, this.maxDLevel);
@@ -80,6 +84,7 @@ public class ConflictLevelTracing extends SearchListenerAdapter<ISolverService> 
         this.visuTool.addInvisiblePoint(this.counter, this.nVar);
     }
 
+    @Impure
     @Override
     public void end(Lbool result) {
         this.visuTool.end();
@@ -87,6 +92,7 @@ public class ConflictLevelTracing extends SearchListenerAdapter<ISolverService> 
         this.restartVisuTool.end();
     }
 
+    @Impure
     @Override
     public void start() {
         this.visuTool.init();
@@ -96,11 +102,13 @@ public class ConflictLevelTracing extends SearchListenerAdapter<ISolverService> 
         this.maxDLevel = 0;
     }
 
+    @Impure
     @Override
     public void init(ISolverService solverService) {
         this.nVar = solverService.nVars();
     }
 
+    @Impure
     @Override
     public void cleaning() {
         this.restartVisuTool.addPoint(this.counter, 0);

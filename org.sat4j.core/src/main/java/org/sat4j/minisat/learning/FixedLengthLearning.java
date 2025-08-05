@@ -29,6 +29,8 @@
  *******************************************************************************/
 package org.sat4j.minisat.learning;
 
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.Pure;
 import org.sat4j.minisat.core.Constr;
 import org.sat4j.minisat.core.DataStructureFactory;
 
@@ -47,10 +49,12 @@ public final class FixedLengthLearning<D extends DataStructureFactory> extends
 
     private int bound;
 
+    @Impure
     public FixedLengthLearning() {
         this(3);
     }
 
+    @Impure
     public FixedLengthLearning(int maxlength) {
         this.maxlength = maxlength;
     }
@@ -62,29 +66,35 @@ public final class FixedLengthLearning<D extends DataStructureFactory> extends
      * org.sat4j.minisat.LimitedLearning#learningCondition(org.sat4j.minisat
      * .Constr)
      */
+    @Impure
     @Override
     public void init() {
         setBound(this.maxlength);
     }
 
+    @Impure
     public void setMaxLength(int v) {
         this.maxlength = v;
     }
 
+    @Pure
     public int getMaxLength() {
         return this.maxlength;
     }
 
+    @Pure
     @Override
     public String toString() {
         return "Limit learning to clauses of size smaller or equal to " //$NON-NLS-1$
                 + this.maxlength;
     }
 
+    @Impure
     protected void setBound(int newbound) {
         this.bound = newbound;
     }
 
+    @Impure
     @Override
     protected boolean learningCondition(Constr constr) {
         return constr.size() <= this.bound;

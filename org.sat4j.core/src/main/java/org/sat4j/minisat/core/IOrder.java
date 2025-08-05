@@ -29,6 +29,8 @@
  *******************************************************************************/
 package org.sat4j.minisat.core;
 
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.Impure;
 import java.io.PrintWriter;
 
 /**
@@ -47,6 +49,7 @@ public interface IOrder {
      * @param lits
      *            the vocabulary
      */
+    @Impure
     void setLits(ILits lits);
 
     /**
@@ -57,6 +60,7 @@ public interface IOrder {
      * 
      * @return an unassigned literal or Lit.UNDEFINED no such literal exists.
      */
+    @Impure
     int select();
 
     /**
@@ -67,6 +71,7 @@ public interface IOrder {
      * @param x
      *            a variable.
      */
+    @Impure
     void undo(int x);
 
     /**
@@ -75,12 +80,14 @@ public interface IOrder {
      * @param p
      *            a literal. The associated variable will be updated.
      */
+    @Impure
     void updateVar(int p);
 
     /**
      * that method has the responsibility to initialize all arrays in the
      * heuristics. PLEASE CALL super.init() IF YOU OVERRIDE THAT METHOD.
      */
+    @Impure
     void init();
 
     /**
@@ -91,6 +98,7 @@ public interface IOrder {
      * @param prefix
      *            to be used in front of each newline.
      */
+    @Impure
     void printStat(PrintWriter out, String prefix);
 
     /**
@@ -103,12 +111,14 @@ public interface IOrder {
      *            more efficient than decaying all the activities by a similar
      *            factor.
      */
+    @Impure
     void setVarDecay(double d);
 
     /**
      * Decay the variables activities.
      * 
      */
+    @Impure
     void varDecayActivity();
 
     /**
@@ -118,6 +128,8 @@ public interface IOrder {
      *            a literal
      * @return the activity of the variable associated to that literal.
      */
+    @Pure
+    @Impure
     double varActivity(int p);
 
     /**
@@ -125,10 +137,14 @@ public interface IOrder {
      * 
      * @param p
      */
+    @Impure
     void assignLiteral(int p);
 
+    @Impure
     void setPhaseSelectionStrategy(IPhaseSelectionStrategy strategy);
 
+    @Pure
+    @Impure
     IPhaseSelectionStrategy getPhaseSelectionStrategy();
 
     /**
@@ -138,6 +154,7 @@ public interface IOrder {
      * @param q
      *            a literal
      */
+    @Impure
     void updateVarAtDecisionLevel(int q);
 
     /**
@@ -149,5 +166,7 @@ public interface IOrder {
      *         index).
      * @since 2.3.2
      */
+    @Pure
+    @Impure
     double[] getVariableHeuristics();
 }

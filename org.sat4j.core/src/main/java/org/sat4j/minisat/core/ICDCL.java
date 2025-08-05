@@ -29,6 +29,8 @@
  *******************************************************************************/
 package org.sat4j.minisat.core;
 
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.Impure;
 import org.sat4j.specs.ILogAble;
 import org.sat4j.specs.ISolver;
 import org.sat4j.specs.UnitPropagationListener;
@@ -52,6 +54,7 @@ public interface ICDCL<D extends DataStructureFactory> extends ISolver,
      * @param dsf
      *            the internal factory
      */
+    @Impure
     void setDataStructureFactory(D dsf);
 
     /**
@@ -60,6 +63,7 @@ public interface ICDCL<D extends DataStructureFactory> extends ISolver,
      * @deprecated renamed into setLearningStrategy()
      * @see #setLearningStrategy(LearningStrategy)
      */
+    @Impure
     @Deprecated
     void setLearner(LearningStrategy<D> learner);
 
@@ -70,16 +74,22 @@ public interface ICDCL<D extends DataStructureFactory> extends ISolver,
      * 
      * @since 2.3.3
      */
+    @Impure
     void setLearningStrategy(LearningStrategy<D> strategy);
 
+    @Impure
     void setSearchParams(SearchParams sp);
 
+    @Pure
     SearchParams getSearchParams();
 
+    @Pure
     SolverStats getStats();
 
+    @Impure
     void setRestartStrategy(RestartStrategy restarter);
 
+    @Pure
     RestartStrategy getRestartStrategy();
 
     /**
@@ -91,6 +101,7 @@ public interface ICDCL<D extends DataStructureFactory> extends ISolver,
      *            a simplification type.
      * 
      */
+    @Impure
     void setSimplifier(SimplificationType simp);
 
     /**
@@ -102,14 +113,17 @@ public interface ICDCL<D extends DataStructureFactory> extends ISolver,
      * 
      * @param simp
      */
+    @Impure
     void setSimplifier(ISimplifier simp);
 
+    @Pure
     ISimplifier getSimplifier();
 
     /**
      * @param lcds
      * @since 2.1
      */
+    @Impure
     void setLearnedConstraintsDeletionStrategy(
             LearnedConstraintsDeletionStrategy lcds);
 
@@ -121,6 +135,7 @@ public interface ICDCL<D extends DataStructureFactory> extends ISolver,
      *            the strategy used to evaluate learned clauses.
      * @since 2.3.2
      */
+    @Impure
     void setLearnedConstraintsDeletionStrategy(ConflictTimer timer,
             LearnedConstraintsEvaluationType evaluation);
 
@@ -130,16 +145,22 @@ public interface ICDCL<D extends DataStructureFactory> extends ISolver,
      *            the strategy used to evaluate learned clauses.
      * @since 2.3.2
      */
+    @Impure
     void setLearnedConstraintsDeletionStrategy(
             LearnedConstraintsEvaluationType evaluation);
 
+    @Pure
     IOrder getOrder();
 
+    @Impure
     void setOrder(IOrder h);
 
+    @Impure
     void setNeedToReduceDB(boolean needToReduceDB);
 
+    @Impure
     void setLogger(ILogAble out);
 
+    @Pure
     ILogAble getLogger();
 }

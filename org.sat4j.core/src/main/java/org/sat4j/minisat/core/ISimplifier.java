@@ -29,6 +29,7 @@
  *******************************************************************************/
 package org.sat4j.minisat.core;
 
+import org.checkerframework.dataflow.qual.Impure;
 import java.io.Serializable;
 
 import org.sat4j.specs.IVecInt;
@@ -40,5 +41,6 @@ import org.sat4j.specs.IVecInt;
  * 
  */
 public interface ISimplifier extends Serializable {
+    @Impure
     void simplify(IVecInt outLearnt);
 }

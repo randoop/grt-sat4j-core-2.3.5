@@ -29,6 +29,9 @@
  *******************************************************************************/
 package org.sat4j.minisat.orders;
 
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.dataflow.qual.Impure;
 import static org.sat4j.core.LiteralsUtils.negLit;
 import static org.sat4j.core.LiteralsUtils.posLit;
 
@@ -56,15 +59,19 @@ public final class RandomLiteralSelectionStrategy implements
      */
     public static final Random RAND = new Random(123456789);
 
+    @SideEffectFree
     public void assignLiteral(int p) {
     }
 
+    @SideEffectFree
     public void init(int nlength) {
     }
 
+    @SideEffectFree
     public void init(int var, int p) {
     }
 
+    @Impure
     public int select(int var) {
         if (RAND.nextBoolean()) {
             return posLit(var);
@@ -72,12 +79,15 @@ public final class RandomLiteralSelectionStrategy implements
         return negLit(var);
     }
 
+    @SideEffectFree
     public void updateVar(int p) {
     }
 
+    @SideEffectFree
     public void updateVarAtDecisionLevel(int q) {
     }
 
+    @Pure
     @Override
     public String toString() {
         return "random phase selection";

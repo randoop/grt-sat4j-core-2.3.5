@@ -29,6 +29,9 @@
  *******************************************************************************/
 package org.sat4j.minisat.constraints.cnf;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.Pure;
 import static org.sat4j.core.LiteralsUtils.neg;
 
 import org.sat4j.minisat.core.ILits;
@@ -40,6 +43,7 @@ import org.sat4j.specs.UnitPropagationListener;
  */
 public class OriginalHTClause extends HTClause {
 
+    @Impure
     public OriginalHTClause(IVecInt ps, ILits voc) {
         super(ps, voc);
     }
@@ -54,15 +58,18 @@ public class OriginalHTClause extends HTClause {
      * 
      * @see org.sat4j.minisat.constraints.cnf.WLClause#register()
      */
+    @Impure
     public void register() {
         this.voc.watch(neg(this.head), this);
         this.voc.watch(neg(this.tail), this);
     }
 
+    @Pure
     public boolean learnt() {
         return false;
     }
 
+    @SideEffectFree
     public void setLearnt() {
         // do nothing
     }
@@ -79,6 +86,7 @@ public class OriginalHTClause extends HTClause {
      * @return the created clause or null if the clause should be ignored
      *         (tautology for example)
      */
+    @Impure
     public static OriginalHTClause brandNewClause(UnitPropagationListener s,
             ILits voc, IVecInt literals) {
         OriginalHTClause c = new OriginalHTClause(literals, voc);
@@ -86,6 +94,7 @@ public class OriginalHTClause extends HTClause {
         return c;
     }
 
+    @Impure
     public void forwardActivity(double claInc) {
         this.activity += claInc;
     }
@@ -93,10 +102,12 @@ public class OriginalHTClause extends HTClause {
     /**
      * @param claInc
      */
+    @SideEffectFree
     public void incActivity(double claInc) {
 
     }
 
+    @SideEffectFree
     public void setActivity(double claInc) {
         // do nothing
     }

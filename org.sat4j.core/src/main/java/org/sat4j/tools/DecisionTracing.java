@@ -29,6 +29,7 @@
  *******************************************************************************/
 package org.sat4j.tools;
 
+import org.checkerframework.dataflow.qual.Impure;
 import org.sat4j.specs.ISolverService;
 import org.sat4j.specs.Lbool;
 
@@ -51,6 +52,7 @@ public class DecisionTracing extends SearchListenerAdapter<ISolverService> {
 
     private int nVar;
 
+    @Impure
     public DecisionTracing(IVisualizationTool positiveVisu,
             IVisualizationTool negativeVisu, IVisualizationTool restartVisu,
             IVisualizationTool cleanVisu) {
@@ -62,6 +64,7 @@ public class DecisionTracing extends SearchListenerAdapter<ISolverService> {
         this.counter = 1;
     }
 
+    @Impure
     @Override
     public void assuming(int p) {
         if (p > 0) {
@@ -76,6 +79,7 @@ public class DecisionTracing extends SearchListenerAdapter<ISolverService> {
         this.counter++;
     }
 
+    @Impure
     @Override
     public void restarting() {
         this.restartVisu.addPoint(this.counter, this.nVar);
@@ -84,6 +88,7 @@ public class DecisionTracing extends SearchListenerAdapter<ISolverService> {
         this.negativeVisu.addInvisiblePoint(this.counter, 0);
     }
 
+    @Impure
     @Override
     public void end(Lbool result) {
         this.positiveVisu.end();
@@ -92,11 +97,13 @@ public class DecisionTracing extends SearchListenerAdapter<ISolverService> {
         this.cleanVisu.end();
     }
 
+    @Impure
     @Override
     public void start() {
         this.counter = 1;
     }
 
+    @Impure
     @Override
     public void init(ISolverService solverService) {
         this.nVar = solverService.nVars();
@@ -106,6 +113,7 @@ public class DecisionTracing extends SearchListenerAdapter<ISolverService> {
         this.cleanVisu.init();
     }
 
+    @Impure
     @Override
     public void cleaning() {
         this.restartVisu.addPoint(this.counter, 0);

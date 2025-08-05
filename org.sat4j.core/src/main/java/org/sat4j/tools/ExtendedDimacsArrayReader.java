@@ -29,6 +29,8 @@
  *******************************************************************************/
 package org.sat4j.tools;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.dataflow.qual.Impure;
 import org.sat4j.core.VecInt;
 import org.sat4j.specs.ContradictionException;
 import org.sat4j.specs.ISolver;
@@ -79,6 +81,8 @@ public class ExtendedDimacsArrayReader extends DimacsArrayReader {
 
     private final GateTranslator gater;
 
+    @SideEffectFree
+    @Impure
     public ExtendedDimacsArrayReader(ISolver solver) {
         super(solver);
         this.gater = new GateTranslator(solver);
@@ -98,6 +102,7 @@ public class ExtendedDimacsArrayReader extends DimacsArrayReader {
      *            for NOT, or 3 for ITE)
      * @return true
      */
+    @Impure
     @Override
     protected boolean handleConstr(int gateType, int output, int[] inputs)
             throws ContradictionException {

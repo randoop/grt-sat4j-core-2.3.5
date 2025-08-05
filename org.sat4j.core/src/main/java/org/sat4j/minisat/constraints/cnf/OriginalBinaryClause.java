@@ -29,6 +29,9 @@
  *******************************************************************************/
 package org.sat4j.minisat.constraints.cnf;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.Pure;
 import org.sat4j.minisat.core.ILits;
 import org.sat4j.specs.IVecInt;
 import org.sat4j.specs.UnitPropagationListener;
@@ -43,14 +46,17 @@ public class OriginalBinaryClause extends BinaryClause {
 	 */
     private static final long serialVersionUID = 1L;
 
+    @Impure
     public OriginalBinaryClause(IVecInt ps, ILits voc) {
         super(ps, voc);
     }
 
+    @SideEffectFree
     public void setLearnt() {
         // do nothing
     }
 
+    @Pure
     public boolean learnt() {
         return false;
     }
@@ -67,6 +73,7 @@ public class OriginalBinaryClause extends BinaryClause {
      * @return the created clause or null if the clause should be ignored
      *         (tautology for example)
      */
+    @Impure
     public static OriginalBinaryClause brandNewClause(
             UnitPropagationListener s, ILits voc, IVecInt literals) {
         OriginalBinaryClause c = new OriginalBinaryClause(literals, voc);
@@ -74,6 +81,7 @@ public class OriginalBinaryClause extends BinaryClause {
         return c;
     }
 
+    @Impure
     public void forwardActivity(double claInc) {
         this.activity += claInc;
     }
@@ -81,10 +89,12 @@ public class OriginalBinaryClause extends BinaryClause {
     /**
      * @param claInc
      */
+    @SideEffectFree
     public void incActivity(double claInc) {
 
     }
 
+    @SideEffectFree
     public void setActivity(double claInc) {
         // do nothing
     }

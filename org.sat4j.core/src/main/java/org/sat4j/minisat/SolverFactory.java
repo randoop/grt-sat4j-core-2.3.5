@@ -29,6 +29,7 @@
  *******************************************************************************/
 package org.sat4j.minisat;
 
+import org.checkerframework.dataflow.qual.Impure;
 import org.sat4j.core.ASolverFactory;
 import org.sat4j.minisat.constraints.MixedDataStructureDanielHT;
 import org.sat4j.minisat.constraints.MixedDataStructureDanielWL;
@@ -79,10 +80,12 @@ public final class SolverFactory extends ASolverFactory<ISolver> {
      * 
      * @see #instance()
      */
+    @Impure
     private SolverFactory() {
         super();
     }
 
+    @Impure
     private static synchronized void createInstance() {
         if (instance == null) {
             instance = new SolverFactory();
@@ -94,6 +97,7 @@ public final class SolverFactory extends ASolverFactory<ISolver> {
      * 
      * @return the singleton of that class.
      */
+    @Impure
     public static SolverFactory instance() {
         if (instance == null) {
             createInstance();
@@ -106,28 +110,33 @@ public final class SolverFactory extends ASolverFactory<ISolver> {
      *         smaller than 10 % of the total number of variables with a heap
      *         based var order.
      */
+    @Impure
     public static Solver<DataStructureFactory> newMiniLearningHeap() {
         return newMiniLearningHeap(new MixedDataStructureDanielWL());
     }
 
+    @Impure
     public static ICDCL<DataStructureFactory> newMiniLearningHeapEZSimp() {
         Solver<DataStructureFactory> solver = newMiniLearningHeap();
         solver.setSimplifier(solver.SIMPLE_SIMPLIFICATION);
         return solver;
     }
 
+    @Impure
     public static Solver<DataStructureFactory> newMiniLearningHeapExpSimp() {
         Solver<DataStructureFactory> solver = newMiniLearningHeap();
         solver.setSimplifier(solver.EXPENSIVE_SIMPLIFICATION);
         return solver;
     }
 
+    @Impure
     public static Solver<DataStructureFactory> newMiniLearningHeapRsatExpSimp() {
         Solver<DataStructureFactory> solver = newMiniLearningHeapExpSimp();
         solver.setOrder(new VarOrderHeap(new RSATPhaseSelectionStrategy()));
         return solver;
     }
 
+    @Impure
     public static Solver<DataStructureFactory> newMiniLearningHeapRsatExpSimpBiere() {
         Solver<DataStructureFactory> solver = newMiniLearningHeapRsatExpSimp();
         solver.setRestartStrategy(new ArminRestarts());
@@ -135,12 +144,14 @@ public final class SolverFactory extends ASolverFactory<ISolver> {
         return solver;
     }
 
+    @Impure
     public static ICDCL<DataStructureFactory> newMiniLearningHeapRsatExpSimpLuby() {
         ICDCL<DataStructureFactory> solver = newMiniLearningHeapRsatExpSimp();
         solver.setRestartStrategy(new LubyRestarts(512));
         return solver;
     }
 
+    @Impure
     public static ICDCL<DataStructureFactory> newGlucose21() {
         Solver<DataStructureFactory> solver = newMiniLearningHeapRsatExpSimp();
         solver.setRestartStrategy(new Glucose21Restarts());
@@ -148,6 +159,7 @@ public final class SolverFactory extends ASolverFactory<ISolver> {
         return solver;
     }
 
+    @Impure
     private static Solver<DataStructureFactory> newBestCurrentSolverConfiguration(
             DataStructureFactory dsf) {
         MiniSATLearning<DataStructureFactory> learning = new MiniSATLearning<DataStructureFactory>();
@@ -163,6 +175,7 @@ public final class SolverFactory extends ASolverFactory<ISolver> {
      * 
      * @since 2.2
      */
+    @Impure
     public static ICDCL<DataStructureFactory> newGreedySolver() {
         MiniSATLearning<DataStructureFactory> learning = new MiniSATLearning<DataStructureFactory>();
         Solver<DataStructureFactory> solver = new Solver<DataStructureFactory>(
@@ -177,6 +190,7 @@ public final class SolverFactory extends ASolverFactory<ISolver> {
     /**
      * @since 2.2
      */
+    @Impure
     public static ICDCL<DataStructureFactory> newDefaultAutoErasePhaseSaving() {
         ICDCL<DataStructureFactory> solver = newBestWL();
         solver.setOrder(new VarOrderHeap(new PhaseCachingAutoEraseStrategy()));
@@ -186,6 +200,7 @@ public final class SolverFactory extends ASolverFactory<ISolver> {
     /**
      * @since 2.2.3
      */
+    @Impure
     public static ICDCL<DataStructureFactory> newDefaultMS21PhaseSaving() {
         ICDCL<DataStructureFactory> solver = newBestWL();
         solver.setOrder(new VarOrderHeap(
@@ -196,6 +211,7 @@ public final class SolverFactory extends ASolverFactory<ISolver> {
     /**
      * @since 2.1
      */
+    @Impure
     public static Solver<DataStructureFactory> newBestWL() {
         return newBestCurrentSolverConfiguration(new MixedDataStructureDanielWL());
     }
@@ -204,6 +220,7 @@ public final class SolverFactory extends ASolverFactory<ISolver> {
      * 
      * @since 2.1
      */
+    @Impure
     public static ICDCL<DataStructureFactory> newBestHT() {
         return newBestCurrentSolverConfiguration(new MixedDataStructureDanielHT());
     }
@@ -212,6 +229,7 @@ public final class SolverFactory extends ASolverFactory<ISolver> {
      * 
      * @since 2.2
      */
+    @Impure
     public static ICDCL<DataStructureFactory> newBest17() {
         Solver<DataStructureFactory> solver = newBestCurrentSolverConfiguration(new MixedDataStructureSingleWL());
         solver.setSimplifier(solver.EXPENSIVE_SIMPLIFICATION_WLONLY);
@@ -225,6 +243,7 @@ public final class SolverFactory extends ASolverFactory<ISolver> {
     /**
      * @since 2.1
      */
+    @Impure
     public static Solver<DataStructureFactory> newGlucose() {
         Solver<DataStructureFactory> solver = newBestWL();
         solver.setLearnedConstraintsDeletionStrategy(solver.glucose);
@@ -239,6 +258,7 @@ public final class SolverFactory extends ASolverFactory<ISolver> {
      *         factory, learning clauses of length smaller or equals to 10 % of
      *         the number of variables and a heap based VSIDS heuristics
      */
+    @Impure
     public static Solver<DataStructureFactory> newMiniLearningHeap(
             DataStructureFactory dsf) {
         return newMiniLearning(dsf, new VarOrderHeap());
@@ -255,6 +275,7 @@ public final class SolverFactory extends ASolverFactory<ISolver> {
      *         data structure, the FirstUIP clause generator and order as
      *         heuristics.
      */
+    @Impure
     public static Solver<DataStructureFactory> newMiniLearning(
             DataStructureFactory dsf, IOrder order) {
         // LimitedLearning<DataStructureFactory> learning = new
@@ -268,6 +289,7 @@ public final class SolverFactory extends ASolverFactory<ISolver> {
     /**
      * @return a default MiniLearning without restarts.
      */
+    @Impure
     public static ICDCL<DataStructureFactory> newMiniLearningHeapEZSimpNoRestarts() {
         LimitedLearning<DataStructureFactory> learning = new PercentLengthLearning<DataStructureFactory>(
                 10);
@@ -283,6 +305,7 @@ public final class SolverFactory extends ASolverFactory<ISolver> {
     /**
      * @return a default MiniLearning with restarts beginning at 1000 conflicts.
      */
+    @Impure
     public static ICDCL<DataStructureFactory> newMiniLearningHeapEZSimpLongRestarts() {
         LimitedLearning<DataStructureFactory> learning = new PercentLengthLearning<DataStructureFactory>(
                 10);
@@ -297,6 +320,7 @@ public final class SolverFactory extends ASolverFactory<ISolver> {
     /**
      * @return a SAT solver very close to the original MiniSAT sat solver.
      */
+    @Impure
     public static Solver<DataStructureFactory> newMiniSATHeap() {
         return newMiniSATHeap(new MixedDataStructureDanielWL());
     }
@@ -305,18 +329,21 @@ public final class SolverFactory extends ASolverFactory<ISolver> {
      * @return a SAT solver very close to the original MiniSAT sat solver
      *         including easy reason simplification.
      */
+    @Impure
     public static ICDCL<DataStructureFactory> newMiniSATHeapEZSimp() {
         Solver<DataStructureFactory> solver = newMiniSATHeap();
         solver.setSimplifier(solver.SIMPLE_SIMPLIFICATION);
         return solver;
     }
 
+    @Impure
     public static ICDCL<DataStructureFactory> newMiniSATHeapExpSimp() {
         Solver<DataStructureFactory> solver = newMiniSATHeap();
         solver.setSimplifier(solver.EXPENSIVE_SIMPLIFICATION);
         return solver;
     }
 
+    @Impure
     public static Solver<DataStructureFactory> newMiniSATHeap(
             DataStructureFactory dsf) {
         MiniSATLearning<DataStructureFactory> learning = new MiniSATLearning<DataStructureFactory>();
@@ -331,6 +358,7 @@ public final class SolverFactory extends ASolverFactory<ISolver> {
      * @return MiniSAT with VSIDS heuristics, FirstUIP clause generator for
      *         backjumping but no learning.
      */
+    @Impure
     public static ICDCL<MixedDataStructureDanielWL> newBackjumping() {
         NoLearningButHeuristics<MixedDataStructureDanielWL> learning = new NoLearningButHeuristics<MixedDataStructureDanielWL>();
         Solver<MixedDataStructureDanielWL> solver = new Solver<MixedDataStructureDanielWL>(
@@ -344,6 +372,7 @@ public final class SolverFactory extends ASolverFactory<ISolver> {
      * @return a solver computing models with a minimum number of satisfied
      *         literals.
      */
+    @Impure
     public static ISolver newMinOneSolver() {
         return new OptToSatAdapter(new MinOneDecorator(newDefault()));
     }
@@ -356,10 +385,12 @@ public final class SolverFactory extends ASolverFactory<ISolver> {
      * @see #defaultSolver() the same method, polymorphic, to be called from an
      *      instance of ASolverFactory.
      */
+    @Impure
     public static ISolver newDefault() {
         return newGlucose21(); // newMiniLearningHeapRsatExpSimpBiere();
     }
 
+    @Impure
     @Override
     public ISolver defaultSolver() {
         return newDefault();
@@ -372,23 +403,28 @@ public final class SolverFactory extends ASolverFactory<ISolver> {
      * @see #lightSolver() the same method, polymorphic, to be called from an
      *      instance of ASolverFactory.
      */
+    @Impure
     public static ISolver newLight() {
         return newMiniLearningHeap();
     }
 
+    @Impure
     @Override
     public ISolver lightSolver() {
         return newLight();
     }
 
+    @Impure
     public static ISolver newDimacsOutput() {
         return new DimacsOutputSolver();
     }
 
+    @Impure
     public static ISolver newStatistics() {
         return new StatisticsSolver();
     }
 
+    @Impure
     public static ISolver newParallel() {
         return new ManyCore(newSAT(), newUNSAT(),
                 newMiniLearningHeapRsatExpSimpLuby(),
@@ -403,6 +439,7 @@ public final class SolverFactory extends ASolverFactory<ISolver> {
      * 
      * @return a parallel solver for both SAT and UNSAT problems.
      */
+    @Impure
     public static ISolver newSATUNSAT() {
         return new ManyCore(newSAT(), newUNSAT());
     }
@@ -412,6 +449,7 @@ public final class SolverFactory extends ASolverFactory<ISolver> {
      * 
      * @return a solver for satisfiable benchmarks.
      */
+    @Impure
     public static Solver newSAT() {
         Solver solver = (Solver) newGlucose21();
         solver.setRestartStrategy(new LubyRestarts(100));
@@ -424,6 +462,7 @@ public final class SolverFactory extends ASolverFactory<ISolver> {
      * 
      * @return a solver for unsatisfiable benchmarks.
      */
+    @Impure
     public static Solver newUNSAT() {
         Solver solver = (Solver) newGlucose21();
         solver.setRestartStrategy(new NoRestarts());

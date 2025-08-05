@@ -29,6 +29,7 @@
  *******************************************************************************/
 package org.sat4j.tools;
 
+import org.checkerframework.dataflow.qual.Impure;
 import org.sat4j.core.VecInt;
 import org.sat4j.specs.ContradictionException;
 import org.sat4j.specs.IConstr;
@@ -65,6 +66,7 @@ public class Minimal4InclusionModel extends AbstractMinimalModel {
      * @param modelListener
      *            an object to be notified when a new model is found.
      */
+    @Impure
     public Minimal4InclusionModel(ISolver solver, IVecInt p,
             SolutionFoundListener modelListener) {
         super(solver, p, modelListener);
@@ -77,6 +79,7 @@ public class Minimal4InclusionModel extends AbstractMinimalModel {
      *            the set of literals on which the minimality for inclusion is
      *            computed.
      */
+    @Impure
     public Minimal4InclusionModel(ISolver solver, IVecInt p) {
         this(solver, p, SolutionFoundListener.VOID);
     }
@@ -84,6 +87,7 @@ public class Minimal4InclusionModel extends AbstractMinimalModel {
     /**
      * @param solver
      */
+    @Impure
     public Minimal4InclusionModel(ISolver solver) {
         this(solver, negativeLiterals(solver), SolutionFoundListener.VOID);
     }
@@ -93,6 +97,7 @@ public class Minimal4InclusionModel extends AbstractMinimalModel {
      * 
      * @see org.sat4j.ISolver#model()
      */
+    @Impure
     @Override
     public int[] model() {
         int[] prevmodel = null;
@@ -128,6 +133,7 @@ public class Minimal4InclusionModel extends AbstractMinimalModel {
 
     }
 
+    @Impure
     @Override
     public int[] modelWithInternalVariables() {
         model();

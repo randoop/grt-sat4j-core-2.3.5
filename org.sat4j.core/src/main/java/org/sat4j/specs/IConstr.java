@@ -28,6 +28,8 @@
  *   CRIL - initial API and implementation
  *******************************************************************************/
 package org.sat4j.specs;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.Impure;
 
 /**
  * The most general abstraction for handling a constraint.
@@ -40,11 +42,13 @@ public interface IConstr {
     /**
      * @return true iff the clause was learnt during the search
      */
+    @Impure
     boolean learnt();
 
     /**
      * @return the number of literals in the constraint.
      */
+    @Impure
     int size();
 
     /**
@@ -54,6 +58,7 @@ public interface IConstr {
      *            the index of the literal
      * @return a literal
      */
+    @Pure
     int get(int i);
 
     /**
@@ -62,6 +67,7 @@ public interface IConstr {
      * @return the activity of the clause.
      * @since 2.1
      */
+    @Pure
     double getActivity();
 
     /**
@@ -73,5 +79,6 @@ public interface IConstr {
      *         propagate a literal.
      * @since 2.3.1
      */
+    @Pure
     boolean canBePropagatedMultipleTimes();
 }

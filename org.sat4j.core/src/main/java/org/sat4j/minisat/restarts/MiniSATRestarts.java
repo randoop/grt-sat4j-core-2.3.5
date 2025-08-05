@@ -29,6 +29,9 @@
  *******************************************************************************/
 package org.sat4j.minisat.restarts;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.Pure;
 import org.sat4j.minisat.core.Constr;
 import org.sat4j.minisat.core.RestartStrategy;
 import org.sat4j.minisat.core.SearchParams;
@@ -53,41 +56,50 @@ public final class MiniSATRestarts implements RestartStrategy {
 
     private int conflictcount;
 
+    @Impure
     public void init(SearchParams theParams, SolverStats stats) {
         this.params = theParams;
         this.nofConflicts = theParams.getInitConflictBound();
         this.conflictcount = 0;
     }
 
+    @Pure
     public long nextRestartNumberOfConflict() {
         return Math.round(this.nofConflicts);
     }
 
+    @Impure
     public void onRestart() {
         this.nofConflicts *= this.params.getConflictBoundIncFactor();
     }
 
+    @Pure
     @Override
     public String toString() {
         return "MiniSAT restarts strategy";
     }
 
+    @Pure
     public boolean shouldRestart() {
         return this.conflictcount >= this.nofConflicts;
     }
 
+    @Impure
     public void onBackjumpToRootLevel() {
         this.conflictcount = 0;
     }
 
+    @Impure
     public void reset() {
         this.conflictcount = 0;
     }
 
+    @Impure
     public void newConflict() {
         this.conflictcount++;
     }
 
+    @SideEffectFree
     public void newLearnedClause(Constr learned, int trailLevel) {
     }
 }

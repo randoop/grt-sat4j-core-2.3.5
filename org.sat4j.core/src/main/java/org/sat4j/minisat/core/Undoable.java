@@ -28,6 +28,7 @@
  *   CRIL - initial API and implementation
  *******************************************************************************/
 package org.sat4j.minisat.core;
+import org.checkerframework.dataflow.qual.Impure;
 
 /**
  * Interface providing the undoable service.
@@ -42,6 +43,7 @@ public interface Undoable {
      * @param p
      *            a literal to be unassigned.
      */
+    @Impure
     void undo(int p);
 
 }

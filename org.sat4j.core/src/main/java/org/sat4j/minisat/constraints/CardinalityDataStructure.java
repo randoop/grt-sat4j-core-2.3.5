@@ -29,6 +29,7 @@
  *******************************************************************************/
 package org.sat4j.minisat.constraints;
 
+import org.checkerframework.dataflow.qual.Impure;
 import org.sat4j.minisat.constraints.card.AtLeast;
 import org.sat4j.minisat.constraints.cnf.LearntWLClause;
 import org.sat4j.minisat.core.Constr;
@@ -43,6 +44,7 @@ public class CardinalityDataStructure extends AbstractCardinalityDataStructure {
 
     private static final long serialVersionUID = 1L;
 
+    @Impure
     public Constr createUnregisteredClause(IVecInt literals) {
         return new LearntWLClause(literals, getVocabulary());
     }
@@ -54,6 +56,7 @@ public class CardinalityDataStructure extends AbstractCardinalityDataStructure {
      * org.sat4j.minisat.DataStructureFactory#createClause(org.sat4j.datatype
      * .VecInt)
      */
+    @Impure
     public Constr createClause(IVecInt literals) throws ContradictionException {
         return AtLeast.atLeastNew(this.solver, getVocabulary(), literals, 1);
     }
@@ -65,6 +68,7 @@ public class CardinalityDataStructure extends AbstractCardinalityDataStructure {
      * org.sat4j.minisat.DataStructureFactory#createCardinalityConstraint(org
      * .sat4j.datatype.VecInt, int)
      */
+    @Impure
     @Override
     public Constr createCardinalityConstraint(IVecInt literals, int degree)
             throws ContradictionException {
@@ -72,6 +76,7 @@ public class CardinalityDataStructure extends AbstractCardinalityDataStructure {
                 degree);
     }
 
+    @Impure
     public Constr createUnregisteredCardinalityConstraint(IVecInt literals,
             int degree) {
         return new AtLeast(getVocabulary(), literals, degree);

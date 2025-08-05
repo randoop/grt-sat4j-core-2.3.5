@@ -29,6 +29,9 @@
  *******************************************************************************/
 package org.sat4j.minisat.constraints.cnf;
 
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.dataflow.qual.Pure;
 import static org.sat4j.core.LiteralsUtils.neg;
 
 import org.sat4j.minisat.core.ILits;
@@ -40,6 +43,7 @@ import org.sat4j.specs.IVecInt;
  */
 public class LearntHTClause extends HTClause {
 
+    @Impure
     public LearntHTClause(IVecInt ps, ILits voc) {
         super(ps, voc);
     }
@@ -54,6 +58,7 @@ public class LearntHTClause extends HTClause {
      * 
      * @see org.sat4j.minisat.constraints.cnf.WLClause#register()
      */
+    @Impure
     public void register() {
         // looking for the literal to put in tail
         if (this.middleLits.length > 0) {
@@ -78,14 +83,17 @@ public class LearntHTClause extends HTClause {
 
     }
 
+    @Pure
     public boolean learnt() {
         return true;
     }
 
+    @SideEffectFree
     public void setLearnt() {
         // do nothing
     }
 
+    @SideEffectFree
     public void forwardActivity(double claInc) {
 
     }
@@ -93,10 +101,12 @@ public class LearntHTClause extends HTClause {
     /**
      * @param claInc
      */
+    @Impure
     public void incActivity(double claInc) {
         this.activity += claInc;
     }
 
+    @Impure
     public void setActivity(double d) {
         this.activity = d;
     }

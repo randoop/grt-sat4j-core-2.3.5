@@ -29,6 +29,7 @@
  *******************************************************************************/
 package org.sat4j.tools;
 
+import org.checkerframework.dataflow.qual.Impure;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -56,14 +57,17 @@ public class MultiTracing<T extends ISolverService> implements
 
     private final Collection<SearchListener<T>> listeners = new ArrayList<SearchListener<T>>();
 
+    @Impure
     public MultiTracing(SearchListener<T>... listeners) {
         this.listeners.addAll(Arrays.asList(listeners));
     }
 
+    @Impure
     public MultiTracing(List<SearchListener<T>> listenersList) {
         this.listeners.addAll(listenersList);
     }
 
+    @Impure
     public void assuming(int p) {
         for (SearchListener<T> sl : this.listeners) {
             sl.assuming(p);
@@ -71,6 +75,7 @@ public class MultiTracing<T extends ISolverService> implements
 
     }
 
+    @Impure
     public void propagating(int p, IConstr reason) {
         for (SearchListener<T> sl : this.listeners) {
             sl.propagating(p, reason);
@@ -78,12 +83,14 @@ public class MultiTracing<T extends ISolverService> implements
 
     }
 
+    @Impure
     public void backtracking(int p) {
         for (SearchListener<T> sl : this.listeners) {
             sl.backtracking(p);
         }
     }
 
+    @Impure
     public void adding(int p) {
         for (SearchListener<T> sl : this.listeners) {
             sl.adding(p);
@@ -91,6 +98,7 @@ public class MultiTracing<T extends ISolverService> implements
 
     }
 
+    @Impure
     public void learn(IConstr c) {
         for (SearchListener<T> sl : this.listeners) {
             sl.learn(c);
@@ -98,12 +106,14 @@ public class MultiTracing<T extends ISolverService> implements
 
     }
 
+    @Impure
     public void learnUnit(int p) {
         for (SearchListener<T> sl : this.listeners) {
             sl.learnUnit(p);
         }
     }
 
+    @Impure
     public void delete(int[] clause) {
         for (SearchListener<T> sl : this.listeners) {
             sl.delete(clause);
@@ -111,6 +121,7 @@ public class MultiTracing<T extends ISolverService> implements
 
     }
 
+    @Impure
     public void conflictFound(IConstr confl, int dlevel, int trailLevel) {
         for (SearchListener<T> sl : this.listeners) {
             sl.conflictFound(confl, dlevel, trailLevel);
@@ -118,6 +129,7 @@ public class MultiTracing<T extends ISolverService> implements
 
     }
 
+    @Impure
     public void conflictFound(int p) {
         for (SearchListener<T> sl : this.listeners) {
             sl.conflictFound(p);
@@ -125,6 +137,7 @@ public class MultiTracing<T extends ISolverService> implements
 
     }
 
+    @Impure
     public void solutionFound(int[] model, RandomAccessModel lazyModel) {
         for (SearchListener<T> sl : this.listeners) {
             sl.solutionFound(model, lazyModel);
@@ -132,12 +145,14 @@ public class MultiTracing<T extends ISolverService> implements
 
     }
 
+    @Impure
     public void beginLoop() {
         for (SearchListener<T> sl : this.listeners) {
             sl.beginLoop();
         }
     }
 
+    @Impure
     public void start() {
         for (SearchListener<T> sl : this.listeners) {
             sl.start();
@@ -145,12 +160,14 @@ public class MultiTracing<T extends ISolverService> implements
 
     }
 
+    @Impure
     public void end(Lbool result) {
         for (SearchListener<T> sl : this.listeners) {
             sl.end(result);
         }
     }
 
+    @Impure
     public void restarting() {
         for (SearchListener<T> sl : this.listeners) {
             sl.restarting();
@@ -158,6 +175,7 @@ public class MultiTracing<T extends ISolverService> implements
 
     }
 
+    @Impure
     public void backjump(int backjumpLevel) {
         for (SearchListener<T> sl : this.listeners) {
             sl.backjump(backjumpLevel);
@@ -165,12 +183,14 @@ public class MultiTracing<T extends ISolverService> implements
 
     }
 
+    @Impure
     public void init(T solverService) {
         for (SearchListener<T> sl : this.listeners) {
             sl.init(solverService);
         }
     }
 
+    @Impure
     public void cleaning() {
         for (SearchListener<T> sl : this.listeners) {
             sl.cleaning();

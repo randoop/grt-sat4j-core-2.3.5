@@ -28,6 +28,7 @@
  *   CRIL - initial API and implementation
  *******************************************************************************/
 package org.sat4j.specs;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 
 /**
  * Exception launched when the solver cannot solve a problem within its allowed
@@ -44,6 +45,7 @@ public class TimeoutException extends Exception {
     /**
      * Constructor for TimeoutException.
      */
+    @SideEffectFree
     public TimeoutException() {
         super();
     }
@@ -54,6 +56,7 @@ public class TimeoutException extends Exception {
      * @param message
      *            the error message
      */
+    @SideEffectFree
     public TimeoutException(String message) {
         super(message);
     }
@@ -66,6 +69,7 @@ public class TimeoutException extends Exception {
      * @param cause
      *            the cause of the exception
      */
+    @SideEffectFree
     public TimeoutException(String message, Throwable cause) {
         super(message, cause);
     }
@@ -76,6 +80,7 @@ public class TimeoutException extends Exception {
      * @param cause
      *            the cause of the exception
      */
+    @SideEffectFree
     public TimeoutException(Throwable cause) {
         super(cause);
     }

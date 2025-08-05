@@ -29,6 +29,8 @@
  *******************************************************************************/
 
 package org.sat4j.tools.encoding;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.Impure;
 
 /**
  * This Enum describes the different encodings that can be used for the
@@ -44,10 +46,12 @@ public enum EncodingStrategy {
 
     private String name;
 
+    @Impure
     EncodingStrategy(String name) {
         this.name = name;
     }
 
+    @Pure
     @Override
     public String toString() {
         return this.name;

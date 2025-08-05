@@ -29,6 +29,8 @@
  *******************************************************************************/
 package org.sat4j.tools;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.dataflow.qual.Impure;
 import java.math.BigInteger;
 
 import org.sat4j.core.Vec;
@@ -52,6 +54,8 @@ public class GateTranslator extends SolverDecorator<ISolver> {
      */
     private static final long serialVersionUID = 1L;
 
+    @SideEffectFree
+    @Impure
     public GateTranslator(ISolver solver) {
         super(solver);
     }
@@ -65,6 +69,7 @@ public class GateTranslator extends SolverDecorator<ISolver> {
      *             iff a trivial inconsistency is found.
      * @since 2.1
      */
+    @Impure
     public IConstr gateFalse(int y) throws ContradictionException {
         IVecInt clause = new VecInt(2);
         clause.push(-y);
@@ -79,6 +84,7 @@ public class GateTranslator extends SolverDecorator<ISolver> {
      * @throws ContradictionException
      * @since 2.1
      */
+    @Impure
     public IConstr gateTrue(int y) throws ContradictionException {
         IVecInt clause = new VecInt(2);
         clause.push(y);
@@ -96,6 +102,7 @@ public class GateTranslator extends SolverDecorator<ISolver> {
      * @throws ContradictionException
      * @since 2.1
      */
+    @Impure
     public IConstr[] ite(int y, int x1, int x2, int x3)
             throws ContradictionException {
         IConstr[] constrs = new IConstr[6];
@@ -141,6 +148,7 @@ public class GateTranslator extends SolverDecorator<ISolver> {
      * @throws ContradictionException
      * @since 2.1
      */
+    @Impure
     public IConstr[] and(int y, IVecInt literals) throws ContradictionException {
         // y <=> AND x1 ... xn
         IConstr[] constrs = new IConstr[literals.size() + 1];
@@ -171,6 +179,7 @@ public class GateTranslator extends SolverDecorator<ISolver> {
      * @throws ContradictionException
      * @since 2.1
      */
+    @Impure
     public IConstr[] and(int y, int x1, int x2) throws ContradictionException {
         IVecInt clause = new VecInt(4);
         IConstr[] constrs = new IConstr[3];
@@ -197,6 +206,7 @@ public class GateTranslator extends SolverDecorator<ISolver> {
      * @throws ContradictionException
      * @since 2.1
      */
+    @Impure
     public IConstr[] or(int y, IVecInt literals) throws ContradictionException {
         // y <=> OR x1 x2 ...xn
         // y => x1 x2 ... xn
@@ -224,6 +234,7 @@ public class GateTranslator extends SolverDecorator<ISolver> {
      * @throws ContradictionException
      * @since 2.1
      */
+    @Impure
     public IConstr[] halfOr(int y, IVecInt literals)
             throws ContradictionException {
         IConstr[] constrs = new IConstr[literals.size()];
@@ -238,6 +249,7 @@ public class GateTranslator extends SolverDecorator<ISolver> {
         return constrs;
     }
 
+    @Impure
     private IConstr processClause(IVecInt clause) throws ContradictionException {
         return addClause(clause);
     }
@@ -250,6 +262,7 @@ public class GateTranslator extends SolverDecorator<ISolver> {
      * @throws ContradictionException
      * @since 2.1
      */
+    @Impure
     public IConstr[] not(int y, int x) throws ContradictionException {
         IConstr[] constrs = new IConstr[2];
         IVecInt clause = new VecInt(3);
@@ -272,6 +285,7 @@ public class GateTranslator extends SolverDecorator<ISolver> {
      * @throws ContradictionException
      * @since 2.1
      */
+    @Impure
     public IConstr[] xor(int y, IVecInt literals) throws ContradictionException {
         literals.push(-y);
         int[] f = new int[literals.size()];
@@ -291,6 +305,7 @@ public class GateTranslator extends SolverDecorator<ISolver> {
      * @throws ContradictionException
      * @since 2.1
      */
+    @Impure
     public IConstr[] iff(int y, IVecInt literals) throws ContradictionException {
         literals.push(y);
         int[] f = new int[literals.size()];
@@ -305,6 +320,7 @@ public class GateTranslator extends SolverDecorator<ISolver> {
     /**
      * @since 2.2
      */
+    @Impure
     public void xor(int x, int a, int b) throws ContradictionException {
         IVecInt clause = new VecInt(3);
         clause.push(-a).push(b).push(x);
@@ -321,6 +337,7 @@ public class GateTranslator extends SolverDecorator<ISolver> {
         clause.clear();
     }
 
+    @Impure
     private void xor2Clause(int[] f, int prefix, boolean negation,
             IVec<IConstr> constrs) throws ContradictionException {
         if (prefix == f.length - 1) {
@@ -348,6 +365,7 @@ public class GateTranslator extends SolverDecorator<ISolver> {
         }
     }
 
+    @Impure
     private void iff2Clause(int[] f, int prefix, boolean negation,
             IVec<IConstr> constrs) throws ContradictionException {
         if (prefix == f.length - 1) {
@@ -378,6 +396,7 @@ public class GateTranslator extends SolverDecorator<ISolver> {
     /**
      * @since 2.2
      */
+    @Impure
     public void fullAdderSum(int x, int a, int b, int c)
             throws ContradictionException {
         IVecInt clause = new VecInt(4);
@@ -412,6 +431,7 @@ public class GateTranslator extends SolverDecorator<ISolver> {
     /**
      * @since 2.2
      */
+    @Impure
     public void fullAdderCarry(int x, int a, int b, int c)
             throws ContradictionException {
         IVecInt clause = new VecInt(3);
@@ -438,6 +458,7 @@ public class GateTranslator extends SolverDecorator<ISolver> {
     /**
      * @since 2.2
      */
+    @Impure
     public void additionalFullAdderConstraints(int xcarry, int xsum, int a,
             int b, int c) throws ContradictionException {
         IVecInt clause = new VecInt(3);
@@ -458,6 +479,7 @@ public class GateTranslator extends SolverDecorator<ISolver> {
     /**
      * @since 2.2
      */
+    @Impure
     public void halfAdderSum(int x, int a, int b) throws ContradictionException {
         xor(x, a, b);
     }
@@ -465,6 +487,7 @@ public class GateTranslator extends SolverDecorator<ISolver> {
     /**
      * @since 2.2
      */
+    @Impure
     public void halfAdderCarry(int x, int a, int b)
             throws ContradictionException {
         and(x, a, b);
@@ -477,6 +500,7 @@ public class GateTranslator extends SolverDecorator<ISolver> {
      * 
      * @since 2.2
      */
+    @Impure
     public void optimisationFunction(IVecInt literals, IVec<BigInteger> coefs,
             IVecInt result) throws ContradictionException {
         IVec<IVecInt> buckets = new Vec<IVecInt>();
@@ -539,6 +563,7 @@ public class GateTranslator extends SolverDecorator<ISolver> {
      * @param i
      * @return
      */
+    @Impure
     private IVecInt createIfNull(IVec<IVecInt> buckets, int i) {
         IVecInt bucket = buckets.get(i);
         if (bucket == null) {

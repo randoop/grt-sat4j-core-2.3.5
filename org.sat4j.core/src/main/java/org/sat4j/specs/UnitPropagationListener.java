@@ -29,6 +29,7 @@
  *******************************************************************************/
 package org.sat4j.specs;
 
+import org.checkerframework.dataflow.qual.Impure;
 import org.sat4j.minisat.core.Constr;
 
 /**
@@ -50,6 +51,7 @@ public interface UnitPropagationListener {
      * @return true if the assignment looks possible, false if a conflict
      *         occurs.
      */
+    @Impure
     boolean enqueue(int p);
 
     /**
@@ -62,6 +64,7 @@ public interface UnitPropagationListener {
      * @return true if the assignment looks possible, false if a conflict
      *         occurs.
      */
+    @Impure
     boolean enqueue(int p, Constr from);
 
     /**
@@ -72,5 +75,6 @@ public interface UnitPropagationListener {
      * @param p
      * @since 2.1
      */
+    @Impure
     void unset(int p);
 }

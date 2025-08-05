@@ -29,6 +29,9 @@
  *******************************************************************************/
 package org.sat4j.minisat.constraints.cnf;
 
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import java.io.Serializable;
 
 import org.sat4j.minisat.core.Constr;
@@ -63,6 +66,7 @@ public abstract class WLClause implements Propagatable, Constr, Serializable {
      * @param ps
      *            A VecInt that WILL BE EMPTY after calling that method.
      */
+    @Impure
     public WLClause(IVecInt ps, ILits voc) {
         this.lits = new int[ps.size()];
         ps.moveTo(this.lits);
@@ -76,6 +80,7 @@ public abstract class WLClause implements Propagatable, Constr, Serializable {
      * 
      * @see Constr#calcReason(Solver, Lit, Vec)
      */
+    @Impure
     public void calcReason(int p, IVecInt outReason) {
         // assert outReason.size() == 0
         // && ((p == ILits.UNDEFINED) || (p == lits[0]));
@@ -89,6 +94,7 @@ public abstract class WLClause implements Propagatable, Constr, Serializable {
     /**
      * @since 2.1
      */
+    @Impure
     public void remove(UnitPropagationListener upl) {
         this.voc.watches(this.lits[0] ^ 1).remove(this);
         this.voc.watches(this.lits[1] ^ 1).remove(this);
@@ -100,6 +106,8 @@ public abstract class WLClause implements Propagatable, Constr, Serializable {
      * 
      * @see Constr#simplify(Solver)
      */
+    @Pure
+    @Impure
     public boolean simplify() {
         for (int lit : this.lits) {
             if (this.voc.isSatisfied(lit)) {
@@ -109,6 +117,7 @@ public abstract class WLClause implements Propagatable, Constr, Serializable {
         return false;
     }
 
+    @Impure
     public boolean propagate(UnitPropagationListener s, int p) {
         final int[] mylits = this.lits;
         // Lits[1] must contain a falsified literal
@@ -144,6 +153,8 @@ public abstract class WLClause implements Propagatable, Constr, Serializable {
     /*
      * For learnt clauses only @author leberre
      */
+    @Pure
+    @Impure
     public boolean locked() {
         return this.voc.getReason(this.lits[0]) == this;
     }
@@ -151,14 +162,17 @@ public abstract class WLClause implements Propagatable, Constr, Serializable {
     /**
      * @return the activity of the clause
      */
+    @Pure
     public double getActivity() {
         return this.activity;
     }
 
+    @Impure
     public void setActivity(double d) {
         this.activity = d;
     }
 
+    @Impure
     @Override
     public String toString() {
         StringBuffer stb = new StringBuffer();
@@ -180,6 +194,7 @@ public abstract class WLClause implements Propagatable, Constr, Serializable {
      *            the index of the literal
      * @return the literal
      */
+    @Pure
     public int get(int i) {
         return this.lits[i];
     }
@@ -187,19 +202,23 @@ public abstract class WLClause implements Propagatable, Constr, Serializable {
     /**
      * @param d
      */
+    @Impure
     public void rescaleBy(double d) {
         this.activity *= d;
     }
 
+    @Pure
     public int size() {
         return this.lits.length;
     }
 
+    @Impure
     public void assertConstraint(UnitPropagationListener s) {
         boolean ret = s.enqueue(this.lits[0], this);
         assert ret;
     }
 
+    @Impure
     public void assertConstraintIfNeeded(UnitPropagationListener s) {
         if (voc.isFalsified(this.lits[1])) {
             boolean ret = s.enqueue(this.lits[0], this);
@@ -207,16 +226,20 @@ public abstract class WLClause implements Propagatable, Constr, Serializable {
         }
     }
 
+    @Pure
     public ILits getVocabulary() {
         return this.voc;
     }
 
+    @SideEffectFree
+    @Impure
     public int[] getLits() {
         int[] tmp = new int[size()];
         System.arraycopy(this.lits, 0, tmp, 0, size());
         return tmp;
     }
 
+    @SideEffectFree
     @Override
     public boolean equals(Object obj) {
         if (obj == null) {
@@ -246,6 +269,7 @@ public abstract class WLClause implements Propagatable, Constr, Serializable {
         }
     }
 
+    @Pure
     @Override
     public int hashCode() {
         long sum = 0;
@@ -255,14 +279,17 @@ public abstract class WLClause implements Propagatable, Constr, Serializable {
         return (int) sum / this.lits.length;
     }
 
+    @Pure
     public boolean canBePropagatedMultipleTimes() {
         return false;
     }
 
+    @Pure
     public Constr toConstraint() {
         return this;
     }
 
+    @Impure
     public void calcReasonOnTheFly(int p, IVecInt trail, IVecInt outReason) {
         calcReason(p, outReason);
     }

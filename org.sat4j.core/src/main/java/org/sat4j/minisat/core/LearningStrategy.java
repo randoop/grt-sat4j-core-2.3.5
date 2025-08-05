@@ -29,6 +29,7 @@
  *******************************************************************************/
 package org.sat4j.minisat.core;
 
+import org.checkerframework.dataflow.qual.Impure;
 import java.io.Serializable;
 
 /**
@@ -45,11 +46,15 @@ public interface LearningStrategy<D extends DataStructureFactory> extends
      * metrics/parameters based on the input formula.
      * 
      */
+    @Impure
     void init();
 
+    @Impure
     void learns(Constr constr);
 
+    @Impure
     void setVarActivityListener(VarActivityListener s);
 
+    @Impure
     void setSolver(Solver<D> s);
 }

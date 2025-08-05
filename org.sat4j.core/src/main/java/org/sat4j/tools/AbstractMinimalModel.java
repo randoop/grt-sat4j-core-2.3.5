@@ -1,5 +1,6 @@
 package org.sat4j.tools;
 
+import org.checkerframework.dataflow.qual.Impure;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -17,6 +18,7 @@ public class AbstractMinimalModel extends SolverDecorator<ISolver> {
     protected final SortedSet<Integer> pLiterals;
     protected final SolutionFoundListener modelListener;
 
+    @Impure
     public static IVecInt positiveLiterals(ISolver solver) {
         IVecInt literals = new VecInt(solver.nVars());
         for (int i = 1; i <= solver.nVars(); i++) {
@@ -25,6 +27,7 @@ public class AbstractMinimalModel extends SolverDecorator<ISolver> {
         return literals;
     }
 
+    @Impure
     public static IVecInt negativeLiterals(ISolver solver) {
         IVecInt literals = new VecInt(solver.nVars());
         for (int i = 1; i <= solver.nVars(); i++) {
@@ -33,19 +36,23 @@ public class AbstractMinimalModel extends SolverDecorator<ISolver> {
         return literals;
     }
 
+    @Impure
     public AbstractMinimalModel(ISolver solver) {
         this(solver, SolutionFoundListener.VOID);
     }
 
+    @Impure
     public AbstractMinimalModel(ISolver solver, IVecInt p) {
         this(solver, p, SolutionFoundListener.VOID);
     }
 
+    @Impure
     public AbstractMinimalModel(ISolver solver,
             SolutionFoundListener modelListener) {
         this(solver, negativeLiterals(solver), modelListener);
     }
 
+    @Impure
     public AbstractMinimalModel(ISolver solver, IVecInt p,
             SolutionFoundListener modelListener) {
         super(solver);

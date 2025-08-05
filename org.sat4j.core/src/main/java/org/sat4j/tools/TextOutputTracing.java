@@ -29,6 +29,8 @@
  *******************************************************************************/
 package org.sat4j.tools;
 
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import java.util.Map;
 
 import org.sat4j.specs.IConstr;
@@ -52,10 +54,12 @@ public class TextOutputTracing<T> implements SearchListener<ISolverService> {
     /**
      * @since 2.1
      */
+    @SideEffectFree
     public TextOutputTracing(Map<Integer, T> mapping) {
         this.mapping = mapping;
     }
 
+    @SideEffectFree
     private String node(int dimacs) {
 
         if (this.mapping != null) {
@@ -71,6 +75,7 @@ public class TextOutputTracing<T> implements SearchListener<ISolverService> {
         return Integer.toString(dimacs);
     }
 
+    @Impure
     public void assuming(int p) {
         System.out.println("assuming " + node(p));
     }
@@ -78,14 +83,17 @@ public class TextOutputTracing<T> implements SearchListener<ISolverService> {
     /**
      * @since 2.1
      */
+    @Impure
     public void propagating(int p, IConstr reason) {
         System.out.println("propagating " + node(p));
     }
 
+    @Impure
     public void backtracking(int p) {
         System.out.println("backtracking " + node(p));
     }
 
+    @Impure
     public void adding(int p) {
         System.out.println("adding " + node(p));
     }
@@ -93,6 +101,7 @@ public class TextOutputTracing<T> implements SearchListener<ISolverService> {
     /**
      * @since 2.1
      */
+    @Impure
     public void learn(IConstr clause) {
         System.out.println("learning " + clause);
 
@@ -101,11 +110,13 @@ public class TextOutputTracing<T> implements SearchListener<ISolverService> {
     /**
      * @since 2.3.4
      */
+    @Impure
     public void learnUnit(int p) {
         System.out.println("learning unit " + p);
 
     }
 
+    @SideEffectFree
     public void delete(int[] clause) {
 
     }
@@ -113,6 +124,7 @@ public class TextOutputTracing<T> implements SearchListener<ISolverService> {
     /**
      * @since 2.1
      */
+    @Impure
     public void conflictFound(IConstr confl, int dlevel, int trailLevel) {
         System.out.println("conflict ");
     }
@@ -120,33 +132,40 @@ public class TextOutputTracing<T> implements SearchListener<ISolverService> {
     /**
      * @since 2.1
      */
+    @Impure
     public void conflictFound(int p) {
         System.out.println("conflict during propagation");
     }
 
+    @Impure
     public void solutionFound(int[] model, RandomAccessModel lazyModel) {
         System.out.println("solution found ");
     }
 
+    @SideEffectFree
     public void beginLoop() {
     }
 
+    @SideEffectFree
     public void start() {
     }
 
     /**
      * @since 2.1
      */
+    @SideEffectFree
     public void end(Lbool result) {
     }
 
     /**
      * @since 2.2
      */
+    @Impure
     public void restarting() {
         System.out.println("restarting ");
     }
 
+    @Impure
     public void backjump(int backjumpLevel) {
         System.out.println("backjumping to decision level " + backjumpLevel);
     }
@@ -154,12 +173,14 @@ public class TextOutputTracing<T> implements SearchListener<ISolverService> {
     /**
      * @since 2.3.2
      */
+    @SideEffectFree
     public void init(ISolverService solverService) {
     }
 
     /**
      * @since 2.3.2
      */
+    @Impure
     public void cleaning() {
         System.out.println("cleaning");
     }

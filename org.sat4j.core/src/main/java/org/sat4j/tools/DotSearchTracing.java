@@ -29,6 +29,9 @@
  *******************************************************************************/
 package org.sat4j.tools;
 
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -75,6 +78,7 @@ public class DotSearchTracing<T> extends SearchListenerAdapter<ISolverService> {
     /**
      * @since 2.1
      */
+    @Impure
     public DotSearchTracing(final String fileNameToSave, Map<Integer, T> mapping) {
         this.pile = new Vec<String>();
         this.mapping = mapping;
@@ -85,6 +89,7 @@ public class DotSearchTracing<T> extends SearchListenerAdapter<ISolverService> {
         }
     }
 
+    @SideEffectFree
     private String node(int dimacs) {
         if (this.mapping != null) {
             int var = Math.abs(dimacs);
@@ -99,6 +104,7 @@ public class DotSearchTracing<T> extends SearchListenerAdapter<ISolverService> {
         return Integer.toString(dimacs);
     }
 
+    @Impure
     @Override
     public final void assuming(final int p) {
         final int absP = Math.abs(p);
@@ -121,6 +127,7 @@ public class DotSearchTracing<T> extends SearchListenerAdapter<ISolverService> {
     /**
      * @since 2.1
      */
+    @Impure
     @Override
     public final void propagating(final int p, IConstr reason) {
         String newName = this.currentNodeName + "." + p;
@@ -140,6 +147,7 @@ public class DotSearchTracing<T> extends SearchListenerAdapter<ISolverService> {
         this.estOrange = false;
     }
 
+    @Impure
     @Override
     public final void backtracking(final int p) {
         final String temp = this.pile.last();
@@ -149,6 +157,7 @@ public class DotSearchTracing<T> extends SearchListenerAdapter<ISolverService> {
         this.currentNodeName = temp;
     }
 
+    @Impure
     @Override
     public final void adding(final int p) {
         this.estOrange = true;
@@ -157,10 +166,12 @@ public class DotSearchTracing<T> extends SearchListenerAdapter<ISolverService> {
     /**
      * @since 2.1
      */
+    @SideEffectFree
     @Override
     public final void learn(final IConstr clause) {
     }
 
+    @SideEffectFree
     @Override
     public final void delete(final int[] clause) {
     }
@@ -168,6 +179,7 @@ public class DotSearchTracing<T> extends SearchListenerAdapter<ISolverService> {
     /**
      * @since 2.1
      */
+    @Impure
     @Override
     public final void conflictFound(IConstr confl, int dlevel, int trailLevel) {
         saveLine(lineTab("\"" + this.currentNodeName
@@ -177,22 +189,26 @@ public class DotSearchTracing<T> extends SearchListenerAdapter<ISolverService> {
     /**
      * @since 2.1
      */
+    @Impure
     @Override
     public final void conflictFound(int p) {
         saveLine(lineTab("\"" + this.currentNodeName
                 + "\" [label=\"\", shape=box, color=\"red\", style=filled]"));
     }
 
+    @Impure
     @Override
     public final void solutionFound(int[] model, RandomAccessModel lazyModel) {
         saveLine(lineTab("\"" + this.currentNodeName
                 + "\" [label=\"\", shape=box, color=\"green\", style=filled]"));
     }
 
+    @SideEffectFree
     @Override
     public final void beginLoop() {
     }
 
+    @Impure
     @Override
     public final void start() {
         saveLine("graph G {");
@@ -201,15 +217,18 @@ public class DotSearchTracing<T> extends SearchListenerAdapter<ISolverService> {
     /**
      * @since 2.1
      */
+    @Impure
     @Override
     public final void end(Lbool result) {
         saveLine("}");
     }
 
+    @Pure
     private String lineTab(final String line) {
         return "\t" + line;
     }
 
+    @Impure
     private void saveLine(final String line) {
         try {
             this.out.write(line + '\n');
@@ -221,6 +240,7 @@ public class DotSearchTracing<T> extends SearchListenerAdapter<ISolverService> {
         }
     }
 
+    @Impure
     private void readObject(ObjectInputStream stream) throws IOException,
             ClassNotFoundException {
         // if the solver is serialized, out is linked to stdout

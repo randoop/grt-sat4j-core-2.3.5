@@ -29,6 +29,10 @@
  *******************************************************************************/
 package org.sat4j.tools;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.Deterministic;
 import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.util.HashMap;
@@ -87,90 +91,116 @@ public class StatisticsSolver implements ISolver {
      */
     private final Map<Integer, Counter> sizes = new HashMap<Integer, Counter>();
 
+    @Pure
     public int[] model() {
         throw new UnsupportedOperationException(
                 THAT_SOLVER_ONLY_COMPUTE_STATISTICS);
     }
 
+    @Pure
     public boolean model(int var) {
         throw new UnsupportedOperationException(
                 THAT_SOLVER_ONLY_COMPUTE_STATISTICS);
     }
 
+    @Pure
     public int[] primeImplicant() {
         throw new UnsupportedOperationException(
                 THAT_SOLVER_ONLY_COMPUTE_STATISTICS);
     }
 
+    @Pure
     public boolean primeImplicant(int p) {
         throw new UnsupportedOperationException(
                 THAT_SOLVER_ONLY_COMPUTE_STATISTICS);
     }
 
+    @Pure
+    @Deterministic
     public boolean isSatisfiable() throws TimeoutException {
         throw new TimeoutException(THAT_SOLVER_ONLY_COMPUTE_STATISTICS);
     }
 
+    @Pure
+    @Deterministic
     public boolean isSatisfiable(IVecInt assumps, boolean globalTimeout)
             throws TimeoutException {
         throw new TimeoutException(THAT_SOLVER_ONLY_COMPUTE_STATISTICS);
     }
 
+    @Pure
+    @Deterministic
     public boolean isSatisfiable(boolean globalTimeout) throws TimeoutException {
         throw new TimeoutException(THAT_SOLVER_ONLY_COMPUTE_STATISTICS);
     }
 
+    @Pure
+    @Deterministic
     public boolean isSatisfiable(IVecInt assumps) throws TimeoutException {
         throw new TimeoutException(THAT_SOLVER_ONLY_COMPUTE_STATISTICS);
     }
 
+    @Pure
+    @Deterministic
     public int[] findModel() throws TimeoutException {
         throw new TimeoutException(THAT_SOLVER_ONLY_COMPUTE_STATISTICS);
     }
 
+    @Pure
+    @Deterministic
     public int[] findModel(IVecInt assumps) throws TimeoutException {
         throw new TimeoutException(THAT_SOLVER_ONLY_COMPUTE_STATISTICS);
     }
 
+    @Pure
     public int nConstraints() {
         return expectedNumberOfConstraints;
     }
 
+    @Impure
     public int newVar(int howmany) {
         this.nbvars = howmany;
         sizeoccurrences = new IVecInt[(howmany + 1) << 1];
         return howmany;
     }
 
+    @Pure
     public int nVars() {
         return this.nbvars;
     }
 
+    @SideEffectFree
     @Deprecated
     public void printInfos(PrintWriter out, String prefix) {
 
     }
 
+    @SideEffectFree
     public void printInfos(PrintWriter out) {
     }
 
+    @Pure
     @Deprecated
     public int newVar() {
         throw new UnsupportedOperationException(NOT_IMPLEMENTED_YET);
     }
 
+    @Pure
     public int nextFreeVarId(boolean reserve) {
         throw new UnsupportedOperationException(NOT_IMPLEMENTED_YET);
     }
 
+    @SideEffectFree
     public void registerLiteral(int p) {
         throw new UnsupportedOperationException(NOT_IMPLEMENTED_YET);
     }
 
+    @Impure
     public void setExpectedNumberOfClauses(int nb) {
         this.expectedNumberOfConstraints = nb;
     }
 
+    @Impure
     public IConstr addClause(IVecInt literals) throws ContradictionException {
         int size = literals.size();
         Counter counter = sizes.get(size);
@@ -209,75 +239,92 @@ public class StatisticsSolver implements ISolver {
         return null;
     }
 
+    @Pure
     public IConstr addBlockingClause(IVecInt literals)
             throws ContradictionException {
         throw new UnsupportedOperationException(NOT_IMPLEMENTED_YET);
     }
 
+    @Pure
     public boolean removeConstr(IConstr c) {
         throw new UnsupportedOperationException(NOT_IMPLEMENTED_YET);
     }
 
+    @Pure
     public boolean removeSubsumedConstr(IConstr c) {
         throw new UnsupportedOperationException(NOT_IMPLEMENTED_YET);
     }
 
+    @SideEffectFree
     public void addAllClauses(IVec<IVecInt> clauses)
             throws ContradictionException {
         throw new UnsupportedOperationException(NOT_IMPLEMENTED_YET);
     }
 
+    @Pure
     public IConstr addAtMost(IVecInt literals, int degree)
             throws ContradictionException {
         throw new UnsupportedOperationException(NOT_IMPLEMENTED_YET);
     }
 
+    @Pure
     public IConstr addAtLeast(IVecInt literals, int degree)
             throws ContradictionException {
         throw new UnsupportedOperationException(NOT_IMPLEMENTED_YET);
     }
 
+    @Pure
     public IConstr addExactly(IVecInt literals, int n)
             throws ContradictionException {
         throw new UnsupportedOperationException(NOT_IMPLEMENTED_YET);
     }
 
+    @SideEffectFree
     public void setTimeout(int t) {
     }
 
+    @SideEffectFree
     public void setTimeoutOnConflicts(int count) {
         throw new UnsupportedOperationException(NOT_IMPLEMENTED_YET);
     }
 
+    @SideEffectFree
     public void setTimeoutMs(long t) {
         throw new UnsupportedOperationException(NOT_IMPLEMENTED_YET);
     }
 
+    @Pure
     public int getTimeout() {
         throw new UnsupportedOperationException(NOT_IMPLEMENTED_YET);
     }
 
+    @Pure
     public long getTimeoutMs() {
         throw new UnsupportedOperationException(NOT_IMPLEMENTED_YET);
     }
 
+    @SideEffectFree
     public void expireTimeout() {
         throw new UnsupportedOperationException(NOT_IMPLEMENTED_YET);
     }
 
+    @SideEffectFree
     public void reset() {
     }
 
+    @SideEffectFree
     @Deprecated
     public void printStat(PrintStream out, String prefix) {
         throw new UnsupportedOperationException(NOT_IMPLEMENTED_YET);
     }
 
+    @SideEffectFree
     @Deprecated
     public void printStat(PrintWriter out, String prefix) {
         throw new UnsupportedOperationException(NOT_IMPLEMENTED_YET);
     }
 
+    @Impure
     public void printStat(PrintWriter out) {
         int realNumberOfVariables = 0;
         int realNumberOfLiterals = 0;
@@ -355,73 +402,91 @@ public class StatisticsSolver implements ISolver {
                         - dualhorn);
     }
 
+    @Pure
     public Map<String, Number> getStat() {
         throw new UnsupportedOperationException(NOT_IMPLEMENTED_YET);
     }
 
+    @Pure
     public String toString(String prefix) {
         return prefix + "Statistics about the benchmarks";
     }
 
+    @SideEffectFree
     public void clearLearntClauses() {
         throw new UnsupportedOperationException(NOT_IMPLEMENTED_YET);
     }
 
+    @SideEffectFree
     public void setDBSimplificationAllowed(boolean status) {
     }
 
+    @Pure
     public boolean isDBSimplificationAllowed() {
         throw new UnsupportedOperationException(NOT_IMPLEMENTED_YET);
     }
 
+    @SideEffectFree
     public <S extends ISolverService> void setSearchListener(
             SearchListener<S> sl) {
         throw new UnsupportedOperationException(NOT_IMPLEMENTED_YET);
     }
 
+    @Pure
     public <S extends ISolverService> SearchListener<S> getSearchListener() {
         throw new UnsupportedOperationException(NOT_IMPLEMENTED_YET);
     }
 
+    @Pure
     public boolean isVerbose() {
         throw new UnsupportedOperationException(NOT_IMPLEMENTED_YET);
     }
 
+    @SideEffectFree
     public void setVerbose(boolean value) {
     }
 
+    @SideEffectFree
     public void setLogPrefix(String prefix) {
         throw new UnsupportedOperationException(NOT_IMPLEMENTED_YET);
     }
 
+    @Pure
     public String getLogPrefix() {
         throw new UnsupportedOperationException(NOT_IMPLEMENTED_YET);
     }
 
+    @Pure
     public IVecInt unsatExplanation() {
         throw new UnsupportedOperationException(NOT_IMPLEMENTED_YET);
     }
 
+    @Pure
     public int[] modelWithInternalVariables() {
         throw new UnsupportedOperationException(NOT_IMPLEMENTED_YET);
     }
 
+    @Pure
     public int realNumberOfVariables() {
         return nbvars;
     }
 
+    @Pure
     public boolean isSolverKeptHot() {
         throw new UnsupportedOperationException(NOT_IMPLEMENTED_YET);
     }
 
+    @SideEffectFree
     public void setKeepSolverHot(boolean keepHot) {
         throw new UnsupportedOperationException(NOT_IMPLEMENTED_YET);
     }
 
+    @Pure
     public ISolver getSolvingEngine() {
         throw new UnsupportedOperationException(NOT_IMPLEMENTED_YET);
     }
 
+    @SideEffectFree
     public void setUnitClauseProvider(UnitClauseProvider ucp) {
         throw new UnsupportedOperationException(NOT_IMPLEMENTED_YET);
     }

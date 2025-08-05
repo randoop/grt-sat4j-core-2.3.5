@@ -29,6 +29,9 @@
  *******************************************************************************/
 package org.sat4j.minisat.restarts;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.Pure;
 import org.sat4j.minisat.core.Constr;
 import org.sat4j.minisat.core.RestartStrategy;
 import org.sat4j.minisat.core.SearchParams;
@@ -59,6 +62,7 @@ public final class LubyRestarts implements RestartStrategy {
      * 
      * @return the current value of the luby sequence.
      */
+    @Pure
     public int luby() {
         return this.vn;
     }
@@ -71,6 +75,7 @@ public final class LubyRestarts implements RestartStrategy {
      * @return the new current value of the luby sequence.
      * @see #luby()
      */
+    @Impure
     public int nextLuby() {
         if ((this.un & -this.un) == this.vn) {
             this.un = this.un + 1;
@@ -86,6 +91,7 @@ public final class LubyRestarts implements RestartStrategy {
     private int bound;
     private int conflictcount;
 
+    @Impure
     public LubyRestarts() {
         this(DEFAULT_LUBY_FACTOR); // uses TiniSAT default
     }
@@ -95,55 +101,67 @@ public final class LubyRestarts implements RestartStrategy {
      *            the factor used for the Luby series.
      * @since 2.1
      */
+    @Impure
     public LubyRestarts(int factor) {
         setFactor(factor);
     }
 
+    @Impure
     public void setFactor(int factor) {
         this.factor = factor;
     }
 
+    @Pure
     public int getFactor() {
         return this.factor;
     }
 
+    @Impure
     public void init(SearchParams params, SolverStats stats) {
         this.un = 1;
         this.vn = 1;
         this.bound = luby() * this.factor;
     }
 
+    @Pure
     public long nextRestartNumberOfConflict() {
         return this.bound;
     }
 
+    @Impure
     public void onRestart() {
         this.bound = nextLuby() * this.factor;
         this.conflictcount = 0;
     }
 
+    @Pure
     @Override
     public String toString() {
         return "luby style (SATZ_rand, TiniSAT) restarts strategy with factor "
                 + this.factor;
     }
 
+    @Pure
     public boolean shouldRestart() {
         return this.conflictcount >= this.bound;
     }
 
+    @Impure
     public void onBackjumpToRootLevel() {
         this.conflictcount = 0;
     }
 
+    @Impure
     public void reset() {
         this.conflictcount = 0;
     }
 
+    @Impure
     public void newConflict() {
         this.conflictcount++;
     }
 
+    @SideEffectFree
     public void newLearnedClause(Constr learned, int trailLevel) {
     }
 }

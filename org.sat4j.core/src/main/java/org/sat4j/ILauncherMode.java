@@ -29,6 +29,9 @@
  *******************************************************************************/
 package org.sat4j;
 
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.dataflow.qual.Pure;
 import java.io.PrintWriter;
 
 import org.sat4j.core.Vec;
@@ -80,6 +83,7 @@ public interface ILauncherMode extends SolutionFoundListener {
      *            indicates whether the solution line shound be displayed or not
      *            (not recommended for large solutions)
      */
+    @Impure
     void displayResult(ISolver solver, IProblem problem, ILogAble logger,
             PrintWriter out, Reader reader, long beginTime,
             boolean displaySolutionLine);
@@ -98,6 +102,7 @@ public interface ILauncherMode extends SolutionFoundListener {
      *            the time at which the solver starts
      * @return
      */
+    @Impure
     void solve(IProblem problem, Reader reader, ILogAble logger,
             PrintWriter out, long beginTime);
 
@@ -107,6 +112,7 @@ public interface ILauncherMode extends SolutionFoundListener {
      * 
      * @param isIncomplete
      */
+    @Impure
     void setIncomplete(boolean isIncomplete);
 
     /**
@@ -115,12 +121,14 @@ public interface ILauncherMode extends SolutionFoundListener {
      * 
      * @return
      */
+    @Pure
     ExitCode getCurrentExitCode();
 
     /**
      * Allow to set a specific exit code to the launcher (in case of trivial
      * unsatisfiability for instance).
      */
+    @Impure
     void setExitCode(ExitCode exitCode);
 
     /**
@@ -131,6 +139,7 @@ public interface ILauncherMode extends SolutionFoundListener {
 
         private ExitCode exitCode = ExitCode.UNKNOWN;
 
+        @Impure
         public void displayResult(ISolver solver, IProblem problem,
                 ILogAble logger, PrintWriter out, Reader reader,
                 long beginTime, boolean displaySolutionLine) {
@@ -187,6 +196,7 @@ public interface ILauncherMode extends SolutionFoundListener {
         private PrintWriter out;
         private long beginTime;
 
+        @Impure
         public void solve(IProblem problem, Reader reader, ILogAble logger,
                 PrintWriter out, long beginTime) {
             this.exitCode = ExitCode.UNKNOWN;
@@ -209,13 +219,16 @@ public interface ILauncherMode extends SolutionFoundListener {
 
         }
 
+        @SideEffectFree
         public void setIncomplete(boolean isIncomplete) {
         }
 
+        @Pure
         public ExitCode getCurrentExitCode() {
             return this.exitCode;
         };
 
+        @Impure
         public void onSolutionFound(int[] solution) {
             this.nbSolutionFound++;
             this.exitCode = ExitCode.SATISFIABLE;
@@ -223,16 +236,19 @@ public interface ILauncherMode extends SolutionFoundListener {
                     (System.currentTimeMillis() - beginTime) / 1000.0);
         }
 
+        @SideEffectFree
         public void onSolutionFound(IVecInt solution) {
             throw new UnsupportedOperationException("Not implemented yet!");
         }
 
+        @Impure
         public void onUnsatTermination() {
             if (this.exitCode == ExitCode.SATISFIABLE) {
                 this.exitCode = ExitCode.OPTIMUM_FOUND;
             }
         }
 
+        @Impure
         public void setExitCode(ExitCode exitCode) {
             this.exitCode = exitCode;
         }
@@ -252,10 +268,12 @@ public interface ILauncherMode extends SolutionFoundListener {
 
         private boolean isIncomplete = false;
 
+        @Impure
         public void setIncomplete(boolean isIncomplete) {
             this.isIncomplete = isIncomplete;
         }
 
+        @Impure
         public void displayResult(ISolver solver, IProblem problem,
                 ILogAble logger, PrintWriter out, Reader reader,
                 long beginTime, boolean displaySolutionLine) {
@@ -300,6 +318,7 @@ public interface ILauncherMode extends SolutionFoundListener {
                     + (System.currentTimeMillis() - beginTime) / 1000.0);
         }
 
+        @Impure
         public void solve(IProblem problem, Reader reader, ILogAble logger,
                 PrintWriter out, long beginTime) {
             boolean isSatisfiable = false;
@@ -343,22 +362,27 @@ public interface ILauncherMode extends SolutionFoundListener {
 
         }
 
+        @Pure
         public ExitCode getCurrentExitCode() {
             return exitCode;
         }
 
+        @SideEffectFree
         public void onSolutionFound(int[] solution) {
             throw new UnsupportedOperationException("Not implemented yet!");
         }
 
+        @SideEffectFree
         public void onSolutionFound(IVecInt solution) {
             throw new UnsupportedOperationException("Not implemented yet!");
         }
 
+        @SideEffectFree
         public void onUnsatTermination() {
             // do nothing
         }
 
+        @Impure
         public void setExitCode(ExitCode exitCode) {
             this.exitCode = exitCode;
         }

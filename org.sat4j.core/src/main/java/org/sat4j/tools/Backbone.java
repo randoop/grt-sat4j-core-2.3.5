@@ -29,6 +29,8 @@
  *******************************************************************************/
 package org.sat4j.tools;
 
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.sat4j.core.VecInt;
 import org.sat4j.specs.ISolver;
 import org.sat4j.specs.IVecInt;
@@ -45,6 +47,7 @@ import org.sat4j.specs.TimeoutException;
  */
 public class Backbone {
 
+    @SideEffectFree
     private Backbone() {
 
     }
@@ -61,6 +64,7 @@ public class Backbone {
      * @return
      * @throws TimeoutException
      */
+    @Impure
     public static IVecInt compute(ISolver solver) throws TimeoutException {
         return compute(solver, VecInt.EMPTY);
     }
@@ -78,6 +82,7 @@ public class Backbone {
      * @return
      * @throws TimeoutException
      */
+    @Impure
     public static IVecInt compute(ISolver solver, IVecInt assumptions)
             throws TimeoutException {
         boolean result = solver.isSatisfiable(assumptions);
@@ -88,11 +93,13 @@ public class Backbone {
 
     }
 
+    @Impure
     public static IVecInt compute(ISolver solver, int[] implicant)
             throws TimeoutException {
         return compute(solver, implicant, VecInt.EMPTY);
     }
 
+    @Impure
     public static IVecInt compute(ISolver solver, int[] implicant,
             IVecInt assumptions) throws TimeoutException {
         IVecInt litsToTest = new VecInt();
@@ -120,6 +127,7 @@ public class Backbone {
         return candidates;
     }
 
+    @Impure
     private static void removeVarNotPresentAndSatisfiedLits(int[] implicant,
             IVecInt litsToTest, int n) {
         int[] marks = new int[n + 1];

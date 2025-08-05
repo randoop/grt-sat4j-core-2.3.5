@@ -29,6 +29,9 @@
  *******************************************************************************/
 package org.sat4j.minisat.core;
 
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.sat4j.specs.ContradictionException;
 import org.sat4j.specs.IVec;
 import org.sat4j.specs.IVecInt;
@@ -52,10 +55,13 @@ public interface DataStructureFactory {
      * @throws UnsupportedOperationException
      *             there is no concrete implementation for that constraint.
      */
+    @Impure
     Constr createClause(IVecInt literals) throws ContradictionException;
 
+    @Impure
     Constr createUnregisteredClause(IVecInt literals);
 
+    @Impure
     void learnConstraint(Constr constr);
 
     /**
@@ -68,17 +74,23 @@ public interface DataStructureFactory {
      * @return a constraint stating that at least degree literals are satisfied.
      * @throws ContradictionException
      */
+    @Impure
     Constr createCardinalityConstraint(IVecInt literals, int degree)
             throws ContradictionException;
 
+    @Impure
     Constr createUnregisteredCardinalityConstraint(IVecInt literals, int degree);
 
+    @Impure
     void setUnitPropagationListener(UnitPropagationListener s);
 
+    @Impure
     void setLearner(Learner l);
 
+    @SideEffectFree
     void reset();
 
+    @Pure
     ILits getVocabulary();
 
     /**
@@ -86,6 +98,7 @@ public interface DataStructureFactory {
      * @return a vector containing all the objects to be notified of the
      *         satisfaction of that literal.
      */
+    @Impure
     IVec<Propagatable> getWatchesFor(int p);
 
     /**
@@ -93,5 +106,6 @@ public interface DataStructureFactory {
      * @param i
      *            the index of the conflicting constraint
      */
+    @Impure
     void conflictDetectedInWatchesFor(int p, int i);
 }

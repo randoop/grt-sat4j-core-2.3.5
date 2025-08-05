@@ -29,6 +29,7 @@
  *******************************************************************************/
 package org.sat4j.tools;
 
+import org.checkerframework.dataflow.qual.Impure;
 import org.sat4j.specs.IConstr;
 import org.sat4j.specs.ISolverService;
 import org.sat4j.specs.Lbool;
@@ -47,6 +48,7 @@ public class SpeedTracing extends SearchListenerAdapter<ISolverService> {
 
     private double maxY;
 
+    @Impure
     public SpeedTracing(IVisualizationTool visuTool,
             IVisualizationTool cleanVisuTool, IVisualizationTool restartVisuTool) {
         this.visuTool = visuTool;
@@ -63,6 +65,7 @@ public class SpeedTracing extends SearchListenerAdapter<ISolverService> {
         this.maxY = 0;
     }
 
+    @Impure
     @Override
     public void propagating(int p, IConstr reason) {
         this.end = System.currentTimeMillis();
@@ -83,6 +86,7 @@ public class SpeedTracing extends SearchListenerAdapter<ISolverService> {
         this.counter++;
     }
 
+    @Impure
     @Override
     public void end(Lbool result) {
         this.visuTool.end();
@@ -90,6 +94,7 @@ public class SpeedTracing extends SearchListenerAdapter<ISolverService> {
         this.restartVisuTool.end();
     }
 
+    @Impure
     @Override
     public void cleaning() {
         this.end = System.currentTimeMillis();
@@ -100,6 +105,7 @@ public class SpeedTracing extends SearchListenerAdapter<ISolverService> {
         this.restartVisuTool.addInvisiblePoint(indexClean, 0);
     }
 
+    @Impure
     @Override
     public void restarting() {
         this.end = System.currentTimeMillis();
@@ -113,6 +119,7 @@ public class SpeedTracing extends SearchListenerAdapter<ISolverService> {
         this.cleanVisuTool.addInvisiblePoint(indexRestart, 0);
     }
 
+    @Impure
     @Override
     public void start() {
         this.visuTool.init();

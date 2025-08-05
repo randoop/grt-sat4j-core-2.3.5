@@ -29,6 +29,9 @@
  *******************************************************************************/
 package org.sat4j.minisat.restarts;
 
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.dataflow.qual.Impure;
 import org.sat4j.minisat.core.CircularBuffer;
 import org.sat4j.minisat.core.Constr;
 import org.sat4j.minisat.core.RestartStrategy;
@@ -58,16 +61,19 @@ public class Glucose21Restarts implements RestartStrategy {
 
     private SolverStats stats;
 
+    @Impure
     public void reset() {
         sumOfAllLBD = 0;
         bufferLBD.clear();
         bufferTrail.clear();
     }
 
+    @SideEffectFree
     public void newConflict() {
 
     }
 
+    @Impure
     public void newLearnedClause(Constr learned, int trailLevel) {
         // on conflict
         int lbd = (int) learned.getActivity();
@@ -83,15 +89,19 @@ public class Glucose21Restarts implements RestartStrategy {
         }
     }
 
+    @Impure
     public void init(SearchParams params, SolverStats stats) {
         this.stats = stats;
         reset();
     }
 
+    @Pure
     public long nextRestartNumberOfConflict() {
         return 0;
     }
 
+    @Pure
+    @Impure
     public boolean shouldRestart() {
         // was
         // ... && bufferLBD.average() * 0.8 > sumOfAllLBD / stats.conflicts
@@ -100,13 +110,16 @@ public class Glucose21Restarts implements RestartStrategy {
                 && bufferLBD.average() * stats.conflicts * 4L > sumOfAllLBD * 5L;
     }
 
+    @Impure
     public void onRestart() {
         bufferLBD.clear();
     }
 
+    @SideEffectFree
     public void onBackjumpToRootLevel() {
     }
 
+    @Pure
     @Override
     public String toString() {
         return "Glucose 2.1 dynamic restart strategy";

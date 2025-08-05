@@ -29,6 +29,9 @@
  *******************************************************************************/
 package org.sat4j.tools;
 
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.dataflow.qual.Impure;
 import org.sat4j.core.VecInt;
 import org.sat4j.specs.ContradictionException;
 import org.sat4j.specs.IOptimizationProblem;
@@ -52,10 +55,14 @@ public class OptToSatAdapter extends SolverDecorator<ISolver> {
 
     private final SolutionFoundListener sfl;
 
+    @SideEffectFree
+    @Impure
     public OptToSatAdapter(IOptimizationProblem problem) {
         this(problem, SolutionFoundListener.VOID);
     }
 
+    @SideEffectFree
+    @Impure
     public OptToSatAdapter(IOptimizationProblem problem,
             SolutionFoundListener sfl) {
         super((ISolver) problem);
@@ -63,28 +70,33 @@ public class OptToSatAdapter extends SolverDecorator<ISolver> {
         this.sfl = sfl;
     }
 
+    @Impure
     @Override
     public void reset() {
         super.reset();
         this.optimalValueForced = false;
     }
 
+    @Impure
     @Override
     public boolean isSatisfiable() throws TimeoutException {
         return isSatisfiable(VecInt.EMPTY);
     }
 
+    @Impure
     @Override
     public boolean isSatisfiable(boolean global) throws TimeoutException {
         return isSatisfiable();
     }
 
+    @Impure
     @Override
     public boolean isSatisfiable(IVecInt myAssumps, boolean global)
             throws TimeoutException {
         return isSatisfiable(myAssumps);
     }
 
+    @Impure
     @Override
     public boolean isSatisfiable(IVecInt myAssumps) throws TimeoutException {
         this.assumps.clear();
@@ -123,21 +135,25 @@ public class OptToSatAdapter extends SolverDecorator<ISolver> {
         return satisfiable;
     }
 
+    @Impure
     @Override
     public int[] model() {
         return this.problem.model();
     }
 
+    @Impure
     @Override
     public boolean model(int var) {
         return this.problem.model(var);
     }
 
+    @Impure
     @Override
     public int[] modelWithInternalVariables() {
         return decorated().modelWithInternalVariables();
     }
 
+    @Impure
     @Override
     public int[] findModel() throws TimeoutException {
         if (isSatisfiable()) {
@@ -146,6 +162,7 @@ public class OptToSatAdapter extends SolverDecorator<ISolver> {
         return null;
     }
 
+    @Impure
     @Override
     public int[] findModel(IVecInt assumps) throws TimeoutException {
         if (isSatisfiable(assumps)) {
@@ -154,6 +171,7 @@ public class OptToSatAdapter extends SolverDecorator<ISolver> {
         return null;
     }
 
+    @Impure
     @Override
     public String toString(String prefix) {
         return prefix + "Optimization to SAT adapter\n"
@@ -166,6 +184,8 @@ public class OptToSatAdapter extends SolverDecorator<ISolver> {
      * 
      * @return true is the solution found is indeed optimal.
      */
+    @Pure
+    @Impure
     public boolean isOptimal() {
         return this.problem.isOptimal();
     }

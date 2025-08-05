@@ -29,6 +29,8 @@
  *******************************************************************************/
 package org.sat4j.minisat.orders;
 
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.Impure;
 import static org.sat4j.core.LiteralsUtils.negLit;
 
 import org.sat4j.minisat.core.IPhaseSelectionStrategy;
@@ -43,6 +45,7 @@ abstract class AbstractPhaserecordingSelectionStrategy implements
 
     protected int[] phase;
 
+    @Impure
     public void init(int nlength) {
         if (this.phase == null || this.phase.length < nlength) {
             this.phase = new int[nlength];
@@ -52,10 +55,12 @@ abstract class AbstractPhaserecordingSelectionStrategy implements
         }
     }
 
+    @Impure
     public void init(int var, int p) {
         this.phase[var] = p;
     }
 
+    @Pure
     public int select(int var) {
         return this.phase[var];
     }

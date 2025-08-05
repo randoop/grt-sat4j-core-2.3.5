@@ -30,6 +30,7 @@
 
 package org.sat4j.tools.encoding;
 
+import org.checkerframework.dataflow.qual.Impure;
 import org.sat4j.core.ConstrGroup;
 import org.sat4j.core.VecInt;
 import org.sat4j.specs.ContradictionException;
@@ -57,6 +58,7 @@ public class Binomial extends EncodingStrategyAdapter {
      */
     private static final long serialVersionUID = 1L;
 
+    @Impure
     @Override
     public IConstr addAtMost(ISolver solver, IVecInt literals, int degree)
             throws ContradictionException {
@@ -79,6 +81,7 @@ public class Binomial extends EncodingStrategyAdapter {
 
     }
 
+    @Impure
     @Override
     public IConstr addAtMostOne(ISolver solver, IVecInt literals)
             throws ContradictionException {
@@ -97,6 +100,7 @@ public class Binomial extends EncodingStrategyAdapter {
         return group;
     }
 
+    @Impure
     @Override
     public IConstr addExactlyOne(ISolver solver, IVecInt literals)
             throws ContradictionException {
@@ -108,6 +112,7 @@ public class Binomial extends EncodingStrategyAdapter {
         return group;
     }
 
+    @Impure
     @Override
     public IConstr addExactly(ISolver solver, IVecInt literals, int degree)
             throws ContradictionException {

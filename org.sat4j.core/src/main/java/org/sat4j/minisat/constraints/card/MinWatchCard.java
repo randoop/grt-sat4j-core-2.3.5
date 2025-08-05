@@ -29,6 +29,9 @@
  *******************************************************************************/
 package org.sat4j.minisat.constraints.card;
 
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import java.io.Serializable;
 
 import org.sat4j.minisat.constraints.cnf.Lits;
@@ -88,6 +91,7 @@ public class MinWatchCard implements Propagatable, Constr, Undoable,
      * @param degree
      *            degree of the constraint
      */
+    @Impure
     public MinWatchCard(ILits voc, IVecInt ps, boolean moreThan, int degree) {
         // On met en place les valeurs
         this.voc = voc;
@@ -145,6 +149,7 @@ public class MinWatchCard implements Propagatable, Constr, Undoable,
      * @param degree
      *            degree of the constraint
      */
+    @Impure
     protected MinWatchCard(ILits voc, IVecInt ps, int degree) {
         // On met en place les valeurs
         this.voc = voc;
@@ -166,6 +171,7 @@ public class MinWatchCard implements Propagatable, Constr, Undoable,
      *            the reason to be computed. Vector of literals.
      * @see Constr#calcReason(int p, IVecInt outReason)
      */
+    @Impure
     public void calcReason(int p, IVecInt outReason) {
         for (int lit : this.lits) {
             if (this.voc.isFalsified(lit)) {
@@ -180,6 +186,7 @@ public class MinWatchCard implements Propagatable, Constr, Undoable,
      * @return activity value of the constraint
      * @see Constr#getActivity()
      */
+    @Pure
     public double getActivity() {
         return 0;
     }
@@ -191,9 +198,11 @@ public class MinWatchCard implements Propagatable, Constr, Undoable,
      *            value to be added to the activity of the constraint
      * @see Constr#incActivity(double claInc)
      */
+    @SideEffectFree
     public void incActivity(double claInc) {
     }
 
+    @SideEffectFree
     public void setActivity(double d) {
     }
 
@@ -203,6 +212,7 @@ public class MinWatchCard implements Propagatable, Constr, Undoable,
      * @return false : a MinWatchCard cannot be learnt.
      * @see Constr#learnt()
      */
+    @Pure
     public boolean learnt() {
         return false;
     }
@@ -217,6 +227,7 @@ public class MinWatchCard implements Propagatable, Constr, Undoable,
      * @return value to be added to the degree. This value is less than or equal
      *         to 0.
      */
+    @Impure
     protected static int linearisation(ILits voc, IVecInt ps) {
         // Stockage de l'influence des modifications
         int modif = 0;
@@ -251,6 +262,7 @@ public class MinWatchCard implements Propagatable, Constr, Undoable,
      * @return true
      * @see Constr#locked()
      */
+    @Pure
     public boolean locked() {
         return true;
     }
@@ -273,6 +285,7 @@ public class MinWatchCard implements Propagatable, Constr, Undoable,
      * @return a new cardinality constraint, null if it is a tautology
      * @throws ContradictionException
      */
+    @Impure
     public static Constr minWatchCardNew(UnitPropagationListener s, ILits voc,
             IVecInt ps, boolean moreThan, int degree)
             throws ContradictionException {
@@ -307,6 +320,7 @@ public class MinWatchCard implements Propagatable, Constr, Undoable,
     /**
      * normalize the constraint (cf. P.Barth normalization)
      */
+    @Impure
     public final void normalize() {
         // Gestion du signe
         if (!this.moreThan) {
@@ -330,6 +344,7 @@ public class MinWatchCard implements Propagatable, Constr, Undoable,
      *            falsified literal
      * @return false if an inconistency is detected, else true
      */
+    @Impure
     public boolean propagate(UnitPropagationListener s, int p) {
 
         // Si la contrainte est responsable de propagation unitaire
@@ -386,6 +401,7 @@ public class MinWatchCard implements Propagatable, Constr, Undoable,
      * 
      * @since 2.1
      */
+    @Impure
     public void remove(UnitPropagationListener upl) {
         for (int i = 0; i < Math.min(this.degree + 1, this.lits.length); i++) {
             this.voc.watches(this.lits[i] ^ 1).remove(this);
@@ -398,6 +414,7 @@ public class MinWatchCard implements Propagatable, Constr, Undoable,
      * @param d
      *            rescale factor
      */
+    @SideEffectFree
     public void rescaleBy(double d) {
         // TODO rescaleBy
     }
@@ -407,6 +424,8 @@ public class MinWatchCard implements Propagatable, Constr, Undoable,
      * 
      * @return true if the constraint is satisfied, else false
      */
+    @Pure
+    @Impure
     public boolean simplify() {
         // Calcul de la valeur actuelle
         for (int i = 0, count = 0; i < this.lits.length; i++) {
@@ -423,6 +442,7 @@ public class MinWatchCard implements Propagatable, Constr, Undoable,
      * 
      * @return representation of the constraint.
      */
+    @Impure
     @Override
     public String toString() {
         StringBuffer stb = new StringBuffer();
@@ -461,31 +481,38 @@ public class MinWatchCard implements Propagatable, Constr, Undoable,
      * @param p
      *            unassigned literal
      */
+    @Impure
     public void undo(int p) {
         // Le litt?ral observ? et falsifi? devient non assign?
         this.watchCumul++;
     }
 
+    @SideEffectFree
     public void setLearnt() {
         throw new UnsupportedOperationException();
     }
 
+    @Impure
     public void register() {
         computeWatches();
     }
 
+    @Pure
     public int size() {
         return this.lits.length;
     }
 
+    @Pure
     public int get(int i) {
         return this.lits[i];
     }
 
+    @SideEffectFree
     public void assertConstraint(UnitPropagationListener s) {
         throw new UnsupportedOperationException();
     }
 
+    @Impure
     public void assertConstraintIfNeeded(UnitPropagationListener s) {
         if (this.watchCumul == this.degree) {
             for (int i = 0; i < this.watchCumul; i++) {
@@ -494,6 +521,7 @@ public class MinWatchCard implements Propagatable, Constr, Undoable,
         }
     }
 
+    @Impure
     protected void computeWatches() {
         int indSwap = this.lits.length;
         int tmpInt;
@@ -544,6 +572,7 @@ public class MinWatchCard implements Propagatable, Constr, Undoable,
 
     }
 
+    @Impure
     protected MinWatchCard computePropagation(UnitPropagationListener s)
             throws ContradictionException {
 
@@ -564,16 +593,20 @@ public class MinWatchCard implements Propagatable, Constr, Undoable,
         return this;
     }
 
+    @SideEffectFree
+    @Impure
     public int[] getLits() {
         int[] tmp = new int[size()];
         System.arraycopy(this.lits, 0, tmp, 0, size());
         return tmp;
     }
 
+    @Pure
     public ILits getVocabulary() {
         return this.voc;
     }
 
+    @SideEffectFree
     @Override
     public boolean equals(Object card) {
         if (card == null) {
@@ -606,6 +639,7 @@ public class MinWatchCard implements Propagatable, Constr, Undoable,
         }
     }
 
+    @Pure
     @Override
     public int hashCode() {
         long sum = 0;
@@ -619,18 +653,22 @@ public class MinWatchCard implements Propagatable, Constr, Undoable,
     /**
      * @since 2.1
      */
+    @SideEffectFree
     public void forwardActivity(double claInc) {
         // do nothing
     }
 
+    @Pure
     public boolean canBePropagatedMultipleTimes() {
         return true;
     }
 
+    @Pure
     public Constr toConstraint() {
         return this;
     }
 
+    @Impure
     public void calcReasonOnTheFly(int p, IVecInt trail, IVecInt outReason) {
         int bound = p == ILits.UNDEFINED ? this.watchCumul
                 : this.watchCumul - 1;

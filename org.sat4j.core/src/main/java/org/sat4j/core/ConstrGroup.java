@@ -29,6 +29,9 @@
  *******************************************************************************/
 package org.sat4j.core;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.Impure;
 import java.util.Iterator;
 
 import org.sat4j.specs.IConstr;
@@ -51,6 +54,8 @@ public class ConstrGroup implements IConstr {
     /**
      * Create a ConstrGroup that cannot contain null constrs.
      */
+    @SideEffectFree
+    @Impure
     public ConstrGroup() {
         this(true);
     }
@@ -62,10 +67,12 @@ public class ConstrGroup implements IConstr {
      *            should be set to false to allow adding null constraints to the
      *            group.
      */
+    @SideEffectFree
     public ConstrGroup(boolean disallowNullConstraints) {
         this.disallowNullConstraints = disallowNullConstraints;
     }
 
+    @Impure
     public void add(IConstr constr) {
         if (constr == null && this.disallowNullConstraints) {
             throw new IllegalArgumentException(
@@ -74,24 +81,29 @@ public class ConstrGroup implements IConstr {
         this.constrs.push(constr);
     }
 
+    @Impure
     public void clear() {
         this.constrs.clear();
     }
 
+    @Impure
     public void removeFrom(ISolver solver) {
         for (Iterator<IConstr> it = this.constrs.iterator(); it.hasNext();) {
             solver.removeConstr(it.next());
         }
     }
 
+    @Impure
     public IConstr getConstr(int i) {
         return this.constrs.get(i);
     }
 
+    @Impure
     public int size() {
         return this.constrs.size();
     }
 
+    @Impure
     public boolean learnt() {
         if (this.constrs.size() == 0) {
             return false;
@@ -99,18 +111,22 @@ public class ConstrGroup implements IConstr {
         return this.constrs.get(0).learnt();
     }
 
+    @Pure
     public double getActivity() {
         return 0;
     }
 
+    @Pure
     public int get(int i) {
         throw new UnsupportedOperationException();
     }
 
+    @Pure
     public boolean canBePropagatedMultipleTimes() {
         return false;
     }
 
+    @SideEffectFree
     @Override
     public String toString() {
         return this.constrs.toString();

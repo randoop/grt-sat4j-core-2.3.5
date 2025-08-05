@@ -29,6 +29,8 @@
  *******************************************************************************/
 package org.sat4j.tools;
 
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.sat4j.core.VecInt;
 import org.sat4j.specs.ISolver;
 import org.sat4j.specs.IVecInt;
@@ -41,6 +43,7 @@ import org.sat4j.specs.TimeoutException;
  */
 public final class RemiUtils {
 
+    @SideEffectFree
     private RemiUtils() {
         // no instanceof that class are expected to be used.
     }
@@ -54,6 +57,7 @@ public final class RemiUtils {
      *         in the solver, in dimacs format.
      * @throws TimeoutException
      */
+    @Impure
     public static IVecInt backbone(ISolver s) throws TimeoutException {
         IVecInt backbone = new VecInt();
         int nvars = s.nVars();

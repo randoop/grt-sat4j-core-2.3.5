@@ -29,6 +29,7 @@
  *******************************************************************************/
 package org.sat4j.tools.xplain;
 
+import org.checkerframework.dataflow.qual.Impure;
 import java.io.Serializable;
 import java.util.Map;
 
@@ -54,11 +55,13 @@ public interface MinimizationStrategy extends Serializable {
      * @throws TimeoutException
      * @since 2.1
      */
+    @Impure
     IVecInt explain(ISolver solver, Map<Integer, ?> constrs, IVecInt assumps)
             throws TimeoutException;
 
     /**
      * @since 2.1
      */
+    @Impure
     void cancelExplanationComputation();
 }

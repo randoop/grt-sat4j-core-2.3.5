@@ -29,6 +29,7 @@
  *******************************************************************************/
 package org.sat4j.minisat.core;
 
+import org.checkerframework.dataflow.qual.Impure;
 import java.io.Serializable;
 
 /**
@@ -46,6 +47,7 @@ public interface IPhaseSelectionStrategy extends Serializable {
      * @param p
      *            a literal. The associated variable will be updated.
      */
+    @Impure
     void updateVar(int p);
 
     /**
@@ -55,6 +57,7 @@ public interface IPhaseSelectionStrategy extends Serializable {
      * @param nlength
      *            the number of variables managed by the heuristics.
      */
+    @Impure
     void init(int nlength);
 
     /**
@@ -66,6 +69,7 @@ public interface IPhaseSelectionStrategy extends Serializable {
      * @param p
      *            it's initial phase
      */
+    @Impure
     void init(int var, int p);
 
     /**
@@ -73,6 +77,7 @@ public interface IPhaseSelectionStrategy extends Serializable {
      * 
      * @param p
      */
+    @Impure
     void assignLiteral(int p);
 
     /**
@@ -84,6 +89,7 @@ public interface IPhaseSelectionStrategy extends Serializable {
      * @return either var or not var, depending of the selection strategy.
      * 
      */
+    @Impure
     int select(int var);
 
     /**
@@ -93,5 +99,6 @@ public interface IPhaseSelectionStrategy extends Serializable {
      * @param q
      *            a literal
      */
+    @Impure
     void updateVarAtDecisionLevel(int q);
 }

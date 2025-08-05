@@ -29,6 +29,8 @@
  *******************************************************************************/
 package org.sat4j.minisat.core;
 
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.Impure;
 import org.sat4j.specs.UnitPropagationListener;
 
 /**
@@ -50,6 +52,7 @@ public interface Propagatable {
      *            constraint.
      * @return false iff an inconsistency (a contradiction) is detected.
      */
+    @Impure
     boolean propagate(UnitPropagationListener s, int p);
 
     /**
@@ -61,5 +64,6 @@ public interface Propagatable {
      * @return the constraint associated to that propagatable.
      * @since 2.3.2
      */
+    @Pure
     Constr toConstraint();
 }

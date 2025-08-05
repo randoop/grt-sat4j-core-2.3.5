@@ -29,6 +29,8 @@
  *******************************************************************************/
 package org.sat4j.minisat.core;
 
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.Pure;
 import java.io.Serializable;
 
 /**
@@ -49,6 +51,7 @@ public interface RestartStrategy extends Serializable, ConflictTimer {
      *            restarts, etc).
      * 
      */
+    @Impure
     void init(SearchParams params, SolverStats stats);
 
     /**
@@ -56,6 +59,7 @@ public interface RestartStrategy extends Serializable, ConflictTimer {
      * 
      * @return the delay in conflicts before the next restart.
      */
+    @Pure
     @Deprecated
     long nextRestartNumberOfConflict();
 
@@ -64,6 +68,8 @@ public interface RestartStrategy extends Serializable, ConflictTimer {
      * 
      * @return true if the solver should restart, else false.
      */
+    @Pure
+    @Impure
     boolean shouldRestart();
 
     /**
@@ -71,6 +77,7 @@ public interface RestartStrategy extends Serializable, ConflictTimer {
      * to top decision level).
      * 
      */
+    @Impure
     void onRestart();
 
     /**
@@ -78,6 +85,7 @@ public interface RestartStrategy extends Serializable, ConflictTimer {
      * 
      * @since 2.3.2
      */
+    @Impure
     void onBackjumpToRootLevel();
 
     /**
@@ -90,5 +98,6 @@ public interface RestartStrategy extends Serializable, ConflictTimer {
      *            the number of literals assigned when the conflict occurred.
      * @since 2.3.3
      */
+    @Impure
     void newLearnedClause(Constr learned, int trailLevel);
 }

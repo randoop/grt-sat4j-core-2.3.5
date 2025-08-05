@@ -30,6 +30,8 @@
 
 package org.sat4j.tools.encoding;
 
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.Pure;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -62,6 +64,7 @@ public class Product extends EncodingStrategyAdapter {
      */
     private static final long serialVersionUID = 1L;
 
+    @Impure
     public IConstr addAtMostNonOpt(ISolver solver, IVecInt literals, int k)
             throws ContradictionException {
 
@@ -157,12 +160,14 @@ public class Product extends EncodingStrategyAdapter {
         return group;
     }
 
+    @Impure
     @Override
     public IConstr addAtMost(ISolver solver, IVecInt literals, int k)
             throws ContradictionException {
         return super.addAtMost(solver, literals, k);
     }
 
+    @Impure
     @Override
     public IConstr addAtMostOne(ISolver solver, IVecInt literals)
             throws ContradictionException {
@@ -213,6 +218,7 @@ public class Product extends EncodingStrategyAdapter {
         return group;
     }
 
+    @Impure
     private int[] decompositionBase10VersBaseP(int n, int p, int nbBits) {
         int[] result = new int[nbBits];
 
@@ -230,6 +236,7 @@ public class Product extends EncodingStrategyAdapter {
         return result;
     }
 
+    @Pure
     private int recompositionBase10DepuisBaseP(int[] tab, int p) {
         int result = 0;
         for (int i = 0; i < tab.length - 1; i++) {
@@ -239,6 +246,7 @@ public class Product extends EncodingStrategyAdapter {
         return result;
     }
 
+    @Impure
     @Override
     public IConstr addExactlyOne(ISolver solver, IVecInt literals)
             throws ContradictionException {
@@ -250,6 +258,7 @@ public class Product extends EncodingStrategyAdapter {
         return group;
     }
 
+    @Impure
     @Override
     public IConstr addExactly(ISolver solver, IVecInt literals, int degree)
             throws ContradictionException {

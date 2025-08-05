@@ -29,6 +29,9 @@
  *******************************************************************************/
 package org.sat4j.opt;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.Pure;
 import org.sat4j.core.ConstrGroup;
 import org.sat4j.core.VecInt;
 import org.sat4j.specs.ContradictionException;
@@ -52,21 +55,27 @@ public final class MaxSatDecorator extends AbstractSelectorVariablesDecorator {
 
     private final boolean equivalence;
 
+    @SideEffectFree
+    @Impure
     public MaxSatDecorator(ISolver solver) {
         this(solver, false);
     }
 
+    @SideEffectFree
+    @Impure
     public MaxSatDecorator(ISolver solver, boolean equivalence) {
         super(solver);
         this.equivalence = equivalence;
     }
 
+    @Impure
     @Override
     public void setExpectedNumberOfClauses(int nb) {
         super.setExpectedNumberOfClauses(nb);
         this.lits.ensure(nb);
     }
 
+    @Impure
     @Override
     public IConstr addClause(IVecInt literals) throws ContradictionException {
         int newvar = nextFreeVarId(true);
@@ -87,6 +96,7 @@ public final class MaxSatDecorator extends AbstractSelectorVariablesDecorator {
         return super.addClause(literals);
     }
 
+    @Impure
     @Override
     public void reset() {
         this.lits.clear();
@@ -94,14 +104,17 @@ public final class MaxSatDecorator extends AbstractSelectorVariablesDecorator {
         this.prevConstr = null;
     }
 
+    @Pure
     public boolean hasNoObjectiveFunction() {
         return false;
     }
 
+    @Pure
     public boolean nonOptimalMeansSatisfiable() {
         return false;
     }
 
+    @Impure
     public Number calculateObjective() {
         calculateObjectiveValue();
         return this.counter;
@@ -116,6 +129,7 @@ public final class MaxSatDecorator extends AbstractSelectorVariablesDecorator {
     /**
      * @since 2.1
      */
+    @Impure
     public void discardCurrentSolution() throws ContradictionException {
         if (this.prevConstr != null) {
             super.removeSubsumedConstr(this.prevConstr);
@@ -128,6 +142,7 @@ public final class MaxSatDecorator extends AbstractSelectorVariablesDecorator {
         }
     }
 
+    @Impure
     @Override
     public boolean admitABetterSolution(IVecInt assumps)
             throws TimeoutException {
@@ -140,6 +155,7 @@ public final class MaxSatDecorator extends AbstractSelectorVariablesDecorator {
         return result;
     }
 
+    @Impure
     public void discard() throws ContradictionException {
         discardCurrentSolution();
     }
@@ -147,10 +163,12 @@ public final class MaxSatDecorator extends AbstractSelectorVariablesDecorator {
     /**
      * @since 2.1
      */
+    @Pure
     public Number getObjectiveValue() {
         return this.counter;
     }
 
+    @Impure
     @Override
     void calculateObjectiveValue() {
         this.counter = 0;
@@ -164,11 +182,13 @@ public final class MaxSatDecorator extends AbstractSelectorVariablesDecorator {
     /**
      * @since 2.1
      */
+    @Impure
     public void forceObjectiveValueTo(Number forcedValue)
             throws ContradictionException {
         super.addAtMost(this.lits, forcedValue.intValue());
     }
 
+    @SideEffectFree
     public void setTimeoutForFindingBetterSolution(int seconds) {
         // TODO
         throw new UnsupportedOperationException("No implemented yet");

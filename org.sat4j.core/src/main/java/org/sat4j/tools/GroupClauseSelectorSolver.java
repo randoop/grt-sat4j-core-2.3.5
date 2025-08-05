@@ -29,6 +29,9 @@
  *******************************************************************************/
 package org.sat4j.tools;
 
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -47,10 +50,13 @@ public class GroupClauseSelectorSolver<T extends ISolver> extends
     private final Map<Integer, Integer> varToHighLevel = new HashMap<Integer, Integer>();
     private final Map<Integer, Integer> highLevelToVar = new HashMap<Integer, Integer>();
 
+    @SideEffectFree
+    @Impure
     public GroupClauseSelectorSolver(T solver) {
         super(solver);
     }
 
+    @Impure
     public IConstr addControlableClause(IVecInt literals, int desc)
             throws ContradictionException {
         if (desc == 0) {
@@ -66,21 +72,25 @@ public class GroupClauseSelectorSolver<T extends ISolver> extends
         return super.addClause(literals);
     }
 
+    @Impure
     public IConstr addNonControlableClause(IVecInt literals)
             throws ContradictionException {
         return super.addClause(literals);
     }
 
+    @Impure
     public IConstr addClause(IVecInt literals, int desc)
             throws ContradictionException {
         return addControlableClause(literals, desc);
     }
 
+    @SideEffectFree
     @Override
     public Collection<Integer> getAddedVars() {
         return varToHighLevel.keySet();
     }
 
+    @Impure
     @Override
     public int[] model() {
         int[] fullmodel = super.modelWithInternalVariables();
@@ -97,6 +107,7 @@ public class GroupClauseSelectorSolver<T extends ISolver> extends
         return model;
     }
 
+    @Pure
     public Map<Integer, Integer> getVarToHighLevel() {
         return varToHighLevel;
     }

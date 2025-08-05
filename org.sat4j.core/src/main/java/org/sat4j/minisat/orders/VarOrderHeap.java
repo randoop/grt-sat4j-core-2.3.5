@@ -29,6 +29,9 @@
  *******************************************************************************/
 package org.sat4j.minisat.orders;
 
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import static org.sat4j.core.LiteralsUtils.var;
 
 import java.io.PrintWriter;
@@ -75,10 +78,12 @@ public class VarOrderHeap implements IOrder, Serializable {
 
     protected IPhaseSelectionStrategy phaseStrategy;
 
+    @Impure
     public VarOrderHeap() {
         this(new PhaseInLastLearnedClauseSelectionStrategy());
     }
 
+    @SideEffectFree
     public VarOrderHeap(IPhaseSelectionStrategy strategy) {
         this.phaseStrategy = strategy;
     }
@@ -88,14 +93,17 @@ public class VarOrderHeap implements IOrder, Serializable {
      * 
      * @param strategy
      */
+    @Impure
     public void setPhaseSelectionStrategy(IPhaseSelectionStrategy strategy) {
         this.phaseStrategy = strategy;
     }
 
+    @Pure
     public IPhaseSelectionStrategy getPhaseSelectionStrategy() {
         return this.phaseStrategy;
     }
 
+    @Impure
     public void setLits(ILits lits) {
         this.lits = lits;
     }
@@ -106,6 +114,7 @@ public class VarOrderHeap implements IOrder, Serializable {
      * 
      * @return Lit.UNDEFINED si aucune variable n'est trouvee
      */
+    @Impure
     public int select() {
         while (!this.heap.empty()) {
             int var = this.heap.getmin();
@@ -126,6 +135,7 @@ public class VarOrderHeap implements IOrder, Serializable {
      * @param d
      *            la nouvelle valeur de varDecay
      */
+    @Impure
     public void setVarDecay(double d) {
         this.varDecay = d;
     }
@@ -135,6 +145,7 @@ public class VarOrderHeap implements IOrder, Serializable {
      * 
      * @param x
      */
+    @Impure
     public void undo(int x) {
         if (!this.heap.inHeap(x)) {
             this.heap.insert(x);
@@ -147,6 +158,7 @@ public class VarOrderHeap implements IOrder, Serializable {
      * @param p
      *            a literal
      */
+    @Impure
     public void updateVar(int p) {
         int var = var(p);
         updateActivity(var);
@@ -156,6 +168,7 @@ public class VarOrderHeap implements IOrder, Serializable {
         }
     }
 
+    @Impure
     protected void updateActivity(final int var) {
         if ((this.activity[var] += this.varInc) > VAR_RESCALE_BOUND) {
             varRescaleActivity();
@@ -165,6 +178,7 @@ public class VarOrderHeap implements IOrder, Serializable {
     /**
      * 
      */
+    @Impure
     public void varDecayActivity() {
         this.varInc *= this.varDecay;
     }
@@ -172,6 +186,7 @@ public class VarOrderHeap implements IOrder, Serializable {
     /**
      * 
      */
+    @Impure
     private void varRescaleActivity() {
         for (int i = 1; i < this.activity.length; i++) {
             this.activity[i] *= VAR_RESCALE_FACTOR;
@@ -179,6 +194,8 @@ public class VarOrderHeap implements IOrder, Serializable {
         this.varInc *= VAR_RESCALE_FACTOR;
     }
 
+    @Pure
+    @Impure
     public double varActivity(int p) {
         return this.activity[var(p)];
     }
@@ -186,6 +203,7 @@ public class VarOrderHeap implements IOrder, Serializable {
     /**
      * 
      */
+    @Pure
     public int numberOfInterestingVariables() {
         int cpt = 0;
         for (int i = 1; i < this.activity.length; i++) {
@@ -200,6 +218,7 @@ public class VarOrderHeap implements IOrder, Serializable {
      * that method has the responsability to initialize all arrays in the
      * heuristics. PLEASE CALL super.init() IF YOU OVERRIDE THAT METHOD.
      */
+    @Impure
     public void init() {
         int nlength = this.lits.nVars() + 1;
         if (this.activity == null || this.activity.length < nlength) {
@@ -219,28 +238,34 @@ public class VarOrderHeap implements IOrder, Serializable {
         }
     }
 
+    @Pure
     @Override
     public String toString() {
         return "VSIDS like heuristics from MiniSAT using a heap " + this.phaseStrategy; //$NON-NLS-1$
     }
 
+    @Pure
     public ILits getVocabulary() {
         return this.lits;
     }
 
+    @Impure
     public void printStat(PrintWriter out, String prefix) {
         out.println(prefix + "non guided choices\t" + this.nullchoice); //$NON-NLS-1$
     }
 
+    @Impure
     public void assignLiteral(int p) {
         this.phaseStrategy.assignLiteral(p);
     }
 
+    @Impure
     public void updateVarAtDecisionLevel(int q) {
         this.phaseStrategy.updateVarAtDecisionLevel(q);
 
     }
 
+    @Pure
     public double[] getVariableHeuristics() {
         return this.activity;
     }

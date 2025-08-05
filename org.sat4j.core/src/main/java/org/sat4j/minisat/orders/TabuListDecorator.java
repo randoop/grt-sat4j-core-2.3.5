@@ -29,6 +29,9 @@
  *******************************************************************************/
 package org.sat4j.minisat.orders;
 
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import java.io.PrintWriter;
 import java.util.LinkedList;
 
@@ -52,33 +55,42 @@ public class TabuListDecorator implements IOrder {
 
     private final LinkedList<Integer> tabuList = new LinkedList<Integer>();
 
+    @SideEffectFree
+    @Impure
     public TabuListDecorator(VarOrderHeap order) {
         this(order, 10);
     }
 
+    @SideEffectFree
     public TabuListDecorator(VarOrderHeap order, int tabuSize) {
         this.decorated = order;
         this.tabuSize = tabuSize;
     }
 
+    @Impure
     public void assignLiteral(int q) {
         this.decorated.assignLiteral(q);
     }
 
+    @Pure
+    @Impure
     public IPhaseSelectionStrategy getPhaseSelectionStrategy() {
         return this.decorated.getPhaseSelectionStrategy();
     }
 
+    @Impure
     public void init() {
         this.decorated.init();
         this.lastVar = -1;
     }
 
+    @Impure
     public void printStat(PrintWriter out, String prefix) {
         out.println(prefix + "tabu list size\t: " + this.tabuSize);
         this.decorated.printStat(out, prefix);
     }
 
+    @Impure
     public int select() {
         int lit = this.decorated.select();
         if (lit == ILits.UNDEFINED) {
@@ -95,19 +107,23 @@ public class TabuListDecorator implements IOrder {
         return lit;
     }
 
+    @Impure
     public void setLits(ILits lits) {
         this.decorated.setLits(lits);
         this.voc = lits;
     }
 
+    @Impure
     public void setPhaseSelectionStrategy(IPhaseSelectionStrategy strategy) {
         this.decorated.setPhaseSelectionStrategy(strategy);
     }
 
+    @Impure
     public void setVarDecay(double d) {
         this.decorated.setVarDecay(d);
     }
 
+    @Impure
     public void undo(int x) {
         if (this.tabuList.size() == this.tabuSize) {
             int var = this.tabuList.removeFirst();
@@ -121,28 +137,37 @@ public class TabuListDecorator implements IOrder {
         }
     }
 
+    @Impure
     public void updateVar(int q) {
         this.decorated.updateVar(q);
     }
 
+    @Pure
+    @Impure
     public double varActivity(int q) {
         return this.decorated.varActivity(q);
     }
 
+    @Impure
     public void varDecayActivity() {
         this.decorated.varDecayActivity();
     }
 
+    @Impure
     public void updateVarAtDecisionLevel(int q) {
         this.decorated.updateVarAtDecisionLevel(q);
     }
 
+    @Pure
+    @SideEffectFree
     @Override
     public String toString() {
         return this.decorated.toString() + " with tabu list of size "
                 + this.tabuSize;
     }
 
+    @Pure
+    @Impure
     public double[] getVariableHeuristics() {
         return this.decorated.getVariableHeuristics();
     }

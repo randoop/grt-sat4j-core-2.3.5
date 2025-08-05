@@ -29,6 +29,9 @@
  *******************************************************************************/
 package org.sat4j.minisat.constraints.card;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.Impure;
 import java.io.Serializable;
 import java.math.BigInteger;
 
@@ -80,6 +83,7 @@ public final class MaxWatchCard implements Propagatable, Constr, Undoable,
      * @param learnt
      *            indique si la contrainte est apprise
      */
+    @Impure
     public MaxWatchCard(ILits voc, IVecInt ps, boolean moreThan, int degree) {
 
         // On met en place les valeurs
@@ -144,6 +148,7 @@ public final class MaxWatchCard implements Propagatable, Constr, Undoable,
      *            vecteur de litt?raux ? remplir
      * @see Constr#calcReason(int p, IVecInt outReason)
      */
+    @Impure
     public void calcReason(int p, IVecInt outReason) {
         for (int lit : this.lits) {
             if (this.voc.isFalsified(lit)) {
@@ -158,6 +163,7 @@ public final class MaxWatchCard implements Propagatable, Constr, Undoable,
      * @return la valeur de l'activit? de la contrainte
      * @see Constr#getActivity()
      */
+    @Pure
     public double getActivity() {
         // TODO getActivity
         return 0;
@@ -170,10 +176,12 @@ public final class MaxWatchCard implements Propagatable, Constr, Undoable,
      *            incr?ment de l'activit? de la contrainte
      * @see Constr#incActivity(double claInc)
      */
+    @SideEffectFree
     public void incActivity(double claInc) {
         // TODO incActivity
     }
 
+    @SideEffectFree
     public void setActivity(double d) {
     }
 
@@ -183,6 +191,7 @@ public final class MaxWatchCard implements Propagatable, Constr, Undoable,
      * @return true si la contrainte est apprise, false sinon
      * @see Constr#learnt()
      */
+    @Pure
     public boolean learnt() {
         // TODO learnt
         return false;
@@ -194,6 +203,7 @@ public final class MaxWatchCard implements Propagatable, Constr, Undoable,
      * @return true si c'est le cas, false sinon
      * @see Constr#locked()
      */
+    @Pure
     public boolean locked() {
         // TODO locked
         return true;
@@ -215,6 +225,7 @@ public final class MaxWatchCard implements Propagatable, Constr, Undoable,
      * @return une nouvelle clause si tout va bien, null sinon
      * @throws ContradictionException
      */
+    @Impure
     public static Constr maxWatchCardNew(UnitPropagationListener s, ILits voc,
             IVecInt ps, boolean moreThan, int degree)
             throws ContradictionException {
@@ -265,6 +276,7 @@ public final class MaxWatchCard implements Propagatable, Constr, Undoable,
     /**
      * On normalise la contrainte au sens de Barth
      */
+    @Impure
     public void normalize() {
         // Gestion du signe
         if (!this.moreThan) {
@@ -288,6 +300,7 @@ public final class MaxWatchCard implements Propagatable, Constr, Undoable,
      *            le litt?ral propag? (il doit etre falsifie)
      * @return false ssi une inconsistance est d?t?ct?e
      */
+    @Impure
     public boolean propagate(UnitPropagationListener s, int p) {
 
         // On observe toujours tous les litt?raux
@@ -317,6 +330,7 @@ public final class MaxWatchCard implements Propagatable, Constr, Undoable,
     /**
      * @since 2.1
      */
+    @Impure
     public void remove(UnitPropagationListener upl) {
         for (int q : this.lits) {
             this.voc.watches(q ^ 1).remove(this);
@@ -329,6 +343,7 @@ public final class MaxWatchCard implements Propagatable, Constr, Undoable,
      * @param d
      *            facteur d'ajustement
      */
+    @SideEffectFree
     public void rescaleBy(double d) {
     }
 
@@ -337,6 +352,8 @@ public final class MaxWatchCard implements Propagatable, Constr, Undoable,
      * 
      * @return true si la contrainte est satisfaite, false sinon
      */
+    @Pure
+    @Impure
     public boolean simplify() {
 
         int i = 0;
@@ -363,6 +380,7 @@ public final class MaxWatchCard implements Propagatable, Constr, Undoable,
      * 
      * @return Cha?ne repr?sentant la contrainte
      */
+    @Impure
     @Override
     public String toString() {
         StringBuffer stb = new StringBuffer();
@@ -391,30 +409,37 @@ public final class MaxWatchCard implements Propagatable, Constr, Undoable,
      * @param p
      *            le litt?ral d?saffect?
      */
+    @Impure
     public void undo(int p) {
         this.watchCumul++;
     }
 
+    @SideEffectFree
     public void setLearnt() {
         throw new UnsupportedOperationException();
     }
 
+    @SideEffectFree
     public void register() {
         throw new UnsupportedOperationException();
     }
 
+    @Pure
     public int size() {
         return this.lits.length;
     }
 
+    @Pure
     public int get(int i) {
         return this.lits[i];
     }
 
+    @SideEffectFree
     public void assertConstraint(UnitPropagationListener s) {
         throw new UnsupportedOperationException();
     }
 
+    @SideEffectFree
     public void assertConstraintIfNeeded(UnitPropagationListener s) {
         throw new UnsupportedOperationException();
     }
@@ -424,6 +449,7 @@ public final class MaxWatchCard implements Propagatable, Constr, Undoable,
      * 
      * @see org.sat4j.minisat.constraints.pb.PBConstr#getCoefficient(int)
      */
+    @Pure
     public BigInteger getCoef(int literal) {
         return BigInteger.ONE;
     }
@@ -433,10 +459,12 @@ public final class MaxWatchCard implements Propagatable, Constr, Undoable,
      * 
      * @see org.sat4j.minisat.constraints.pb.PBConstr#getDegree()
      */
+    @Impure
     public BigInteger getDegree() {
         return BigInteger.valueOf(this.degree);
     }
 
+    @Pure
     public ILits getVocabulary() {
         return this.voc;
     }
@@ -444,19 +472,23 @@ public final class MaxWatchCard implements Propagatable, Constr, Undoable,
     /**
      * @since 2.1
      */
+    @SideEffectFree
     public void forwardActivity(double claInc) {
         // TODO Auto-generated method stub
 
     }
 
+    @Pure
     public boolean canBePropagatedMultipleTimes() {
         return true;
     }
 
+    @Pure
     public Constr toConstraint() {
         return this;
     }
 
+    @SideEffectFree
     public void calcReasonOnTheFly(int p, IVecInt trail, IVecInt outReason) {
         throw new UnsupportedOperationException("Not implemented yet!");
     }

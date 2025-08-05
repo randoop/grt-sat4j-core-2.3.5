@@ -29,6 +29,8 @@
  *******************************************************************************/
 package org.sat4j.tools;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.dataflow.qual.Impure;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -51,6 +53,7 @@ public class CheckMUSSolutionListener implements SolutionFoundListener {
     // }
     private final ASolverFactory<? extends ISolver> factory;
 
+    @SideEffectFree
     public CheckMUSSolutionListener(ASolverFactory<? extends ISolver> factory) {
         this.clauses = new ArrayList<IVecInt>();
         this.factory = factory;
@@ -60,6 +63,7 @@ public class CheckMUSSolutionListener implements SolutionFoundListener {
     // this.clauses = clauses;
     // }
 
+    @Impure
     public void addOriginalClause(IVecInt clause) {
         IVecInt newClause = new VecInt(clause.size());
         if (clauses == null) {
@@ -77,6 +81,7 @@ public class CheckMUSSolutionListener implements SolutionFoundListener {
      *            the original set of clauses
      * @return
      */
+    @Impure
     public boolean checkThatItIsAMUS(IVecInt mus) {
         boolean result = false;
 
@@ -128,10 +133,12 @@ public class CheckMUSSolutionListener implements SolutionFoundListener {
 
     }
 
+    @SideEffectFree
     public void onSolutionFound(int[] solution) {
 
     }
 
+    @Impure
     public void onSolutionFound(IVecInt solution) {
         if (checkThatItIsAMUS(solution)) {
             System.out.println(solution + " is a MUS");
@@ -140,6 +147,7 @@ public class CheckMUSSolutionListener implements SolutionFoundListener {
         }
     }
 
+    @SideEffectFree
     public void onUnsatTermination() {
         // do nothing
     }

@@ -29,6 +29,9 @@
  *******************************************************************************/
 package org.sat4j.minisat.restarts;
 
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.sat4j.minisat.core.Constr;
 import org.sat4j.minisat.core.RestartStrategy;
 import org.sat4j.minisat.core.SearchParams;
@@ -45,45 +48,56 @@ public class FixedPeriodRestarts implements RestartStrategy {
 
     private long period;
 
+    @Impure
     public void reset() {
         conflictCount = 0;
     }
 
+    @Impure
     public void newConflict() {
         conflictCount++;
     }
 
+    @Impure
     public void init(SearchParams params, SolverStats stats) {
         this.conflictCount = 0;
     }
 
+    @Pure
     @Deprecated
     public long nextRestartNumberOfConflict() {
         return period;
     }
 
+    @Pure
     public boolean shouldRestart() {
         return conflictCount >= period;
     }
 
+    @Impure
     public void onRestart() {
         this.conflictCount = 0;
     }
 
+    @SideEffectFree
     public void onBackjumpToRootLevel() {
     }
 
+    @SideEffectFree
     public void newLearnedClause(Constr learned, int trailLevel) {
     }
 
+    @Pure
     public long getPeriod() {
         return period;
     }
 
+    @Impure
     public void setPeriod(long period) {
         this.period = period;
     }
 
+    @Pure
     @Override
     public String toString() {
         return "constant restarts strategy every " + this.period + " conflicts";

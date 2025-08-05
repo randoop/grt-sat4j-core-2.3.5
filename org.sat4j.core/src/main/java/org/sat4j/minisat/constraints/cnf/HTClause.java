@@ -29,6 +29,9 @@
  *******************************************************************************/
 package org.sat4j.minisat.constraints.cnf;
 
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import static org.sat4j.core.LiteralsUtils.neg;
 
 import java.io.Serializable;
@@ -75,6 +78,7 @@ public abstract class HTClause implements Propagatable, Constr, Serializable {
      * @param ps
      *            A VecInt that WILL BE EMPTY after calling that method.
      */
+    @Impure
     public HTClause(IVecInt ps, ILits voc) {
         assert ps.size() > 1;
         this.head = ps.get(0);
@@ -94,6 +98,7 @@ public abstract class HTClause implements Propagatable, Constr, Serializable {
      * 
      * @see Constr#calcReason(Solver, Lit, Vec)
      */
+    @Impure
     public void calcReason(int p, IVecInt outReason) {
         if (this.voc.isFalsified(this.head)) {
             outReason.push(neg(this.head));
@@ -114,6 +119,7 @@ public abstract class HTClause implements Propagatable, Constr, Serializable {
      * 
      * @see Constr#remove(Solver)
      */
+    @Impure
     public void remove(UnitPropagationListener upl) {
         this.voc.watches(neg(this.head)).remove(this);
         this.voc.watches(neg(this.tail)).remove(this);
@@ -124,6 +130,8 @@ public abstract class HTClause implements Propagatable, Constr, Serializable {
      * 
      * @see Constr#simplify(Solver)
      */
+    @Pure
+    @Impure
     public boolean simplify() {
         if (this.voc.isSatisfied(this.head) || this.voc.isSatisfied(this.tail)) {
             return true;
@@ -136,6 +144,7 @@ public abstract class HTClause implements Propagatable, Constr, Serializable {
         return false;
     }
 
+    @Impure
     public boolean propagate(UnitPropagationListener s, int p) {
 
         if (this.head == neg(p)) {
@@ -177,6 +186,8 @@ public abstract class HTClause implements Propagatable, Constr, Serializable {
     /*
      * For learnt clauses only @author leberre
      */
+    @Pure
+    @Impure
     public boolean locked() {
         return this.voc.getReason(this.head) == this
                 || this.voc.getReason(this.tail) == this;
@@ -185,10 +196,12 @@ public abstract class HTClause implements Propagatable, Constr, Serializable {
     /**
      * @return the activity of the clause
      */
+    @Pure
     public double getActivity() {
         return this.activity;
     }
 
+    @Impure
     @Override
     public String toString() {
         StringBuffer stb = new StringBuffer();
@@ -219,6 +232,7 @@ public abstract class HTClause implements Propagatable, Constr, Serializable {
      *            the index of the literal
      * @return the literal
      */
+    @Pure
     public int get(int i) {
         if (i == 0) {
             return this.head;
@@ -232,20 +246,24 @@ public abstract class HTClause implements Propagatable, Constr, Serializable {
     /**
      * @param d
      */
+    @Impure
     public void rescaleBy(double d) {
         this.activity *= d;
     }
 
+    @Pure
     public int size() {
         return this.middleLits.length + 2;
     }
 
+    @Impure
     public void assertConstraint(UnitPropagationListener s) {
         assert this.voc.isUnassigned(this.head);
         boolean ret = s.enqueue(this.head, this);
         assert ret;
     }
 
+    @Impure
     public void assertConstraintIfNeeded(UnitPropagationListener s) {
         if (voc.isFalsified(this.tail)) {
             boolean ret = s.enqueue(this.head, this);
@@ -253,10 +271,12 @@ public abstract class HTClause implements Propagatable, Constr, Serializable {
         }
     }
 
+    @Pure
     public ILits getVocabulary() {
         return this.voc;
     }
 
+    @Impure
     public int[] getLits() {
         int[] tmp = new int[size()];
         System.arraycopy(this.middleLits, 0, tmp, 1, this.middleLits.length);
@@ -265,6 +285,7 @@ public abstract class HTClause implements Propagatable, Constr, Serializable {
         return tmp;
     }
 
+    @SideEffectFree
     @Override
     public boolean equals(Object obj) {
         if (obj == null) {
@@ -297,6 +318,7 @@ public abstract class HTClause implements Propagatable, Constr, Serializable {
         }
     }
 
+    @Pure
     @Override
     public int hashCode() {
         long sum = this.head + this.tail;
@@ -306,14 +328,17 @@ public abstract class HTClause implements Propagatable, Constr, Serializable {
         return (int) sum / this.middleLits.length;
     }
 
+    @Pure
     public boolean canBePropagatedMultipleTimes() {
         return false;
     }
 
+    @Pure
     public Constr toConstraint() {
         return this;
     }
 
+    @Impure
     public void calcReasonOnTheFly(int p, IVecInt trail, IVecInt outReason) {
         calcReason(p, outReason);
     }

@@ -29,6 +29,8 @@
  *******************************************************************************/
 package org.sat4j.tools.xplain;
 
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.Impure;
 import java.util.Map;
 import java.util.Set;
 
@@ -72,10 +74,12 @@ public class QuickXplainStrategy implements MinimizationStrategy {
 
     private boolean computationCanceled;
 
+    @Impure
     public void cancelExplanationComputation() {
         this.computationCanceled = true;
     }
 
+    @Impure
     public IVecInt explain(ISolver solver, Map<Integer, ?> constrs,
             IVecInt assumps) throws TimeoutException {
         this.computationCanceled = false;
@@ -126,6 +130,7 @@ public class QuickXplainStrategy implements MinimizationStrategy {
         return results;
     }
 
+    @Impure
     private void computeExplanation(ISolver solver, Map<Integer, ?> constrs,
             IVecInt encodingAssumptions, int start, int end, IVecInt result)
             throws TimeoutException {
@@ -166,6 +171,7 @@ public class QuickXplainStrategy implements MinimizationStrategy {
         }
     }
 
+    @Pure
     @Override
     public String toString() {
         return "QuickXplain (AAAI 2004 version) minimization strategy";

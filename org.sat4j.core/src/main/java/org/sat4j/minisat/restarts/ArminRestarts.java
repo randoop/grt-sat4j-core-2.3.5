@@ -29,6 +29,9 @@
  *******************************************************************************/
 package org.sat4j.minisat.restarts;
 
+import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.Pure;
 import org.sat4j.minisat.core.Constr;
 import org.sat4j.minisat.core.RestartStrategy;
 import org.sat4j.minisat.core.SearchParams;
@@ -54,6 +57,7 @@ public final class ArminRestarts implements RestartStrategy {
 
     private long conflictcount = 0;
 
+    @Impure
     public void init(SearchParams theParams, SolverStats stats) {
         this.params = theParams;
         this.inner = theParams.getInitConflictBound();
@@ -61,10 +65,12 @@ public final class ArminRestarts implements RestartStrategy {
         this.conflicts = Math.round(this.inner);
     }
 
+    @Pure
     public long nextRestartNumberOfConflict() {
         return this.conflicts;
     }
 
+    @Impure
     public void onRestart() {
         if (this.inner >= this.outer) {
             this.outer *= this.params.getConflictBoundIncFactor();
@@ -76,27 +82,33 @@ public final class ArminRestarts implements RestartStrategy {
         this.conflictcount = 0;
     }
 
+    @Pure
     @Override
     public String toString() {
         return "Armin Biere (Picosat) restarts strategy";
     }
 
+    @Pure
     public boolean shouldRestart() {
         return this.conflictcount >= this.conflicts;
     }
 
+    @Impure
     public void onBackjumpToRootLevel() {
         this.conflictcount = 0;
     }
 
+    @Impure
     public void reset() {
         this.conflictcount = 0;
     }
 
+    @Impure
     public void newConflict() {
         this.conflictcount++;
     }
 
+    @SideEffectFree
     public void newLearnedClause(Constr learned, int trailLevel) {
     }
 }

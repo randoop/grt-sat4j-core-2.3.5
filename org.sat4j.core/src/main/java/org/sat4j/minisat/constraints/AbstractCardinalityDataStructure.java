@@ -29,6 +29,7 @@
  *******************************************************************************/
 package org.sat4j.minisat.constraints;
 
+import org.checkerframework.dataflow.qual.Impure;
 import org.sat4j.minisat.constraints.cnf.Lits;
 import org.sat4j.minisat.core.ILits;
 
@@ -44,6 +45,7 @@ public abstract class AbstractCardinalityDataStructure extends
 	 */
     private static final long serialVersionUID = 1L;
 
+    @Impure
     @Override
     protected ILits createLits() {
         return new Lits();

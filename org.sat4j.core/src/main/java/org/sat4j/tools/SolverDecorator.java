@@ -29,6 +29,9 @@
  *******************************************************************************/
 package org.sat4j.tools;
 
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.util.Map;
@@ -57,10 +60,12 @@ public abstract class SolverDecorator<T extends ISolver> implements ISolver {
 	 */
     private static final long serialVersionUID = 1L;
 
+    @Impure
     public boolean isDBSimplificationAllowed() {
         return this.solver.isDBSimplificationAllowed();
     }
 
+    @Impure
     public void setDBSimplificationAllowed(boolean status) {
         this.solver.setDBSimplificationAllowed(status);
     }
@@ -70,6 +75,7 @@ public abstract class SolverDecorator<T extends ISolver> implements ISolver {
      * 
      * @see org.sat4j.specs.ISolver#setTimeoutOnConflicts(int)
      */
+    @Impure
     public void setTimeoutOnConflicts(int count) {
         this.solver.setTimeoutOnConflicts(count);
     }
@@ -80,6 +86,7 @@ public abstract class SolverDecorator<T extends ISolver> implements ISolver {
      * @see org.sat4j.specs.IProblem#printInfos(java.io.PrintWriter,
      * java.lang.String)
      */
+    @Impure
     public void printInfos(PrintWriter out, String prefix) {
         this.solver.printInfos(out, prefix);
     }
@@ -90,6 +97,7 @@ public abstract class SolverDecorator<T extends ISolver> implements ISolver {
      * @see org.sat4j.specs.IProblem#printInfos(java.io.PrintWriter,
      * java.lang.String)
      */
+    @Impure
     public void printInfos(PrintWriter out) {
         this.solver.printInfos(out);
     }
@@ -99,6 +107,7 @@ public abstract class SolverDecorator<T extends ISolver> implements ISolver {
      * 
      * @see org.sat4j.specs.IProblem#isSatisfiable(boolean)
      */
+    @Impure
     public boolean isSatisfiable(boolean global) throws TimeoutException {
         return this.solver.isSatisfiable(global);
     }
@@ -109,6 +118,7 @@ public abstract class SolverDecorator<T extends ISolver> implements ISolver {
      * @see org.sat4j.specs.IProblem#isSatisfiable(org.sat4j.specs.IVecInt,
      * boolean)
      */
+    @Impure
     public boolean isSatisfiable(IVecInt assumps, boolean global)
             throws TimeoutException {
         return this.solver.isSatisfiable(assumps, global);
@@ -119,6 +129,7 @@ public abstract class SolverDecorator<T extends ISolver> implements ISolver {
      * 
      * @see org.sat4j.specs.ISolver#clearLearntClauses()
      */
+    @Impure
     public void clearLearntClauses() {
         this.solver.clearLearntClauses();
     }
@@ -128,6 +139,7 @@ public abstract class SolverDecorator<T extends ISolver> implements ISolver {
      * 
      * @see org.sat4j.specs.IProblem#findModel()
      */
+    @Impure
     public int[] findModel() throws TimeoutException {
         return this.solver.findModel();
     }
@@ -137,6 +149,7 @@ public abstract class SolverDecorator<T extends ISolver> implements ISolver {
      * 
      * @see org.sat4j.specs.IProblem#findModel(org.sat4j.specs.IVecInt)
      */
+    @Impure
     public int[] findModel(IVecInt assumps) throws TimeoutException {
         return this.solver.findModel(assumps);
     }
@@ -146,10 +159,12 @@ public abstract class SolverDecorator<T extends ISolver> implements ISolver {
      * 
      * @see org.sat4j.specs.IProblem#model(int)
      */
+    @Impure
     public boolean model(int var) {
         return this.solver.model(var);
     }
 
+    @Impure
     public void setExpectedNumberOfClauses(int nb) {
         this.solver.setExpectedNumberOfClauses(nb);
     }
@@ -159,6 +174,7 @@ public abstract class SolverDecorator<T extends ISolver> implements ISolver {
      * 
      * @see org.sat4j.specs.ISolver#getTimeout()
      */
+    @Impure
     public int getTimeout() {
         return this.solver.getTimeout();
     }
@@ -166,6 +182,7 @@ public abstract class SolverDecorator<T extends ISolver> implements ISolver {
     /**
      * @since 2.1
      */
+    @Impure
     public long getTimeoutMs() {
         return this.solver.getTimeoutMs();
     }
@@ -175,10 +192,12 @@ public abstract class SolverDecorator<T extends ISolver> implements ISolver {
      * 
      * @see org.sat4j.specs.ISolver#toString(java.lang.String)
      */
+    @Impure
     public String toString(String prefix) {
         return this.solver.toString(prefix);
     }
 
+    @Impure
     @Override
     public String toString() {
         return toString("");
@@ -190,15 +209,18 @@ public abstract class SolverDecorator<T extends ISolver> implements ISolver {
      * @see org.sat4j.specs.ISolver#printStat(java.io.PrintStream,
      * java.lang.String)
      */
+    @Impure
     @Deprecated
     public void printStat(PrintStream out, String prefix) {
         this.solver.printStat(out, prefix);
     }
 
+    @Impure
     public void printStat(PrintWriter out, String prefix) {
         this.solver.printStat(out, prefix);
     }
 
+    @Impure
     public void printStat(PrintWriter out) {
         this.solver.printStat(out);
     }
@@ -208,10 +230,12 @@ public abstract class SolverDecorator<T extends ISolver> implements ISolver {
     /**
      * 
      */
+    @SideEffectFree
     public SolverDecorator(T solver) {
         this.solver = solver;
     }
 
+    @Impure
     @Deprecated
     public int newVar() {
         return this.solver.newVar();
@@ -222,6 +246,7 @@ public abstract class SolverDecorator<T extends ISolver> implements ISolver {
      * 
      * @see org.sat4j.ISolver#newVar(int)
      */
+    @Impure
     public int newVar(int howmany) {
         return this.solver.newVar(howmany);
     }
@@ -231,10 +256,12 @@ public abstract class SolverDecorator<T extends ISolver> implements ISolver {
      * 
      * @see org.sat4j.ISolver#addClause(org.sat4j.datatype.VecInt)
      */
+    @Impure
     public IConstr addClause(IVecInt literals) throws ContradictionException {
         return this.solver.addClause(literals);
     }
 
+    @Impure
     public void addAllClauses(IVec<IVecInt> clauses)
             throws ContradictionException {
         this.solver.addAllClauses(clauses);
@@ -243,6 +270,7 @@ public abstract class SolverDecorator<T extends ISolver> implements ISolver {
     /**
      * @since 2.1
      */
+    @Impure
     public IConstr addBlockingClause(IVecInt literals)
             throws ContradictionException {
         return this.solver.addBlockingClause(literals);
@@ -253,6 +281,7 @@ public abstract class SolverDecorator<T extends ISolver> implements ISolver {
      * 
      * @see org.sat4j.ISolver#addAtMost(org.sat4j.datatype.VecInt, int)
      */
+    @Impure
     public IConstr addAtMost(IVecInt literals, int degree)
             throws ContradictionException {
         return this.solver.addAtMost(literals, degree);
@@ -263,6 +292,7 @@ public abstract class SolverDecorator<T extends ISolver> implements ISolver {
      * 
      * @see org.sat4j.ISolver#addAtLeast(org.sat4j.datatype.VecInt, int)
      */
+    @Impure
     public IConstr addAtLeast(IVecInt literals, int degree)
             throws ContradictionException {
         return this.solver.addAtLeast(literals, degree);
@@ -273,6 +303,7 @@ public abstract class SolverDecorator<T extends ISolver> implements ISolver {
      * 
      * @see org.sat4j.ISolver#model()
      */
+    @Impure
     public int[] model() {
         return this.solver.model();
     }
@@ -282,6 +313,7 @@ public abstract class SolverDecorator<T extends ISolver> implements ISolver {
      * 
      * @see org.sat4j.ISolver#isSatisfiable()
      */
+    @Impure
     public boolean isSatisfiable() throws TimeoutException {
         return this.solver.isSatisfiable();
     }
@@ -291,6 +323,7 @@ public abstract class SolverDecorator<T extends ISolver> implements ISolver {
      * 
      * @see org.sat4j.ISolver#isSatisfiable(org.sat4j.datatype.VecInt)
      */
+    @Impure
     public boolean isSatisfiable(IVecInt assumps) throws TimeoutException {
         return this.solver.isSatisfiable(assumps);
     }
@@ -300,6 +333,7 @@ public abstract class SolverDecorator<T extends ISolver> implements ISolver {
      * 
      * @see org.sat4j.ISolver#setTimeout(int)
      */
+    @Impure
     public void setTimeout(int t) {
         this.solver.setTimeout(t);
     }
@@ -309,6 +343,7 @@ public abstract class SolverDecorator<T extends ISolver> implements ISolver {
      * 
      * @see org.sat4j.ISolver#setTimeoutMs(int)
      */
+    @Impure
     public void setTimeoutMs(long t) {
         this.solver.setTimeoutMs(t);
     }
@@ -318,6 +353,7 @@ public abstract class SolverDecorator<T extends ISolver> implements ISolver {
      * 
      * @see org.sat4j.ISolver#expireTimeout()
      */
+    @Impure
     public void expireTimeout() {
         this.solver.expireTimeout();
     }
@@ -327,6 +363,7 @@ public abstract class SolverDecorator<T extends ISolver> implements ISolver {
      * 
      * @see org.sat4j.ISolver#nConstraints()
      */
+    @Impure
     public int nConstraints() {
         return this.solver.nConstraints();
     }
@@ -336,6 +373,7 @@ public abstract class SolverDecorator<T extends ISolver> implements ISolver {
      * 
      * @see org.sat4j.ISolver#nVars()
      */
+    @Impure
     public int nVars() {
         return this.solver.nVars();
     }
@@ -345,10 +383,12 @@ public abstract class SolverDecorator<T extends ISolver> implements ISolver {
      * 
      * @see org.sat4j.ISolver#reset()
      */
+    @Impure
     public void reset() {
         this.solver.reset();
     }
 
+    @Pure
     public T decorated() {
         return this.solver;
     }
@@ -359,6 +399,7 @@ public abstract class SolverDecorator<T extends ISolver> implements ISolver {
      * 
      * @return the decorated solver.
      */
+    @Impure
     public T clearDecorated() {
         T decorated = this.solver;
         this.solver = null;
@@ -370,6 +411,7 @@ public abstract class SolverDecorator<T extends ISolver> implements ISolver {
      * 
      * @see org.sat4j.specs.ISolver#removeConstr(org.sat4j.minisat.core.Constr)
      */
+    @Impure
     public boolean removeConstr(IConstr c) {
         return this.solver.removeConstr(c);
     }
@@ -379,6 +421,7 @@ public abstract class SolverDecorator<T extends ISolver> implements ISolver {
      * 
      * @see org.sat4j.specs.ISolver#getStat()
      */
+    @Impure
     public Map<String, Number> getStat() {
         return this.solver.getStat();
     }
@@ -386,6 +429,7 @@ public abstract class SolverDecorator<T extends ISolver> implements ISolver {
     /**
      * @since 2.1
      */
+    @Impure
     public <S extends ISolverService> void setSearchListener(
             SearchListener<S> sl) {
         this.solver.setSearchListener(sl);
@@ -394,6 +438,7 @@ public abstract class SolverDecorator<T extends ISolver> implements ISolver {
     /**
      * @since 2.1
      */
+    @Impure
     public int nextFreeVarId(boolean reserve) {
         return this.solver.nextFreeVarId(reserve);
     }
@@ -401,6 +446,7 @@ public abstract class SolverDecorator<T extends ISolver> implements ISolver {
     /**
      * @since 2.1
      */
+    @Impure
     public boolean removeSubsumedConstr(IConstr c) {
         return this.solver.removeSubsumedConstr(c);
     }
@@ -408,6 +454,7 @@ public abstract class SolverDecorator<T extends ISolver> implements ISolver {
     /**
      * @since 2.2
      */
+    @Impure
     public <S extends ISolverService> SearchListener<S> getSearchListener() {
         return this.solver.getSearchListener();
     }
@@ -415,6 +462,7 @@ public abstract class SolverDecorator<T extends ISolver> implements ISolver {
     /**
      * @since 2.2
      */
+    @Impure
     public boolean isVerbose() {
         return this.solver.isVerbose();
     }
@@ -422,6 +470,7 @@ public abstract class SolverDecorator<T extends ISolver> implements ISolver {
     /**
      * @since 2.2
      */
+    @Impure
     public void setVerbose(boolean value) {
         this.solver.setVerbose(value);
     }
@@ -429,6 +478,7 @@ public abstract class SolverDecorator<T extends ISolver> implements ISolver {
     /**
      * @since 2.2
      */
+    @Impure
     public void setLogPrefix(String prefix) {
         this.solver.setLogPrefix(prefix);
     }
@@ -436,6 +486,7 @@ public abstract class SolverDecorator<T extends ISolver> implements ISolver {
     /**
      * @since 2.2
      */
+    @Impure
     public String getLogPrefix() {
         return this.solver.getLogPrefix();
     }
@@ -443,6 +494,7 @@ public abstract class SolverDecorator<T extends ISolver> implements ISolver {
     /**
      * @since 2.2
      */
+    @Impure
     public IVecInt unsatExplanation() {
         return this.solver.unsatExplanation();
     }
@@ -450,6 +502,7 @@ public abstract class SolverDecorator<T extends ISolver> implements ISolver {
     /**
      * @since 2.3
      */
+    @Impure
     public int[] primeImplicant() {
         return this.solver.primeImplicant();
     }
@@ -457,6 +510,7 @@ public abstract class SolverDecorator<T extends ISolver> implements ISolver {
     /**
      * @since 2.3.1
      */
+    @Impure
     public IConstr addExactly(IVecInt literals, int n)
             throws ContradictionException {
         return this.solver.addExactly(literals, n);
@@ -465,6 +519,7 @@ public abstract class SolverDecorator<T extends ISolver> implements ISolver {
     /**
      * @since 2.3.1
      */
+    @Impure
     public int[] modelWithInternalVariables() {
         return this.solver.modelWithInternalVariables();
     }
@@ -472,6 +527,7 @@ public abstract class SolverDecorator<T extends ISolver> implements ISolver {
     /**
      * @since 2.3.1
      */
+    @Impure
     public int realNumberOfVariables() {
         return this.solver.realNumberOfVariables();
     }
@@ -479,6 +535,7 @@ public abstract class SolverDecorator<T extends ISolver> implements ISolver {
     /**
      * @since 2.3.1
      */
+    @Impure
     public void registerLiteral(int p) {
         this.solver.registerLiteral(p);
     }
@@ -486,6 +543,7 @@ public abstract class SolverDecorator<T extends ISolver> implements ISolver {
     /**
      * @since 2.3.2
      */
+    @Impure
     public boolean isSolverKeptHot() {
         return this.solver.isSolverKeptHot();
     }
@@ -493,6 +551,7 @@ public abstract class SolverDecorator<T extends ISolver> implements ISolver {
     /**
      * @since 2.3.2
      */
+    @Impure
     public void setKeepSolverHot(boolean value) {
         this.solver.setKeepSolverHot(value);
     }
@@ -500,6 +559,7 @@ public abstract class SolverDecorator<T extends ISolver> implements ISolver {
     /**
      * @since 2.3.2
      */
+    @Impure
     public boolean primeImplicant(int p) {
         return this.solver.primeImplicant(p);
     }
@@ -507,6 +567,7 @@ public abstract class SolverDecorator<T extends ISolver> implements ISolver {
     /**
      * @since 2.3.3
      */
+    @Impure
     public ISolver getSolvingEngine() {
         return this.solver.getSolvingEngine();
     }
@@ -514,6 +575,7 @@ public abstract class SolverDecorator<T extends ISolver> implements ISolver {
     /**
      * @since 2.3.4
      */
+    @Impure
     public void setUnitClauseProvider(UnitClauseProvider ucp) {
         this.solver.setUnitClauseProvider(ucp);
     }

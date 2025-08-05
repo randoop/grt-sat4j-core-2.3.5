@@ -29,6 +29,8 @@
  *******************************************************************************/
 package org.sat4j.specs;
 
+import org.checkerframework.dataflow.qual.Impure;
+import org.checkerframework.dataflow.qual.Pure;
 import java.io.Serializable;
 
 /**
@@ -38,6 +40,7 @@ import java.io.Serializable;
  */
 public interface IVecInt extends Serializable {
 
+    @Impure
     int size();
 
     /**
@@ -45,20 +48,26 @@ public interface IVecInt extends Serializable {
      * 
      * @param nofelems
      */
+    @Impure
     void shrink(int nofelems);
 
+    @Impure
     void shrinkTo(int newsize);
 
     /**
      * depile le dernier element du vecteur. Si le vecteur est vide, ne fait
      * rien.
      */
+    @Impure
     IVecInt pop();
 
+    @Impure
     void growTo(int newsize, final int pad);
 
+    @Impure
     void ensure(int nsize);
 
+    @Impure
     IVecInt push(int elem);
 
     /**
@@ -67,18 +76,25 @@ public interface IVecInt extends Serializable {
      * 
      * @param elem
      */
+    @Impure
     void unsafePush(int elem);
 
+    @Impure
     int unsafeGet(int eleem);
 
+    @Impure
     void clear();
 
+    @Impure
     int last();
 
+    @Impure
     int get(int i);
 
+    @Impure
     void set(int i, int o);
 
+    @Impure
     boolean contains(int e);
 
     /**
@@ -86,6 +102,7 @@ public interface IVecInt extends Serializable {
      * @param e
      * @return
      */
+    @Impure
     int indexOf(int e);
 
     /**
@@ -95,6 +112,7 @@ public interface IVecInt extends Serializable {
      *            an integer
      * @return the index i such that get(i)==e, else -1.
      */
+    @Impure
     int containsAt(int e);
 
     /**
@@ -107,6 +125,7 @@ public interface IVecInt extends Serializable {
      *            the index to start from (excluded).
      * @return the index i such that i>from and get(i)==e, else -1
      */
+    @Impure
     int containsAt(int e, int from);
 
     /**
@@ -115,22 +134,28 @@ public interface IVecInt extends Serializable {
      * 
      * @param copy
      */
+    @Impure
     void copyTo(IVecInt copy);
 
     /**
      * @param is
      */
+    @Impure
     void copyTo(int[] is);
 
     /*
      * Copie un vecteur dans un autre (en vidant le premier), en temps constant.
      */
+    @Impure
     void moveTo(IVecInt dest);
 
+    @Impure
     void moveTo(int sourceStartingIndex, int[] dest);
 
+    @Impure
     void moveTo2(IVecInt dest);
 
+    @Impure
     void moveTo(int[] dest);
 
     /**
@@ -142,6 +167,7 @@ public interface IVecInt extends Serializable {
      * @param source
      *            the index of the source
      */
+    @Impure
     void moveTo(int dest, int source);
 
     /**
@@ -152,6 +178,7 @@ public interface IVecInt extends Serializable {
      * @param elem
      *            the element to put first in the vector.
      */
+    @Impure
     void insertFirst(final int elem);
 
     /**
@@ -160,6 +187,7 @@ public interface IVecInt extends Serializable {
      * @param elem
      *            un element du vecteur
      */
+    @Impure
     void remove(int elem);
 
     /**
@@ -171,10 +199,13 @@ public interface IVecInt extends Serializable {
      * @return the former ith element of the vector that is now removed from the
      *         vector
      */
+    @Impure
     int delete(int i);
 
+    @Impure
     void sort();
 
+    @Impure
     void sortUnique();
 
     /**
@@ -183,8 +214,10 @@ public interface IVecInt extends Serializable {
      * @return true iff the vector is empty.
      * @since 1.6
      */
+    @Impure
     boolean isEmpty();
 
+    @Impure
     IteratorInt iterator();
 
     /**
@@ -195,6 +228,7 @@ public interface IVecInt extends Serializable {
      * @return the internal representation of the Vector as an array.
      * @since 2.1
      */
+    @Pure
     int[] toArray();
 
     /**
@@ -206,5 +240,6 @@ public interface IVecInt extends Serializable {
      * @author sroussel
      * @since 2.3.1
      */
+    @Impure
     IVecInt[] subset(int k);
 }

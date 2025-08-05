@@ -29,6 +29,7 @@
  *******************************************************************************/
 package org.sat4j.minisat.learning;
 
+import org.checkerframework.dataflow.qual.Impure;
 import org.sat4j.minisat.core.Constr;
 import org.sat4j.minisat.core.DataStructureFactory;
 import org.sat4j.minisat.core.ILits;
@@ -56,11 +57,13 @@ public abstract class LimitedLearning<D extends DataStructureFactory>
 
     private SolverStats stats;
 
+    @Impure
     public LimitedLearning() {
         this.none = new NoLearningButHeuristics<D>();
         this.all = new MiniSATLearning<D>();
     }
 
+    @Impure
     public void setSolver(Solver<D> s) {
         if (s != null) {
             this.lits = s.getVocabulary();
@@ -70,6 +73,7 @@ public abstract class LimitedLearning<D extends DataStructureFactory>
         }
     }
 
+    @Impure
     public void learns(Constr constr) {
         if (learningCondition(constr)) {
             this.all.learns(constr);
@@ -79,13 +83,16 @@ public abstract class LimitedLearning<D extends DataStructureFactory>
         }
     }
 
+    @Impure
     protected abstract boolean learningCondition(Constr constr);
 
+    @Impure
     public void init() {
         this.all.init();
         this.none.init();
     }
 
+    @Impure
     public void setVarActivityListener(VarActivityListener s) {
         this.none.setVarActivityListener(s);
         this.all.setVarActivityListener(s);
